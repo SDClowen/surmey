@@ -1,0 +1,29 @@
+{
+  "name": "surmey",
+  "description": "A free and opensource survey application",
+  "version": "1.0.0",
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/sdclowen/surmey"
+  },
+  "keywords": [
+    "surveyapp",
+    "sdclowen"
+  ],
+  "author": "sdclowen",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.7.0",
+    "sdeasy": "^1.0.1"
+  },
+  "main": "tailwind.config.js",
+  "scripts": {
+    "build": "npx tailwindcss -i tailwind.css -o ./app/public/css/surmey.css --minify",
+    "watch": "npx tailwindcss -i ./app/public/css/base.css -o ./app/public/css/surmey.css -w --minify"
+  }
+}

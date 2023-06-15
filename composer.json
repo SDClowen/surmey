@@ -1,0 +1,12 @@
+{
+    "require": {
+        "sdclowen/sdphp": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\Models\\": "app/models/",
+            "App\\Helpers\\": "app/helpers/",
+            "App\\Controllers\\": "app/controllers/"
+        }
+    }
+}
