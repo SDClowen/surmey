@@ -1,6 +1,7 @@
 /vendor/
 .vscode
 .idea
+/app/caches/
 node_modules/
 npm-debug.log
 yarn-error.log

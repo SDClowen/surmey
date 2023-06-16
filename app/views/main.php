@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?= $title ?>
+        {$title}
     </title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,10 +13,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.3.0/alpine.js" integrity="sha512-nIwdJlD5/vHj23CbO2iHCXtsqzdTTx3e3uAmpTm4x2Y8xCIFyWu4cSIV8GaGe2UNVq86/1h9EgUZy7tn243qdA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
-    <?= acss("surmey") ?>
-    <?= njs("jquery/dist/jquery.min") ?>
-    <?= njs("sdeasy/sdeasy") ?>
-    <?= ajs("app") ?>
+    {acss("surmey")|noescape}
+    {njs("jquery/dist/jquery.min")|noescape}
+    {njs("sdeasy/sdeasy")|noescape}
+    {ajs("app")|noescape}
 </head>
 
 <body class="bg-gray-50 dark:bg-gray-900">
@@ -117,15 +117,15 @@
                         </g>
                     </svg>
                     <span class="text-gray-500">Surmey - <small class="text-gray-400 font-thin">A simple survey system</small></span>
-                    <small class="text-gray-400 ml-auto font-thin font">Copyright ©
-                        <?= date("Y") ?> <a href="https://github.com/SDClowen">All rights reserved!</a>
+                    <small class="text-gray-400 ml-auto font-thin font">
+                        Copyright © <?= date("Y") ?> <a href="https://github.com/SDClowen">All rights reserved!</a>
                     </small>
                 </h1>
             </div>
         </header>
         <main>
             <div id="container" class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 m-3 rounded-md border shadow-sm bg-white dark:bg-slate-800 dark:border-slate-700 dark:text-white">
-                <?= $content ?>
+                {$content|noescape}
             </div>
         </main>
     </div>

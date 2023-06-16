@@ -39,7 +39,8 @@ return [
 	'time.ago' => "önce",
 	'time.now' => "şimdi",
 	'csrf.error' => 'Güvenlik hatası. Lütfen sayfayı yenileyip tekrar deneyin.',
-
+	'csrf' => "Güvenlik",
+	
 	# App
 	'already.have' => "<b>%s</b> sistem'de zaten kayıtlı",
 	"login.required" => "Lütfen giriş yapınız.",

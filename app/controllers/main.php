@@ -36,7 +36,6 @@ class Main extends Controller
             "csrf" => ["name" => lang("security.code"), "required" => true]
         ]);
 
-
         if ($check)
             error($check);
         elseif (! check_csrf($post->csrf))

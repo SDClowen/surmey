@@ -1,6 +1,7 @@
 {
     "require": {
-        "sdclowen/sdphp": "dev-master"
+        "sdclowen/sdphp": "dev-master",
+        "latte/latte": "^3.0"
     },
     "autoload": {
         "psr-4": {
