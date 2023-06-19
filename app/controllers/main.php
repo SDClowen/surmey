@@ -10,13 +10,17 @@ class Main extends Controller
     #[route(method: route::get | route::xhr_get, session: "user", otherwise: "/auth")]
     public function index()
     {
-        $this->view("main", "dashboard", "Surmey");
+        $this->view("main", "dashboard", "Surmey", ["user" => User::info()]);
     }
 
     public function auth()
     {
         if (session_check("user"))
             redirect("/");
+        
+        session_remove("tempPin");
+        if (session_check("tempPin"))
+            redirect("/pin");
 
         $this->render("auth", [
             "title" => lang("login.required")
@@ -51,13 +55,68 @@ class Main extends Controller
         $password = hash("sha256", $post->password);
 
         $memberDetail = User::validateAuth($post->userNameOrEmail, $password);
-
-        if (! $memberDetail)
+        if (!$memberDetail)
             error(lang("wrong.auth.info"));
+
+        while(User::exists("pin_token", ($pin = join(randomSequence(6)))));
+
+        User::updateBy("id", $memberDetail->id, ["pin_token" => $pin]);
+            session_set("tempPin", hash("sha256", $pin));
+            
+        #disabled for now
+        #success(redirect: "/pin");
 
         session_regenerate_id(true);
 
         session_set("user", $memberDetail);
+        success(redirect: "/");
+    }
+
+    #[route(method: route::xhr_get | route::get)]
+    public function pin()
+    {
+        if (session_check("user") || !session_check("tempPin"))
+            redirect("/");
+
+        $tempPin = session_get("tempPin");
+        if(!$tempPin)
+            redirect("/");
+
+        $this->render("auth-pin", [
+            "title" => "PIN",
+            "token" => $tempPin
+        ]);
+    }
+
+    #[route(method: route::xhr_post, uri: "pin")]
+    public function validatePin()
+    {
+        $post = Request::post();
+        $validate = validate($post, [
+            "pin" => ["name" => "pin", "min" => 6, "max" => 6],
+            "token" => ["name" => "token", "min" => 64, "max" => 64],
+            "csrf" => ["name" => lang("security.code"), "required" => true]
+        ]);
+
+        if ($validate)
+            error($validate);
+        elseif (! check_csrf($post->csrf))
+            errorlang("csrf.error");
+
+        $tempPin = session_get("tempPin");
+        if($post->token != $tempPin)
+            error("UNDEFINED_TOKEN");
+        elseif(hash("sha256", $post->pin) != $tempPin)
+            errorlang("pin.error");
+            
+        if (! ($userInfo = User::validatePin($post->token, $post->pin)))
+            warninglang("pin.error");
+            
+        session_remove("tempPin");
+        
+        session_regenerate_id(true);
+
+        session_set("user", $userInfo);
         success(redirect: "/");
     }
 
@@ -90,7 +149,8 @@ class Main extends Controller
         ]);
 
         if ($result) {
-            $this->logout();
+            session_remove("user");
+            session_destroy();
             successlang("password.successfully.changed", redirect: "/auth:2000");
         }
 
@@ -98,7 +158,7 @@ class Main extends Controller
     }
 
     #[route(method: route::get | route::xhr_get)]
-    function logout()
+    function signout()
     {
         session_remove("user");
         session_destroy();

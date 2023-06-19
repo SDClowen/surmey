@@ -1,6 +1,7 @@
 <?php 
 namespace App\Controllers;
 
+use App\Models\User;
 use Core\{Controller, Request};
 use Core\Attributes\route;
 
@@ -9,7 +10,7 @@ class Surveys extends Controller
     #[route(method: route::get | route::xhr_get, session: "user")]
     public function index()
     {
-        $this->view("main", "survey", lang("survey"));
+        $this->view("main", "survey", lang("survey"), ["user" => User::info()]);
     }
     
     #[route(method: route::get, session: "user")]
@@ -27,7 +28,7 @@ class Surveys extends Controller
     #[route(method: route::get | route::xhr_get, session: "user")]
     public function create()
     {
-        $this->view("main", "create-survey", lang("create.survey"));
+        $this->view("main", "create-survey", lang("create.survey"), ["user" => User::info()]);
     }
     
     #[route(method: route::xhr_post, uri: "create", session: "user")]

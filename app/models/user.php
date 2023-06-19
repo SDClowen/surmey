@@ -12,6 +12,11 @@ class User extends Model
         return Database::get()->from("users")->where($column, "=", $value)->where("password", "=", $password)->result();
     }
 
+    public static function validatePin($token, $pin)
+    {
+        return Database::get()->from("users")->where("pin_token", "=", $pin)->result();
+    }
+
     /**
      * Get user id from the session
      */

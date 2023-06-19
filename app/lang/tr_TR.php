@@ -80,8 +80,10 @@ return [
 	#Participants must be confirmed by phone
 	"create.survey.title.desc" => "Katılımcıların telefonla onaylanması gerekmektedir.",
 	"survey" => "Anket",
+	"reports" => "Raporlar",
 	"create.survey" => "Yeni Anket Oluştur",
 	#This information will be displayed publicly so be careful what you share.
 	"create.survey.desc" => "Bu bilgiler herkese açık olarak görüntülenecektir, bu nedenle ne paylaştığınıza dikkat edin.",
 	"settings" => "Ayarlar",
+	"pin.error" => "Doğrulama kodu yanlış! Lütfen kontrol ederek tekrar deneyiniz."
 ];
