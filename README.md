@@ -4,7 +4,7 @@ A free and opensource survey application
 
 ## Issues and status
 [![GitHub issues](https://img.shields.io/github/issues/sdclowen/surmey.svg)](https://github.com/sdclowen/surmey/issues)
-[![Version](https://img.shields.io/badge/version-v2.x-maroon.svg)](https://github.com/SDClowen/RSBot)
+[![Version](https://img.shields.io/badge/version-v1.x-maroon.svg)](https://github.com/SDClowen/RSBot)
 
 ## Project info
 ![Language](https://img.shields.io/badge/language-php-blue.svg)
