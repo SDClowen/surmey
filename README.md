@@ -7,7 +7,7 @@ A free and opensource survey application
 [![Version](https://img.shields.io/badge/version-v2.x-maroon.svg)](https://github.com/SDClowen/RSBot)
 
 ## Project info
-![Language](https://img.shields.io/badge/language-CSharp-blue.svg)
+![Language](https://img.shields.io/badge/language-php-blue.svg)
 [![GitHub license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/SDClowen/surmey/blob/master/LICENSE)
 
 ## Support the project!
