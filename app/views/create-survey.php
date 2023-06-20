@@ -66,7 +66,7 @@
                     <span>Questions</span>
 
                     <div x-data="{ isOpen: false }" class="relative inline-block">
-                        <a href="javascript:void(0)" @click="isOpen = !isOpen" id="add-question" class="flex rounded-md bg-gray-700 px-2 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        <a href="javascript:void(0)" @click="isOpen = !isOpen" class="flex rounded-md bg-gray-700 px-2 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
@@ -76,12 +76,11 @@
                             </svg>
                         </a>
                         <!-- Dropdown menu -->
-                        <div x-show="isOpen" @click.away="isOpen = false" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90" class="absolute right-0 z-20 w-48 py-2 mt-2 origin-top-right bg-white rounded-lg border dark:border-gray-600 shadow-xl dark:bg-gray-800">
-                            <a href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> your profile </a>
-                            <a href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Your projects </a>
-                            <a href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Help </a>
-                            <a href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Settings </a>
-                            <a href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Sign Out </a>
+                        <div id="create-survey" x-show="isOpen" @click.away="isOpen = false" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90" class="absolute right-0 z-20 w-48 py-2 mt-2 origin-top-right bg-white rounded-lg border dark:border-gray-600 shadow-xl dark:bg-gray-800">
+                            <a type="radio" question-text="New Question" answer-text="New Answer" href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Radio List </a>
+                            <a type="checkbox" question-text="New Question" answer-text="New Answer" href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Check List </a>
+                            <a type="textarea" href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Text Area </a>
+                            <a type="description" href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Description </a>
                         </div>
                     </div>
                 </h2>
@@ -94,51 +93,24 @@
                             </svg>
                             <span class="ml-1">Developing</span>
                         </a>
-                        <a href="javascript:void(0)" class="cursor-default inline-flex items-center px-4 py-1 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:text-gray-300" x-on:click="current = 2" x-bind:class="{ 'text-white bg-blue-600 dark:bg-blue-800': current === 2 }">
+                        <a id="preview" href="javascript:void(0)" class="cursor-default inline-flex items-center px-4 py-1 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:text-gray-300" x-on:click="current = 2" x-bind:class="{ 'text-white bg-blue-600 dark:bg-blue-800': current === 2 }">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mx-1 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                             </svg>
                             <span class="ml-1">Preview</span>
                         </a>
                     </div>
-                    <div class="rounded-lg p-1 shadow-sm bg-slate-50 dark:bg-gray-700">
-                        <div x-show="current === 1" class="">
-                            <div class="border-2 border-dashed border-gray-400 bg-white dark:bg-gray-800 dark:border-gray-600 px-2 pt-2 text-sm m-3">
-                                <div contenteditable="true" class="bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">Question Title 1</div>
+                    <div class="rounded-lg p-1 shadow-sm bg-slate-50 dark:bg-slate-700">
+                        <div x-show="current === 1" class="questions">
 
-                                <div class="ml-8 my-3">
-                                    <div>
-                                        <div class="mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">Answer 1</div>
-                                        <div class="mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">Answer 1</div>
-                                    </div>
-                                    <div contenteditable="true" class="border-b border-gray-500 my-2 p-2 text-sm focus:outline-blue-600">New...</div>
-                                </div>
-                                <div class="rounded-t-lg bg-yellow-100 dark:bg-gray-900 p-2">
-                                    <div class="col-span-4">
-                                        <label class="relative inline-flex items-center mb-4 cursor-pointer">
-                                            <input type="checkbox" value="" class="sr-only peer">
-                                            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                            <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">
-                                                Yatay olarak dizginle
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-
-
-                            </div>
                         </div>
-                        <div class="p-2" x-show="current === 2">
-                            <div class="flex items-center">
-                                <input id="link-radio" type="radio" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label for="link-radio" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Radio button with a <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">link inside</a>.</label>
-                            </div>
+                        <div class="preview-content p-2" x-show="current === 2">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="border-b border-gray-900/10 pb-12">
+            <div class="border-b border-gray-900/10 pb-12 hidden">
                 <h2 class="text-base font-semibold leading-7 text-gray-900">Notifications</h2>
                 <p class="mt-1 text-sm leading-6 text-gray-600">We'll always let you know about important changes, but you pick what else you want to hear about.</p>
 
