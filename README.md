@@ -8,7 +8,7 @@ A free and opensource survey application
 
 ## Project info
 ![Language](https://img.shields.io/badge/language-php-blue.svg)
-[![GitHub license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/SDClowen/surmey/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/SDClowen/surmey/blob/master/LICENSE)
 
 ## Support the project!
 [![Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/sdclowen)
