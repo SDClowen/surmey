@@ -9,5 +9,8 @@
             "App\\Helpers\\": "app/helpers/",
             "App\\Controllers\\": "app/controllers/"
         }
+    },
+    "config": {
+        "bin-dir": "bin/"
     }
 }

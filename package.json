@@ -23,7 +23,7 @@
   },
   "main": "tailwind.config.js",
   "scripts": {
-    "build": "npx tailwindcss -i tailwind.css -o ./app/public/css/surmey.css --minify",
-    "watch": "npx tailwindcss -i ./app/public/css/base.css -o ./app/public/css/surmey.css -w --minify"
+    "build": "npx tailwindcss -i ./public/css/base.css -o ./public/css/surmey.css --minify",
+    "watch": "npx tailwindcss -i ./public/css/base.css -o ./public/css/surmey.css -w --minify"
   }
 }
