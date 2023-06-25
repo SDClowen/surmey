@@ -5,15 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surmey - {$title}</title>
-    {acss("surmey")|noescape}
+    {acss("app")|noescape}
     {njs("jquery/dist/jquery.min")|noescape}
     {njs("sdeasy/sdeasy")|noescape}
 </head>
 
 <body class="flex flex-wrap min-h-screen w-full content-center justify-center bg-gray-200 dark:bg-slate-700 dark:text-gray-200 py-10">
     <!-- Login component -->
-    <div class="flex shadow-md">
+    <div class="flex shadow-md relative">
         <!-- Login form -->
+        <div class="auth-message absolute bottom-0 w-4/5 ml-5"></div>
         <div class="flex flex-wrap content-center justify-center rounded-l-md bg-white dark:bg-slate-900" style="width: 24rem; height: 32rem;">
             <div class="w-72">
                 <!-- Heading -->
@@ -21,7 +22,6 @@
                 <small class="text-gray-400">Please enter your details</small>
 
                 <form role="form" class="space-y-6" action="/auth" method="post" data-content=".auth-message">
-                    <div class="auth-message text-gray-900 dark:text-gray-200 my-2"></div>
                     {csrf()|noescape}
                     <div class="mb-3">
                         <label class="mb-2 block text-xs font-semibold">{lang("username.or.email")}</label>

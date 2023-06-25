@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surmey - Validate Pin</title>
-    {acss("surmey")|noescape}
+    {acss("app")|noescape}
     {njs("jquery/dist/jquery.min")|noescape}
     {njs("sdeasy/sdeasy")|noescape}
 
