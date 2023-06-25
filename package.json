@@ -23,7 +23,7 @@
   },
   "main": "tailwind.config.js",
   "scripts": {
-    "build": "npx tailwindcss -i ./public/css/base.css -o ./public/css/app.css --minify",
-    "watch": "npx tailwindcss -i ./public/css/base.css -o ./public/css/app.css -w --minify"
+    "build": "npx tailwindcss -i ./public/css/tailwind.base.css -o ./public/css/app.css --minify",
+    "watch": "npx tailwindcss -i ./public/css/tailwind.base.css -o ./public/css/app.css -w --minify"
   }
 }

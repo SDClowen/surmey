@@ -2,7 +2,7 @@ $(function () {
 
     function createCheckableList(type, questionDummyText, answerDummyText) {
         return `
-            <div data-type="${type}" id="question" class="border-2 border-dashed border-gray-400 bg-white dark:bg-gray-800 dark:border-gray-600 px-2 pt-2 text-sm m-3">
+            <div data-type="${type}" id="question" class="border-2 rounded-md border-dashed bg-white dark:bg-gray-800 border-gray-900/25 dark:border-gray-300/25 px-2 pt-2 text-sm m-3">
                 <div contenteditable="true" class="bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
 
                 <div class="ml-8 my-3">

@@ -34,13 +34,13 @@
 
                     <div class="col-span-full">
                         <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">Cover photo</label>
-                        <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                        <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 dark:border-gray-300/25 px-6 py-10">
                             <div class="text-center">
                                 <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd"></path>
                                 </svg>
                                 <div class="mt-4 flex text-sm leading-6 text-gray-600 dark:text-slate-300">
-                                    <label for="file-upload" class="relative cursor-pointer rounded-md bg-white dark:bg-slate-600 font-semibold dark:text-blue-300 text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                                    <label for="file-upload" class="relative cursor-pointer rounded-md bg-white dark:bg-slate-600 font-semibold dark:text-blue-300 text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 hover:text-blue-500">
                                         <span>Upload a file</span>
                                         <input id="file-upload" name="file-upload" type="file" class="sr-only">
                                     </label>
@@ -66,7 +66,7 @@
                     <span>Questions</span>
 
                     <div x-data="{ isOpen: false }" class="relative inline-block">
-                        <a href="javascript:void(0)" @click="isOpen = !isOpen" class="flex rounded-md bg-gray-700 px-2 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        <a href="javascript:void(0)" @click="isOpen = !isOpen" class="flex rounded-md bg-gray-700 px-2 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 dark:hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-1">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
@@ -120,7 +120,7 @@
                         <div class="mt-6 space-y-6">
                             <div class="relative flex gap-x-3">
                                 <div class="flex h-6 items-center">
-                                    <input id="comments" name="comments" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                    <input id="comments" name="comments" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600">
                                 </div>
                                 <div class="text-sm leading-6">
                                     <label for="comments" class="font-medium text-gray-900">Comments</label>
@@ -129,7 +129,7 @@
                             </div>
                             <div class="relative flex gap-x-3">
                                 <div class="flex h-6 items-center">
-                                    <input id="candidates" name="candidates" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                    <input id="candidates" name="candidates" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600">
                                 </div>
                                 <div class="text-sm leading-6">
                                     <label for="candidates" class="font-medium text-gray-900">Candidates</label>
@@ -138,7 +138,7 @@
                             </div>
                             <div class="relative flex gap-x-3">
                                 <div class="flex h-6 items-center">
-                                    <input id="offers" name="offers" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                    <input id="offers" name="offers" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600">
                                 </div>
                                 <div class="text-sm leading-6">
                                     <label for="offers" class="font-medium text-gray-900">Offers</label>
@@ -152,15 +152,15 @@
                         <p class="mt-1 text-sm leading-6 text-gray-600">These are delivered via SMS to your mobile phone.</p>
                         <div class="mt-6 space-y-6">
                             <div class="flex items-center gap-x-3">
-                                <input id="push-everything" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                <input id="push-everything" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600">
                                 <label for="push-everything" class="block text-sm font-medium leading-6 text-gray-900">Everything</label>
                             </div>
                             <div class="flex items-center gap-x-3">
-                                <input id="push-email" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                <input id="push-email" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600">
                                 <label for="push-email" class="block text-sm font-medium leading-6 text-gray-900">Same as email</label>
                             </div>
                             <div class="flex items-center gap-x-3">
-                                <input id="push-nothing" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                <input id="push-nothing" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-600">
                                 <label for="push-nothing" class="block text-sm font-medium leading-6 text-gray-900">No push notifications</label>
                             </div>
                         </div>
