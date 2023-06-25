@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.3.0/alpine.js" integrity="sha512-nIwdJlD5/vHj23CbO2iHCXtsqzdTTx3e3uAmpTm4x2Y8xCIFyWu4cSIV8GaGe2UNVq86/1h9EgUZy7tn243qdA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    {acss("surmey")|noescape}
+    {acss("app")|noescape}
     {njs("jquery/dist/jquery.min")|noescape}
     {njs("sdeasy/sdeasy")|noescape}
     {ajs("app")|noescape}
@@ -222,8 +222,7 @@
                     </svg>
                     <span class="text-gray-500">Surmey - <small class="text-gray-400 font-thin">A simple survey system</small></span>
                     <small class="text-gray-400 ml-auto font-thin font">
-                        Copyright ©
-                        <?= date("Y") ?> <a href="https://github.com/SDClowen">All rights reserved.</a>
+                        Copyright © <?= date("Y") ?> <a href="https://github.com/SDClowen">All rights reserved.</a>
                     </small>
                 </h1>
             </div>

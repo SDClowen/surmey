@@ -25,12 +25,12 @@
                     {csrf()|noescape}
                     <div class="mb-3">
                         <label class="mb-2 block text-xs font-semibold">{lang("username.or.email")}</label>
-                        <input type="text" name="userNameOrEmail" placeholder="Enter your username or email" class="transition-colors transition-duration-200 block w-full rounded-md border border-gray-300 focus:border-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-700 py-1 px-1.5 text-gray-700 dark:border-slate-600 dark:bg-gray-900" />
+                        <input type="text" name="userNameOrEmail" placeholder="Enter your username or email" class="transition-colors transition-duration-200 block w-full rounded-md border border-gray-300 focus:border-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-700 py-1 px-1.5 text-gray-700 dark:text-gray-200 dark:border-slate-600 dark:bg-gray-900" />
                     </div>
 
                     <div class="mb-3">
                         <label class="mb-2 block text-xs font-semibold">{lang("password")}</label>
-                        <input type="password" name="password" placeholder="*****" class="transition-colors transition-duration-200 block w-full rounded-md border border-gray-300 focus:border-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-700 py-1 px-1.5 text-gray-700 dark:border-slate-600 dark:bg-gray-900" />
+                        <input type="password" name="password" placeholder="*****" class="transition-colors transition-duration-200 block w-full rounded-md border border-gray-300 focus:border-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-700 py-1 px-1.5 text-gray-700 dark:text-gray-200 dark:border-slate-600 dark:bg-gray-900" />
                     </div>
 
                     <div class="mb-3 flex flex-wrap content-center">
