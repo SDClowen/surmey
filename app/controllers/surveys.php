@@ -37,11 +37,15 @@ class Surveys extends Controller
         $post = Request::post();
         $validate = validate($post, [
             "title" => ["name" => lang("title"), "required" => true, "min" => 8, "max" => 250],
-            "csrf" => ["name" => lang("csrf"), "required" => true]
+            "csrf" => ["name" => lang("csrf"), "required" => true],
+            "photo" => ["name" => lang("photo")],
+            "data" => ["name" => "data", "required" => true]
         ]);
 
         if($validate)
             warning($validate);
+
+        $post->confirmPhone = isset($post->confirmPhone);
 
         successlang("data.successfully.changed");
     }

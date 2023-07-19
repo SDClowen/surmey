@@ -78,7 +78,7 @@ return [
 	"remember.me" => "Beni Hatırla",
 	"title" => "Başlık",
 	#Participants must be confirmed by phone
-	"create.survey.title.desc" => "Katılımcıların telefonla onaylanması gerekmektedir.",
+	"create.survey.phone" => "Katılımcıların telefonla onaylanması gerekmektedir.",
 	"survey" => "Anket",
 	"reports" => "Raporlar",
 	"create.survey" => "Yeni Anket Oluştur",
