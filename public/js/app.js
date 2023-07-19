@@ -71,7 +71,7 @@ $(function () {
         `
     }
 
-    function generate() {
+    const generate = () => {
         const questions = $(".questions #question")
 
         var result = [];
@@ -95,9 +95,14 @@ $(function () {
         });
 
         console.log(result)
+
+        $("form input[name=data]").val(JSON.stringify(result))
+
         return result
     }
 
+    window.generateSurvey = generate
+    
     $(document).on("click", "#preview", function (event) {
         const array = generate()
 
@@ -192,6 +197,4 @@ $(function () {
 
         $(".questions").append(content);
     })
-
-
 })
