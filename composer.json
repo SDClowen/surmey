@@ -1,8 +1,4 @@
 {
-    "require": {
-        "latte/latte": "^3.0",
-        "sdclowen/sdphp": "dev-master"
-    },
     "autoload": {
         "psr-4": {
             "App\\Models\\": "app/models/",
@@ -12,5 +8,8 @@
     },
     "config": {
         "bin-dir": "bin/"
+    },
+    "require": {
+        "sdclowen/sdphp": "dev-master"
     }
 }

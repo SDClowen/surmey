@@ -1,3 +1,23 @@
+{njs("@tinymce/tinymce-jquery/dist/tinymce-jquery.min")|noescape}
+{njs("tinymce/tinymce.min")|noescape}
+<script>
+
+    $(() => {
+        $("[tinymce=true]").tinymce({
+            height: 500,
+            menubar: false,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+            ],
+            toolbar: 'undo redo | blocks | bold italic backcolor | ' +
+                'alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist outdent indent | removeformat | help'
+        });
+    })
+
+</script>
 <div class="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-6 lg:px-8">
     <div class="mx-auto max-w-2xl">
 

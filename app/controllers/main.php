@@ -164,4 +164,24 @@ class Main extends Controller
         session_destroy();
         success(redirect: "/");
     }
+
+    public function test()
+    {
+        $this->render("test");
+    }
+
+    #[route(method: route::xhr_post)]
+	public function survey()
+	{
+		$post = Request::post();
+
+		$rules = validate($post, [
+			"answer" => ["name" => "Cevap", "numeric" => true, "min" => 0, "max" => 1]
+		]);
+
+		if($rules)
+			warning($rules);
+
+		success(json_encode($post));
+	}
 }
