@@ -1,5 +1,19 @@
 $(function () {
 
+    $('#file-upload').on('change', function (event) {
+        var input = event.currentTarget;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#cover-photo-result').css(
+                    "background-image", "url(" + e.target.result + ")"
+                )
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    });
+
     function createCheckableList(type, questionDummyText, answerDummyText) {
         return `
             <div data-type="${type}" id="question" class="border-2 rounded-md border-dashed bg-white dark:bg-gray-800 border-gray-900/25 dark:border-gray-300/25 px-2 pt-2 text-sm m-3">

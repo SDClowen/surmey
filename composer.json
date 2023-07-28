@@ -10,6 +10,7 @@
         "bin-dir": "bin/"
     },
     "require": {
-        "sdclowen/sdphp": "dev-master"
+        "sdclowen/sdphp": "dev-master",
+        "verot/class.upload.php": "^2.1"
     }
 }

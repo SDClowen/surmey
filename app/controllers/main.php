@@ -61,10 +61,10 @@ class Main extends Controller
         while(User::exists("pin_token", ($pin = join(randomSequence(6)))));
 
         User::updateBy("id", $memberDetail->id, ["pin_token" => $pin]);
-            session_set("tempPin", hash("sha256", $pin));
+        session_set("tempPin", hash("sha256", $pin));
             
         #disabled for now
-        #success(redirect: "/pin");
+        success(redirect: "/pin");
 
         session_regenerate_id(true);
 
