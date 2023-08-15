@@ -83,6 +83,7 @@ return [
 	"survey" => "Anket",
 	"reports" => "Raporlar",
 	"create.survey" => "Yeni Anket Oluştur",
+	"edit.survey" => "Anketi Düzenle",
 	#This information will be displayed publicly so be careful what you share.
 	"create.survey.desc" => "Bu bilgiler herkese açık olarak görüntülenecektir, bu nedenle ne paylaştığınıza dikkat edin.",
 	"settings" => "Ayarlar",

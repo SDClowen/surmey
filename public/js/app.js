@@ -124,8 +124,15 @@ $(function () {
         return result
     }
 
-    const renderFromJson = function (data) {
-        for (const [k, v] of Object.entries(JSON.parse(data))) {
+    const prepareSurveyForEditing = function (formData, jsonData) {
+
+        formData = JSON.parse(formData)
+        $("input[name=title]").val(formData.title)
+        $("input[name=verifyPhone]").prop("checked", formData.verifyPhone);
+        $("#cover-photo-result").css({backgroundImage: `url('/public/images/survey/${formData.photo}')`})
+        $("textarea[name=about]").text(formData.about)
+
+        for (const [k, v] of Object.entries(JSON.parse(jsonData))) {
 
             var content = ''
 
@@ -147,7 +154,7 @@ $(function () {
     }
 
     window.generateSurvey = generate
-    window.renderSurvey = renderFromJson
+    window.prepareSurveyForEditing = prepareSurveyForEditing
 
     $(document).on("click", "#preview", function (event) {
         const array = generate()

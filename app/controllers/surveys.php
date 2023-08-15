@@ -34,11 +34,19 @@ class Surveys extends Controller
     #[route(method: route::get | route::xhr_get, session: "user")]
     public function create()
     {
-        $this->view("main", "survey-crud", lang("create.survey"), ["user" => User::info()]);
+        $this->view("main", "survey-crud", lang("create.survey"), [
+            "url" => "apply",
+            "surveyFormTitle" => lang("create.survey"),
+            "user" => User::info(),
+            "showIfOnEditMode" => false
+        ]);
     }
 
-    #[route(method: route::xhr_post, uri: "create", session: "user")]
-    public function createAjax()
+    /**
+     * Create or Update survey
+     */
+    #[route(method: route::xhr_post, uri: "apply", session: "user")]
+    public function apply(int $id = 0)
     {
         $post = Request::post();
         $validate = validate($post, [
@@ -61,60 +69,79 @@ class Surveys extends Controller
 
         $input = Request::files();
 
-        if (! isset($input->photo) || ! $input->photo->name)
-            warning("Missing input image!");
+        if (isset($input->photo) && $input->photo->name) {
+            $language = Cookie::instance()->get("lang");
+            if ($language == "en_US")
+                $language = "en_GB";
 
-        $language = Cookie::instance()->get("lang");
-        if ($language == "en_US")
-            $language = "en_GB";
 
-        $upload = new Upload($input->photo->tmp_name, $language);
-        if ($upload->uploaded) {
+            $upload = new Upload($input->photo->tmp_name, $language);
+            if ($upload->uploaded) {
 
-            $fileName = gen_pw() . mt_rand(10000, PHP_INT_MAX) . _e($post->title);
+                $fileName = gen_pw() . mt_rand(10000, PHP_INT_MAX) . _e($post->title);
 
-            $upload->allowed = array('image/*');
-            $upload->file_new_name_body = $fileName;
-            $upload->image_convert = "png";
-            $upload->process(ROOT_DIR . '/public/images/survey');
+                $upload->allowed = array('image/*');
+                $upload->file_new_name_body = $fileName;
+                $upload->image_convert = "png";
+                $upload->process(ROOT_DIR . '/public/images/survey');
 
-            if ($upload->processed) {
+                if ($upload->processed) {
 
-                if ($upload->image_src_x >= 100) {
-                    $upload->file_new_name_body = $fileName;
-                    $upload->image_convert = "png";
-                    $upload->image_resize = true;
-                    $upload->image_x = 250;
-                    $upload->image_ratio_y = true;
-                    $upload->process(ROOT_DIR . '/public/images/survey/thumbnail');
+                    if ($upload->image_src_x >= 100) {
+                        $upload->file_new_name_body = $fileName;
+                        $upload->image_convert = "png";
+                        $upload->image_resize = true;
+                        $upload->image_x = 250;
+                        $upload->image_ratio_y = true;
+                        $upload->process(ROOT_DIR . '/public/images/survey/thumbnail');
+                    }
+
+                    $post->photo = $upload->file_dst_name;
+                } else {
+                    warning($upload->error);
                 }
 
-                $post->photo = $upload->file_dst_name;
-            } else {
-                warning($upload->error);
+                $upload->clean();
             }
-
-            $upload->clean();
         }
 
-        $post->userId = User::id();
-        $result = $this->db->from("surveys")->insert((array) $post);
+        $result = false;
+
+        if ($id == 0) {
+            $post->userId = User::id();
+            $result = $this->db->from("surveys")->insert((array) $post);
+        } else
+            $result = $this->db->from("surveys")->where("id", "=", $id)->update((array) $post);
+
         if ($result)
             successlang("data.successfully.changed");
+
+        getDataError();
     }
 
     #[route(method: route::get | route::xhr_get, session: "user")]
     public function edit(int $surveyId)
     {
-        $data = $this->db->from("surveys")->where("id", "=", $surveyId)->result();
-        if (! $data)
+        if (! $surveyId)
+            warning("DATA_WAS_ZERO");
+
+        $result = $this->db->from("surveys")->where("id", "=", $surveyId)->result();
+        if (! $result)
             warning("DATA_NOT_FOUND");
 
-        $isOnEditMode = Request::segments()[1] == "edit";
+        $data = $result->data;
+        unset($result->data);
 
-        $this->view("main", "survey-crud", lang("create.survey"), [
-            "user" => User::info(), 
-            "showIfOnEditMode" => $isOnEditMode ? "<script>$(()=>{window.renderSurvey('".data_json((array)$data)."')})</script>" : ""
+        $result = data_json($result);
+
+        $isOnEditMode = Request::segments()[1] == "edit";
+        $surveyFormTitle = $isOnEditMode ? lang("edit.survey") : lang("create.survey");
+
+        $this->view("main", "survey-crud", $surveyFormTitle, [
+            "user" => User::info(),
+            "surveyFormTitle" => $surveyFormTitle,
+            "url" => $isOnEditMode ? "apply/$surveyId" : "apply",
+            "showIfOnEditMode" => $isOnEditMode ? "<script>$(()=>{window.prepareSurveyForEditing('$result', '$data')})</script>" : ""
         ]);
     }
 }
