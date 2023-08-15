@@ -72,7 +72,7 @@
                             <tr>
                                 <th scope="col" class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <button class="flex items-center gap-x-3 focus:outline-none">
-                                        <span>Company</span>
+                                        <span>Title</span>
 
                                         <svg class="h-3" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M2.13347 0.0999756H2.98516L5.01902 4.79058H3.86226L3.45549 3.79907H1.63772L1.24366 4.79058H0.0996094L2.13347 0.0999756ZM2.54025 1.46012L1.96822 2.92196H3.11227L2.54025 1.46012Z" fill="currentColor" stroke="currentColor" stroke-width="0.1" />
@@ -95,26 +95,26 @@
                                 <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">License use</th>
 
                                 <th scope="col" class="relative py-3.5 px-4">
-                                    <span class="sr-only">Edit</span>
+                                    <span class="sr-only"></span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                            <tr>
+                            <tr n:foreach="$surveys as $survey">
                                 <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
                                     <div>
-                                        <h2 class="font-medium text-gray-800 dark:text-white ">Catalog</h2>
+                                        <h2 class="font-medium text-gray-800 dark:text-white"><a live="true" href="/surveys/edit/{$survey->id}" data-content="#container">{$survey->title}</a></h2>
                                         <p class="text-sm font-normal text-gray-600 dark:text-gray-400">catalogapp.io</p>
                                     </div>
                                 </td>
                                 <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
                                     <div class="inline px-3 py-1 text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                                        Customer
+                                        Active
                                     </div>
                                 </td>
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                                <td class="px-4 py-4 text-sm whitespace-wrap">
                                     <div>
-                                        <h4 class="text-gray-700 dark:text-gray-200">Content curating app</h4>
+                                        <h4 class="text-gray-700 dark:text-gray-200">{$survey->about}</h4>
                                         <p class="text-gray-500 dark:text-gray-400">Brings all your news into one place</p>
                                     </div>
                                 </td>
@@ -135,7 +135,7 @@
                                 </td>
 
                                 <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <button class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
+                                    <button class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
                                         </svg>

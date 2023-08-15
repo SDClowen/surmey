@@ -1,7 +1,7 @@
 <?php
 	return[
 		"driver"	=>	"mysql",
-		"name"		=>	"surmey",
+		"name"		=>	"survey",
 		"charset"	=>	"utf8",
 		"collation"	=>	"utf8_general_ci",
 		"host"		=>	"localhost",

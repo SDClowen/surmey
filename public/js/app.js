@@ -1,5 +1,9 @@
 $(function () {
 
+    navigation.addEventListener("navigate", e => {
+        console.log(`navigate ->`, e)
+    });
+
     $('#file-upload').on('change', function (event) {
         var input = event.currentTarget;
         if (input.files && input.files[0]) {
@@ -14,28 +18,33 @@ $(function () {
         }
     });
 
-    function createCheckableList(type, questionDummyText, answerDummyText) {
+    function createCheckableList(type, questionDummyText, answerDummyText, answers = [], isHorizontal = false, isRequired = true) {
+
+        var generatedAnswers = '';
+        for (const v of Object.values(answers))
+            generatedAnswers += `<div class="mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">${v}</div>`;
+
         return `
             <div data-type="${type}" id="question" class="border-2 rounded-md border-dashed bg-white dark:bg-gray-800 border-gray-900/25 dark:border-gray-300/25 px-2 pt-2 text-sm m-3">
                 <div contenteditable="true" class="bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
 
                 <div class="ml-8 my-3">
                     <div id="answers">
-                        
+                        ${generatedAnswers}
                     </div>
                     <div id="create-answer" contenteditable="true" class="focus:rounded-lg border-b border-gray-500 my-2 p-2 text-sm focus:outline-blue-600">${answerDummyText}</div>
                 </div>
                 <div class="rounded-t-lg bg-yellow-100 dark:bg-gray-900 p-2">
                     <div class="col-span-4">
                         <label class="${type == 'checkbox' || type == 'radio' ? '' : 'hidden'} relative inline-flex items-center mb-4 cursor-pointer">
-                            <input type="checkbox" class="sr-only peer">
+                            <input type="checkbox" checked="${isHorizontal}" class="sr-only peer">
                             <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                             <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">
                                 Yatay olarak dizginle
                             </span>
                         </label>
                         <label class="relative inline-flex items-center mb-4 cursor-pointer">
-                            <input type="checkbox" checked="false" class="sr-only peer">
+                            <input type="checkbox" checked="${isRequired}" class="sr-only peer">
                             <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                             <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">
                                 Zorunlu
@@ -47,14 +56,14 @@ $(function () {
         `;
     }
 
-    function createTextArea(questionDummyText) {
+    function createTextArea(questionDummyText, isRequired = true) {
         return `
             <div data-type="textarea" id="question" class="border-2 border-dashed border-gray-400 bg-white dark:bg-gray-800 dark:border-gray-600 px-2 pt-2 text-sm m-3">
             <div contenteditable="true" class="mb-3 bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
             <div class="rounded-t-lg bg-yellow-100 dark:bg-gray-900 p-2">
                 <div class="col-span-4">
                     <label class="relative inline-flex items-center mb-4 cursor-pointer">
-                        <input type="checkbox" checked="false" class="sr-only peer">
+                        <input type="checkbox" checked="${isRequired}" class="sr-only peer">
                         <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                         <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">
                             Zorunlu
@@ -115,8 +124,31 @@ $(function () {
         return result
     }
 
+    const renderFromJson = function (data) {
+        for (const [k, v] of Object.entries(JSON.parse(data))) {
+
+            var content = ''
+
+            switch (v.type) {
+                case "radio":
+                case "checkbox":
+                    content = createCheckableList(v.type, v.title, "...", v.answers, v.isHorizontal, v.isRequired);
+                    break
+                case "textarea":
+                    content = createTextArea(v.title, v.isRequired)
+                    break
+                case "description":
+                    content = createDescription(v.title)
+                    break
+            }
+
+            $(".questions").append(content);
+        }
+    }
+
     window.generateSurvey = generate
-    
+    window.renderSurvey = renderFromJson
+
     $(document).on("click", "#preview", function (event) {
         const array = generate()
 
@@ -152,7 +184,7 @@ $(function () {
 
                     const types = ["info", "warning", "success", "danger"]
 
-                    content+=`
+                    content += `
                         <div class="alert ${types[element.subType]}">
                             ${element.title}
                         </div>
@@ -189,7 +221,7 @@ $(function () {
         }
     })
 
-    $(document).on("click", "#create-survey a", function (event) {
+    $(document).on("click", "#survey-crud a", function (event) {
         const type = $(this).attr("type");
         const questionDummyText = $(this).attr("question-text");
         const answerDummyText = $(this).attr("answer-text");
