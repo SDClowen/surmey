@@ -25,7 +25,15 @@ $(function () {
             generatedAnswers += `<div class="mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">${v}</div>`;
 
         return `
-            <div data-type="${type}" id="question" class="border-2 rounded-md border-dashed bg-white dark:bg-gray-800 border-gray-900/25 dark:border-gray-300/25 px-2 pt-2 text-sm m-3">
+            <div data-type="${type}" id="question" class="relative border-2 rounded-md border-dashed bg-white dark:bg-gray-800 border-gray-900/25 dark:border-gray-300/25 px-2 pt-2 text-sm m-3">
+                <button type="button" class="remove absolute -top-3 -right-3 bg-red-500/80 shadow-md rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-red-600 focus:outline-none">
+                    <span class="sr-only">Close menu</span>
+
+                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
                 <div contenteditable="true" class="bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
 
                 <div class="ml-8 my-3">
@@ -58,7 +66,14 @@ $(function () {
 
     function createTextArea(questionDummyText, isRequired = true) {
         return `
-            <div data-type="textarea" id="question" class="border-2 border-dashed border-gray-400 bg-white dark:bg-gray-800 dark:border-gray-600 px-2 pt-2 text-sm m-3">
+            <div data-type="textarea" id="question" class="relative border-2 border-dashed border-gray-400 bg-white dark:bg-gray-800 dark:border-gray-600 px-2 pt-2 text-sm m-3">
+            <button type="button" class="remove absolute -top-3 -right-3 bg-red-500/80 shadow-md rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-red-600 focus:outline-none">
+                <span class="sr-only">Close menu</span>
+
+                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
             <div contenteditable="true" class="mb-3 bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
             <div class="rounded-t-lg bg-yellow-100 dark:bg-gray-900 p-2">
                 <div class="col-span-4">
@@ -77,7 +92,14 @@ $(function () {
 
     function createDescription(questionDummyText) {
         return `
-            <div data-type="description" id="question" class="border-2 border-dashed border-gray-400 bg-white dark:bg-gray-800 dark:border-gray-600 px-2 pt-2 text-sm m-3">
+            <div data-type="description" id="question" class="relative border-2 border-dashed border-gray-400 bg-white dark:bg-gray-800 dark:border-gray-600 px-2 pt-2 text-sm m-3">
+                <button type="button" class="remove absolute -top-3 -right-3 bg-red-500/80 shadow-md rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-red-600 focus:outline-none">
+                    <span class="sr-only">Close menu</span>
+
+                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
                 <div contenteditable="true" class="mb-3 h-14 bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
             
                 <div class="rounded-t-lg bg-yellow-100 dark:bg-gray-900 p-2">
@@ -129,7 +151,7 @@ $(function () {
         formData = JSON.parse(formData)
         $("input[name=title]").val(formData.title)
         $("input[name=verifyPhone]").prop("checked", formData.verifyPhone);
-        $("#cover-photo-result").css({backgroundImage: `url('/public/images/survey/${formData.photo}')`})
+        $("#cover-photo-result").css({ backgroundImage: `url('/public/images/survey/${formData.photo}')` })
         $("textarea[name=about]").text(formData.about)
 
         for (const [k, v] of Object.entries(JSON.parse(jsonData))) {
@@ -153,66 +175,82 @@ $(function () {
         }
     }
 
+    const renderFormEntry = (element) => {
+        let content = "";
+
+        if (element.type != "description")
+            content += `
+                <div class="rounded-lg bg-slate-50/30 border mb-3 border-gray-200 shadow-sm p-4 dark:border-gray-600 dark:bg-slate-900"> 
+            `
+
+        if (element.type != "description")
+            content += `
+                <h1 class="text-clip border-b border-gray-200 pb-3 pt-1 text-lg font-medium dark:border-gray-600 mb-4">
+                    ${element.title}
+                </h1>
+            `;
+
+        switch (element.type) {
+            case "radio":
+            case "checkbox":
+                let divClass = "inline"
+                if (element.isHorizontal)
+                    divClass = "grid grid-flow-col justify-stretch"
+
+                content += `<div class="${divClass}">`;
+                break
+            case "textarea":
+                content += '<textarea class="w-full rounded-lg border mb-3 text-gray-900 dark:text-gray-50 border-gray-200 shadow-sm bg-white p-2 focus:outline-blue-500 dark:focus:outline-blue-600 dark:border-gray-600 dark:bg-slate-900"></textarea>'
+                break
+
+            case "description":
+
+                const types = ["info", "warning", "success", "danger"]
+
+                content += `
+                    <div class="my-3 shadow-sm text-center rounded-md p-3 text-md ${types[element.subType]}">
+                        ${element.title}
+                    </div>
+                `;
+
+                break
+        }
+
+        element.answers.forEach((answer, i) => {
+            content += `
+                <div class="flex items-center mb-2 mx-1">
+                    <input id="link-${element.type}-${i}" type="${element.type}" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="link-${element.type}-${i}" class="ml-2 text-sm font-normal text-gray-900 dark:text-gray-300">${answer}</label>
+                </div>
+            `
+        })
+
+        if (element.type != "description")
+            content += "</div>";
+
+        return content
+    }
+
     window.generateSurvey = generate
     window.prepareSurveyForEditing = prepareSurveyForEditing
+    window.buildForm = (data) => {
+        data = JSON.parse(data)
+
+        $(".generated-form").html("")
+        for (const [k, element] of Object.entries(data))
+            $(".generated-form").append(renderFormEntry(element))
+    }
+
+    $(document).on("click", ".remove", function (event) {
+        $(this).parent().remove()
+    })
 
     $(document).on("click", "#preview", function (event) {
         const array = generate()
 
         $(".preview-content").html("")
 
-        array.forEach(element => {
-
-            let content = `
-                <div class="rounded-lg border mb-3 border-gray-200 shadow-sm bg-white p-4 dark:border-gray-600 dark:bg-slate-900"> 
-            `
-
-            if (element.type != "description")
-                content += `
-                    <h1 class="text-clip border-b border-gray-200 pb-3 pt-1 text-3xl font-thin dark:border-gray-600 mb-4">
-                        ${element.title}
-                    </h1>
-                `;
-
-            switch (element.type) {
-                case "radio":
-                case "checkbox":
-                    let divClass = "inline"
-                    if (element.isHorizontal)
-                        divClass = "grid grid-flow-col justify-stretch"
-
-                    content += `<div class="${divClass}">`;
-                    break
-                case "textarea":
-                    content += '<textarea class="w-full rounded-lg border mb-3 text-gray-900 dark:text-gray-50 border-gray-200 shadow-sm bg-white p-2 focus:outline-blue-500 dark:focus:outline-blue-600 dark:border-gray-600 dark:bg-slate-900"></textarea>'
-                    break
-
-                case "description":
-
-                    const types = ["info", "warning", "success", "danger"]
-
-                    content += `
-                        <div class="alert ${types[element.subType]}">
-                            ${element.title}
-                        </div>
-                    `;
-
-                    break
-            }
-
-            element.answers.forEach((answer, i) => {
-                content += `
-                    <div class="flex items-center mb-2">
-                        <input id="link-${element.type}-${i}" type="${element.type}" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                        <label for="link-${element.type}-${i}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">${answer}</label>
-                    </div>
-                `
-            })
-
-            content += "</div>";
-
-            $(".preview-content").append(content)
-        })
+        array.forEach(element => $(".preview-content").append(renderFormEntry(element)))
     })
 
     $(document).on("keypress", "#create-answer", function (event) {

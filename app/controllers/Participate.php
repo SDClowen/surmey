@@ -9,10 +9,8 @@ use Core\{Controller, Request, Config, Database};
 use Core\Attributes\route;
 use App\Models\User;
 
-class Partipicate extends Controller
+class Participate extends Controller
 {
-	private const isActive = 1;
-
 	public function index()
 	{
 		if(!session_check("surveySlug"))
@@ -23,9 +21,9 @@ class Partipicate extends Controller
 
 		#session_destroy();
 		if (session_check("tempPin"))
-			redirect("/partipicate/pin");
+			redirect("/participate/pin");
 
-		if (session_check("partipicator"))
+		if (session_check("participator"))
 			redirect("/d/$slug");
 
 		$this->render("survey/auth", [
@@ -38,13 +36,13 @@ class Partipicate extends Controller
 	public function verifyPhone()
 	{
 		if (session_check("tempPin"))
-			warning(redirect: "/partipicate/pin");
+			warning(redirect: "/participate/pin");
 
 		if(!session_check("surveySlug"))
 			redirect("/");
 	
 		$slug = session_get("surveySlug");
-		if (session_check("partipicator"))
+		if (session_check("participator"))
 			warning(redirect: "/d/$slug");
 
 		$surveyId = session_get("surveyId");
@@ -67,7 +65,7 @@ class Partipicate extends Controller
 		if (! $personalId)
 			warning("Personel bulunamadı!");
 
-		if (Participator::checkSurveyIsPartipicated($surveyId, $personalId, isDone: true))
+		if (Participator::checkSurveyIsParticipated($surveyId, $personalId, isDone: true))
 			warning("Bu anketi daha önce zaten cevapladınız!");
 
 		# find a unique usable pin for the participator
@@ -105,7 +103,7 @@ class Partipicate extends Controller
 
 		#\SmsHelper::send($post->phone, "HAUS - Çalışma saatleri değerlendirme anketi onay kodu: ". $pin);
 		if ($result)
-			success(redirect: "/partipicate/pin");
+			success(redirect: "/participate/pin");
 
 		getDataError();
 	}
@@ -140,7 +138,7 @@ class Partipicate extends Controller
 			redirect("/");
 	
 		$slug = session_get("surveySlug");
-		if (session_check("partipicator"))
+		if (session_check("participator"))
 			warning(redirect: "/d/$slug");
 
 		$post = Request::post();
@@ -161,25 +159,25 @@ class Partipicate extends Controller
 		elseif (hash("sha256", $post->pin) != $tempPin->token)
 			errorlang("pin.error");
 
-		if (! ($partipicatorInfo = Participator::checkToken($post->pin)))
+		if (! ($participatorInfo = Participator::checkToken($post->pin)))
 			warninglang("pin.error");
 
 		session_remove("tempPin");
 
 		#session_regenerate_id(true);
 
-		session_set("partipicator", $partipicatorInfo);
+		session_set("participator", $participatorInfo);
 		success(redirect: "/d/$slug");
 	}
 
-	#[route(method: route::xhr_post, session: "partipicator", uri: "answer-survey")]
-	public function answerSurvey()
+	#[route(method: route::xhr_post, session: "participator", uri: "apply")]
+	public function apply()
 	{
 		if(!session_check("surveySlug"))
 			redirect("/");
 	
 		$slug = session_get("surveySlug");
-		if (!session_check("partipicator"))
+		if (!session_check("participator"))
 			warning(redirect: "/d/$slug");
 
 		$post = Request::post();
@@ -191,9 +189,9 @@ class Partipicate extends Controller
 		if ($rules)
 			warning($rules);
 
-		$user = session_get("partipicator");
+		$user = session_get("participator");
 
-		if (Participator::checkSurveyIsPartipicated($user->personalId, true))
+		if (Participator::checkSurveyIsParticipated($user->personalId, true))
 			warning("Bu anketi daha önce zaten cevapladınız!");
 
 		$result = Database::get()->from("answers")

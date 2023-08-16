@@ -15,7 +15,7 @@ final class Participator extends Model
         return $user;
     }
 
-    public static function checkSurveyIsPartipicated(int $surveyId, int $personalId, bool $isDone = false) : int
+    public static function checkSurveyIsParticipated(int $surveyId, int $personalId, bool $isDone = false) : int
     {
         return Database::get()->select("count(id)")
             ->from("answers")

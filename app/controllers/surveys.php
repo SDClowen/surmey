@@ -19,18 +19,6 @@ class Surveys extends Controller
         ]);
     }
 
-    #[route(method: route::get, session: "user")]
-    public function participate($token)
-    {
-        $this->render("participate", [
-            "title" => "Welcome - Surmey",
-            "survey" => (object) [
-                "title" => "Thanks for participating to this survey!",
-                "token" => $token
-            ]
-        ]);
-    }
-
     #[route(method: route::get | route::xhr_get, session: "user")]
     public function create()
     {

@@ -167,19 +167,19 @@ class Main extends Controller
     }
     
     #[route(method: route::get, uri: "d")]
-	public function partipicateSurvey(string $slug)
+	public function participateSurvey(string $slug)
 	{
         $survey = Survey::exists("slug", $slug);
 		if (!$survey)
 			die("Anket bulunamadı veya belirtilen anketin süresi bitmiş olabilir!");
 
-		if (!session_check("partipicator"))
+		if (!session_check("user") && !session_check("participator"))
 		{
             session_set("surveySlug", $slug);
             session_set("surveyId", $survey->id);
-            redirect("/partipicate");
+            redirect("/participate");
         }
 
-		$this->render("survey/view", ["title" => $survey->title, "data" => $survey]);
+		$this->render("survey/participate", ["title" => $survey->title, "survey" => $survey]);
 	}
 }
