@@ -24,7 +24,7 @@
         <form role="form" action="/surveys/{$url}" before="window.generateSurvey()" method="post" data-content=".survey-create-message">
             <input type="hidden" name="data"/>
             {csrf()|noescape}
-            <div class="survey-create-message my-5"></div>
+            <div class="survey-create-message fixed bottom-0 right-2 z-10 my-5"></div>
             <div class="border-b border-gray-900/10 pb-12">
                 <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-slate-50">
                     {$surveyFormTitle}
@@ -121,7 +121,7 @@
                             <span class="ml-1">Preview</span>
                         </a>
                     </div>
-                    <div class="rounded-lg p-1 shadow-sm bg-slate-50 dark:bg-slate-700">
+                    <div class="rounded-lg p-1 shadow-md bg-slate-50 border-slate-100 dark:border-slate-600 dark:bg-slate-700">
                         <div x-show="current === 1" class="questions">
                             {$showIfOnEditMode|noescape}
                         </div>
@@ -189,7 +189,7 @@
                 </div>
             </div>
 
-            <div class="mt-6 flex items-center justify-end gap-x-6">
+            <div class="flex items-center sticky bottom-0 justify-end gap-x-6 p-3 backdrop-blur-xl border-t">
                 <button type="button" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50 hover:underline">Cancel</button>
                 <button type="submit" class="rounded-md bg-blue-600 dark:bg-blue-800 px-8 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 dark:hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Save</button>
             </div>

@@ -79,7 +79,7 @@
                 const csrf = document.querySelector("input[name='csrf']").value
 
                 $.ajax({
-                    url: "/partipicate/pin",
+                    url: "/participate/pin",
                     method: "post",
                     dataType: "json",
                     data: {
@@ -98,7 +98,7 @@
                         if(result.redirect)
                             window.location.href = result.redirect
                         else 
-                            window.location.href = "/partipicate"
+                            window.location.href = "/participate"
                     }
                 })
             }

@@ -28,7 +28,7 @@
                 <h1 class="text-2xl font-semibold">Hoşgeldiniz</h1>
                 <small class="text-gray-400">{$survey->title}</small>
                 <i class="text-gray-300 font-thin text-xs">Ankete katılmak için lütfen telefon numaranız ile giriş yapınız...</i>
-                <form role="form" class="space-y-6" action="/partipicate/verify-step1" method="post" data-content=".message">
+                <form role="form" class="space-y-6" action="/participate/verify-step1" method="post" data-content=".message">
                     {csrf()|noescape}
                     <div class="mb-3">
                         <label class="mb-2 block text-xs font-semibold">{lang("type.phone")}</label>
