@@ -38,7 +38,7 @@
                     </div>
                     <span class="mx-1 text-xs text-gray-600 dark:text-gray-300">21 SEP 2015</span>
                     
-        <button class="bg-blue-600 ml-auto rounded-md text-white p-2 text-sm">Participate</button>
+                    <button class="bg-blue-600 ml-auto rounded-md text-white p-2 text-sm">Participate</button>
                 </div>
             </div>
         </div>

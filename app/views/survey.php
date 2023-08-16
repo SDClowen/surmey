@@ -4,10 +4,10 @@
             <div class="flex items-center gap-x-3">
                 <h2 class="text-lg font-medium text-gray-800 dark:text-white">Surveys</h2>
 
-                <span class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">12 survey</span>
+                <span class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{count($surveys)}</span>
             </div>
 
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">These companies have purchased in the last 12 months.</p>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">Oluşturulan tüm anketler burada yer alır.</p>
         </div>
 
         <div class="flex items-center mt-4 gap-x-3">
@@ -89,11 +89,11 @@
                                 <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     About
                                 </th>
-
+<!--
                                 <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">Users</th>
 
                                 <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">License use</th>
-
+-->
                                 <th scope="col" class="relative py-3.5 px-4">
                                     <span class="sr-only"></span>
                                 </th>
@@ -103,22 +103,22 @@
                             <tr n:foreach="$surveys as $survey">
                                 <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
                                     <div>
-                                        <h2 class="font-medium text-gray-800 dark:text-white"><a live="true" href="/surveys/edit/{$survey->id}" data-content="#container">{$survey->title}</a></h2>
-                                        <p class="text-sm font-normal text-gray-600 dark:text-gray-400">catalogapp.io</p>
+                                        <h2 class="font-medium text-gray-800 dark:text-white"><a href="/d/{$survey->slug}" data-content="#container" target="blank">{$survey->title}</a></h2>
+                                        <p class="text-sm font-normal text-gray-600 dark:text-gray-400">0 katılım - <span class="text-blue-600">{Core\Request::getHost()}/d/{$survey->slug}</span></p>
                                     </div>
                                 </td>
                                 <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
-                                    <div class="inline px-3 py-1 text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                                        Active
+                                    <div class="inline px-3 py-1 text-sm font-normal rounded-full gap-x-2 {$survey->status ? ' text-emerald-500 bg-emerald-100/60' : 'text-gray-500 bg-gray-100 dark:text-gray-400'} dark:bg-gray-800">
+                                        {$survey->status ? 'ACTIVE' : 'PASSIVE'}
                                     </div>
                                 </td>
                                 <td class="px-4 py-4 text-sm whitespace-wrap">
                                     <div>
-                                        <h4 class="text-gray-700 dark:text-gray-200">{$survey->about}</h4>
-                                        <p class="text-gray-500 dark:text-gray-400">Brings all your news into one place</p>
+                                        <!--<h4 class="text-gray-700 dark:text-gray-200"></h4>-->
+                                        <p class="text-gray-500 dark:text-gray-400">{$survey->about}</p>
                                     </div>
                                 </td>
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                                <!--<td class="px-4 py-4 text-sm whitespace-nowrap">
                                     <div class="flex items-center">
                                         <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
                                         <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
@@ -126,192 +126,18 @@
                                         <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
                                         <p class="flex items-center justify-center w-6 h-6 -mx-1 text-xs text-blue-600 bg-blue-100 border-2 border-white rounded-full">+4</p>
                                     </div>
-                                </td>
+                                </td>-->
 
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
+                                <!--<td class="px-4 py-4 text-sm whitespace-nowrap">
                                     <div class="w-48 h-1.5 bg-blue-200 overflow-hidden rounded-full">
                                         <div class="bg-blue-500 w-2/3 h-1.5"></div>
                                     </div>
-                                </td>
+                                </td>-->
 
                                 <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <button class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                                    <div>
-                                        <h2 class="font-medium text-gray-800 dark:text-white ">Circooles</h2>
-                                        <p class="text-sm font-normal text-gray-600 dark:text-gray-400">getcirooles.com</p>
-                                    </div>
-                                </td>
-                                <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
-                                    <div class="inline px-3 py-1 text-sm font-normal text-gray-500 bg-gray-100 rounded-full dark:text-gray-400 gap-x-2 dark:bg-gray-800">
-                                        Churned
-                                    </div>
-                                </td>
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div>
-                                        <h4 class="text-gray-700 dark:text-gray-200">Design software</h4>
-                                        <p class="text-gray-500 dark:text-gray-400">Super lightweight design app</p>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <p class="flex items-center justify-center w-6 h-6 -mx-1 text-xs text-blue-600 bg-blue-100 border-2 border-white rounded-full">+4</p>
-                                    </div>
-                                </td>
-
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div class="w-48 h-1.5 bg-blue-200 overflow-hidden rounded-full">
-                                        <div class="bg-blue-500 w-2/5 h-1.5"></div>
-                                    </div>
-                                </td>
-
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <button class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                                    <div>
-                                        <h2 class="font-medium text-gray-800 dark:text-white ">Sisyphus</h2>
-                                        <p class="text-sm font-normal text-gray-600 dark:text-gray-400">sisyphus.com</p>
-                                    </div>
-                                </td>
-                                <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
-                                    <div class="inline px-3 py-1 text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                                        Customer
-                                    </div>
-                                </td>
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div>
-                                        <h4 class="text-gray-700 dark:text-gray-200">Automation and workflow</h4>
-                                        <p class="text-gray-500 dark:text-gray-400">Time tracking, invoicing and expenses</p>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <p class="flex items-center justify-center w-6 h-6 -mx-1 text-xs text-blue-600 bg-blue-100 border-2 border-white rounded-full">+4</p>
-                                    </div>
-                                </td>
-
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div class="w-48 h-1.5 bg-blue-200 overflow-hidden rounded-full">
-                                        <div class="bg-blue-500 w-11/12 h-1.5"></div>
-                                    </div>
-                                </td>
-
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <button class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                                    <div>
-                                        <h2 class="font-medium text-gray-800 dark:text-white ">Hourglass</h2>
-                                        <p class="text-sm font-normal text-gray-600 dark:text-gray-400">hourglass.app</p>
-                                    </div>
-                                </td>
-                                <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
-                                    <div class="inline px-3 py-1 text-sm font-normal text-gray-500 bg-gray-100 rounded-full dark:text-gray-400 gap-x-2 dark:bg-gray-800">
-                                        Churned
-                                    </div>
-                                </td>
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div>
-                                        <h4 class="text-gray-700 dark:text-gray-200">Productivity app</h4>
-                                        <p class="text-gray-500 dark:text-gray-400">Time management and productivity</p>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <p class="flex items-center justify-center w-6 h-6 -mx-1 text-xs text-blue-600 bg-blue-100 border-2 border-white rounded-full">+4</p>
-                                    </div>
-                                </td>
-
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div class="w-48 h-1.5 bg-blue-200 overflow-hidden rounded-full">
-                                        <div class="bg-blue-500 w-1/3 h-1.5"></div>
-                                    </div>
-                                </td>
-
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <button class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
-                                        </svg>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                                    <div>
-                                        <h2 class="font-medium text-gray-800 dark:text-white ">Quotient</h2>
-                                        <p class="text-sm font-normal text-gray-600 dark:text-gray-400">quotient.co</p>
-                                    </div>
-                                </td>
-                                <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
-                                    <div class="inline px-3 py-1 text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                                        Customer
-                                    </div>
-                                </td>
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div>
-                                        <h4 class="text-gray-700 dark:text-gray-200">Sales CRM</h4>
-                                        <p class="text-gray-500 dark:text-gray-400">Web-based sales doc management</p>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <p class="flex items-center justify-center w-6 h-6 -mx-1 text-xs text-blue-600 bg-blue-100 border-2 border-white rounded-full">+4</p>
-                                    </div>
-                                </td>
-
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div class="w-48 h-1.5 bg-blue-200 overflow-hidden rounded-full">
-                                        <div class="bg-blue-500 w-1/6 h-1.5"></div>
-                                    </div>
-                                </td>
-
-                                <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <button class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
-                                        </svg>
-                                    </button>
+                                    <a live="true" href="/reports/view/{$survey->id}" data-content="#container" class="bg-blue-600 text-white px-4 transition-colors duration-200 rounded-xl py-1">Reports</a>
+                                    <a live="true" href="/surveys/edit/{$survey->id}" data-content="#container" class="bg-gray-300 text-black px-4 transition-colors duration-200 rounded-xl py-1">Edit</a>
+                                    <a data-url="/surveys/delete/{$survey->id}" class="bg-red-600 text-white px-4 transition-colors duration-200 rounded-xl py-1">Delete</a>
                                 </td>
                             </tr>
                         </tbody>

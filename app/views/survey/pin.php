@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surmey - Validate Pin</title>
+    <title>Surmey - {$title}</title>
     {acss("app")|noescape}
     {njs("jquery/dist/jquery.min")|noescape}
     {njs("sdeasy/sdeasy")|noescape}
@@ -14,22 +14,20 @@
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
 </head>
 
-<body class="fixed inset-0 w-full h-full flex bg-gray-200 dark:bg-slate-700 dark:text-gray-200 items-center justify-center">
-    <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4" x-data="app()">
+<body class="fixed inset-0 w-full h-full flex bg-gray-200 dark:bg-slate-700 dark:text-gray-200 items-center justify-center min-[980px]:px-4">
+    <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-4 max-[980px]:mx-4" x-data="app()">
         <div class="font-thin px-2 pb-4 text-lg">Enter your pin code</div>
         <div class="font-thin px-2 pb-4 text-center text-gray-500">
-            <b>+90 (***) *** 76 94</b><br>Doğrulama kodu gönderildi
+            <b>+90 (***) *** {$pin->phoneLastNum4}</b><br>Doğrulama kodu gönderildi
         </div>
         <div class="flex">
             <template x-for="(l,i) in pinlength" :key="`codefield_${ i }`">
                 <input :autofocus="i == 0" :id="`codefield_${ i }`" class="dark:bg-gray-950 dark:border-gray-700 focus:border-blue-300 focus:outline-blue-500 h-16 w-12 border mx-2 rounded-xl text-center font-thin text-3xl" value="" maxlength="1" max="9" min="0" inputmode="numeric" @keyup="stepForward(i)" @keydown.backspace="stepBack(i)" @focus="resetValue(i)"/>
             </template>
             {csrf()|noescape}
-            <input type="hidden" name="token" value="{$token}">
+            <input type="hidden" name="token" value="{$pin->token}">
         </div>
-        <h1 class="text-center m-8 font-extralight text-slate-800 dark:text-gray-200 text-7xl te">
-            60
-        </h1>
+        <h1 class="text-center m-8 font-extralight text-slate-800 dark:text-gray-200 text-7xl"> </h1>
     </div>
 </body>
 
@@ -81,7 +79,7 @@
                 const csrf = document.querySelector("input[name='csrf']").value
 
                 $.ajax({
-                    url: "/pin",
+                    url: "/partipicate/pin",
                     method: "post",
                     dataType: "json",
                     data: {
@@ -97,7 +95,10 @@
                             return
                         }
                         
-                        window.location.href = "/"
+                        if(result.redirect)
+                            window.location.href = result.redirect
+                        else 
+                            window.location.href = "/partipicate"
                     }
                 })
             }

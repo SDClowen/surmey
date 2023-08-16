@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers;
 
+use App\Models\Survey;
 use App\Models\User;
 use Core\{Controller, Request};
 use Core\Attributes\route;
@@ -164,24 +165,21 @@ class Main extends Controller
         session_destroy();
         success(redirect: "/");
     }
-
-    public function test()
-    {
-        $this->render("test");
-    }
-
-    #[route(method: route::xhr_post)]
-	public function survey()
+    
+    #[route(method: route::get, uri: "d")]
+	public function partipicateSurvey(string $slug)
 	{
-		$post = Request::post();
+        $survey = Survey::exists("slug", $slug);
+		if (!$survey)
+			die("Anket bulunamadı veya belirtilen anketin süresi bitmiş olabilir!");
 
-		$rules = validate($post, [
-			"answer" => ["name" => "Cevap", "numeric" => true, "min" => 0, "max" => 1]
-		]);
+		if (!session_check("partipicator"))
+		{
+            session_set("surveySlug", $slug);
+            session_set("surveyId", $survey->id);
+            redirect("/partipicate");
+        }
 
-		if($rules)
-			warning($rules);
-
-		success(json_encode($post));
+		$this->render("survey/view", ["title" => $survey->title, "data" => $survey]);
 	}
 }

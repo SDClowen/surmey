@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full">
+<html class="h-full" lang="tr">
 
 <head>
     <meta charset="UTF-8">
@@ -39,7 +39,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <button class="mb-1.5 block w-full text-center text-white bg-blue-700 hover:bg-blue-900 transition-colors transition-duration-200 px-2 py-1.5 rounded-md">Sign in</button>
+                        <button type="submit" class="mb-1.5 block w-full text-center text-white bg-blue-700 hover:bg-blue-900 transition-colors transition-duration-200 px-2 py-1.5 rounded-md">Sign in</button>
                     </div>
                 </form>
             </div>
