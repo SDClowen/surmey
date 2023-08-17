@@ -178,11 +178,15 @@ class Participate extends Controller
 	
 		$slug = session_get("surveySlug");
 		if (!session_check("participator"))
+<<<<<<< HEAD
 			warning("INVALID_SURVEY");
 
 		$survey = Survey::exists("slug", $slug);
 		if(!$survey)
 			error("INVALID_SURVEY_DATA");
+=======
+			warning(redirect: "/d/$slug");
+>>>>>>> 2ae60f26b6a9e8182a33fd3d67d9ffeef6f357a4
 
 		$post = Request::post();
 
@@ -190,11 +194,16 @@ class Participate extends Controller
 
 		$validate = validate($post, $rules);
 
+<<<<<<< HEAD
 		if ($validate)
 			warning($validate);
 
 		$user = session_get("participator");
 
+=======
+		$user = session_get("participator");
+
+>>>>>>> 2ae60f26b6a9e8182a33fd3d67d9ffeef6f357a4
 		if (Participator::checkSurveyIsParticipated($user->personalId, true))
 			warning("Bu anketi daha önce zaten cevapladınız!");
 

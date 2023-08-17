@@ -22,11 +22,18 @@ $(function () {
 
         var generatedAnswers = '';
         for (const v of Object.values(answers))
-            generatedAnswers += `<div class="mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">${v}</div>`;
+            generatedAnswers += `<div class="relative mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">
+                                    <button type="button" class="remove absolute top-50 right-2 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
+                                        <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                    ${v}
+                                </div>`;
 
         return `
             <div data-type="${type}" id="question" class="relative border-2 rounded-md border-dashed bg-white dark:bg-gray-800 border-gray-900/25 dark:border-gray-300/25 px-2 pt-2 text-sm m-3">
-                <button type="button" class="remove absolute -top-3 -right-3 bg-red-500/80 shadow-md rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-red-600 focus:outline-none">
+                <button type="button" class="remove absolute -top-3 -right-3 bg-red-500/80 transition duration-400 shadow-md rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-red-600 focus:outline-none">
                     <span class="sr-only">Close menu</span>
 
                     <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -67,7 +74,7 @@ $(function () {
     function createTextArea(questionDummyText, isRequired = true) {
         return `
             <div data-type="textarea" id="question" class="relative border-2 border-dashed border-gray-400 bg-white dark:bg-gray-800 dark:border-gray-600 px-2 pt-2 text-sm m-3">
-            <button type="button" class="remove absolute -top-3 -right-3 bg-red-500/80 shadow-md rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-red-600 focus:outline-none">
+            <button type="button" class="remove absolute -top-3 -right-3 bg-red-500/80 transition duration-400 shadow-md rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-red-600 focus:outline-none">
                 <span class="sr-only">Close menu</span>
 
                 <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -90,10 +97,10 @@ $(function () {
         `
     }
 
-    function createDescription(questionDummyText) {
+    function createDescription(questionDummyText, subType = 0) {
         return `
             <div data-type="description" id="question" class="relative border-2 border-dashed border-gray-400 bg-white dark:bg-gray-800 dark:border-gray-600 px-2 pt-2 text-sm m-3">
-                <button type="button" class="remove absolute -top-3 -right-3 bg-red-500/80 shadow-md rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-red-600 focus:outline-none">
+                <button type="button" class="remove absolute -top-3 -right-3 bg-red-500/80 transition duration-400 shadow-md rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-red-600 focus:outline-none">
                     <span class="sr-only">Close menu</span>
 
                     <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -105,15 +112,36 @@ $(function () {
                 <div class="rounded-t-lg bg-yellow-100 dark:bg-gray-900 p-2">
                     <div class="col-span-4">
                         <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md outline-none focus:ring-blue-500 focus:border-blue-500 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected value="0">Bilgi</option>
-                            <option value="1">Uyarı</option>
-                            <option value="2">Başarı</option>
-                            <option value="3">Tehlike</option>
+                            <option value="0" ${(subType == 0 ? "selected" : "")}>Bilgi</option>
+                            <option value="1" ${(subType == 1 ? "selected" : "")}>Uyarı</option>
+                            <option value="2" ${(subType == 2 ? "selected" : "")}>Başarı</option>
+                            <option value="3" ${(subType == 3 ? "selected" : "")}>Tehlike</option>
                         </select>
                     </div>
                 </div>
             </div>
         `
+    }
+
+    var uniqueStrings = []
+    const randomString = (length) => {
+
+        const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+        var result = '';
+        
+        while(true)
+        {
+            for (var i = length; i > 0; --i) 
+                result += chars[Math.floor(Math.random() * chars.length)];
+
+            if(uniqueStrings.find(p => p == result))
+                continue;
+
+            break;
+        }
+
+        return result;
     }
 
     const generate = () => {
@@ -122,8 +150,10 @@ $(function () {
         var result = [];
         questions.each(function () {
             $this = $(this)
+
             var question = {
                 title: $this.find("div:eq(0)").text(),
+                slug: randomString(6),
                 type: $this.data("type"),
                 isHorizontal: $this.find("input[type=checkbox]:eq(0)").prop("checked"),
                 isRequired: $this.find("input[type=checkbox]:eq(1)").prop("checked"),
@@ -167,7 +197,7 @@ $(function () {
                     content = createTextArea(v.title, v.isRequired)
                     break
                 case "description":
-                    content = createDescription(v.title)
+                    content = createDescription(v.title, v.subType)
                     break
             }
 
@@ -200,7 +230,7 @@ $(function () {
                 content += `<div class="${divClass}">`;
                 break
             case "textarea":
-                content += '<textarea class="w-full rounded-lg border mb-3 text-gray-900 dark:text-gray-50 border-gray-200 shadow-sm bg-white p-2 focus:outline-blue-500 dark:focus:outline-blue-600 dark:border-gray-600 dark:bg-slate-900"></textarea>'
+                content += '<textarea name="'+element.slug+'" class="w-full rounded-lg border mb-3 text-gray-900 dark:text-gray-50 border-gray-200 shadow-sm bg-white p-2 focus:outline-blue-500 dark:focus:outline-blue-600 dark:border-gray-600 dark:bg-slate-900"></textarea>'
                 break
 
             case "description":
@@ -219,7 +249,7 @@ $(function () {
         element.answers.forEach((answer, i) => {
             content += `
                 <div class="flex items-center mb-2 mx-1">
-                    <input id="link-${element.type}-${i}" type="${element.type}" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <input id="link-${element.type}-${i}" name="${element.type == "radio" ? element.slug : element.slug + i}" type="${element.type}" value="${i}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     <label for="link-${element.type}-${i}" class="ml-2 text-sm font-normal text-gray-900 dark:text-gray-300">${answer}</label>
                 </div>
             `
