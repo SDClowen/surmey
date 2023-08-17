@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.3.0/alpine.js" integrity="sha512-nIwdJlD5/vHj23CbO2iHCXtsqzdTTx3e3uAmpTm4x2Y8xCIFyWu4cSIV8GaGe2UNVq86/1h9EgUZy7tn243qdA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+    
     {acss("app")|noescape}
     {njs("jquery/dist/jquery.min")|noescape}
     {njs("sdeasy/sdeasy")|noescape}
@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="hidden md:block">
-                        
+
                         <div x-data="{ isOpen: false }" class="relative inline-block">
                             <!-- Dropdown toggle button -->
                             <button @click="isOpen = !isOpen" class="relative z-10 flex transition-colors duration-300 transform items-center p-2 text-sm text-gray-200 border-transparent rounded-md hover:bg-blue-900 focus:bg-blue-900 focus:border-blue-500 focus:ring-opacity-40 focus:ring-blue-300 focus:ring focus:outline-none">
@@ -63,7 +63,9 @@
                                 <a href="#" class="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
                                     <img class="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src="https://images.unsplash.com/photo-1523779917675-b6ed3a42a561?ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8d29tYW4lMjBibHVlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=face&w=500&q=200" alt="jane avatar">
                                     <div class="mx-1">
-                                        <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-200"><pre>{$user->name}</pre></h1>
+                                        <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                                            <pre>{$user->name}</pre>
+                                        </h1>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">{$user->email}</p>
                                     </div>
                                 </a>
@@ -222,7 +224,8 @@
                     </svg>
                     <span class="text-gray-500">Surmey - <small class="text-gray-400 font-thin">A simple survey system</small></span>
                     <small class="text-gray-400 ml-auto font-thin font">
-                        Copyright © <?= date("Y") ?> <a href="https://github.com/SDClowen">All rights reserved.</a>
+                        Copyright ©
+                        <?= date("Y") ?> <a href="https://github.com/SDClowen">All rights reserved.</a>
                     </small>
                 </h1>
             </div>

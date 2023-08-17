@@ -10,7 +10,11 @@ final class Survey extends Model
 
     public static function all(int $userId)
     {
-        return Database::get()->from("surveys")->where("userId", "=", $userId)->results();
+        return Database::get()->select("count(answers.id) answersCount, surveys.*")
+                ->from("surveys")
+                ->leftJoin("answers", "answers.surveyId = surveys.id")
+                ->where("surveys.userId", "=", $userId)
+                ->results();
     }
 
     public static function exists(string $column, string $value)

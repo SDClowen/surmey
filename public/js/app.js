@@ -152,7 +152,7 @@ $(function () {
             $this = $(this)
 
             var question = {
-                title: $this.find("div:eq(0)").text(),
+                title: $this.find("div:eq(0)").text().trim(),
                 slug: randomString(6),
                 type: $this.data("type"),
                 isHorizontal: $this.find("input[type=checkbox]:eq(0)").prop("checked"),
@@ -163,7 +163,7 @@ $(function () {
 
             const answers = $this.find("#answers div");
             answers.each(function () {
-                question.answers.push($(this).text())
+                question.answers.push($(this).text().trim())
             })
 
             result.push(question)
@@ -249,8 +249,8 @@ $(function () {
         element.answers.forEach((answer, i) => {
             content += `
                 <div class="flex items-center mb-2 mx-1">
-                    <input id="link-${element.type}-${i}" name="${element.type == "radio" ? element.slug : element.slug + i}" type="${element.type}" value="${i}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="link-${element.type}-${i}" class="ml-2 text-sm font-normal text-gray-900 dark:text-gray-300">${answer}</label>
+                    <input id="link-${element.slug + i}" name="${element.type == "radio" ? element.slug : element.slug + i}" type="${element.type}" value="${i}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="link-${element.slug + i}" class="ml-2 text-sm font-normal text-gray-900 dark:text-gray-300">${answer}</label>
                 </div>
             `
         })

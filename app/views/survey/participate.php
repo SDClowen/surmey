@@ -38,7 +38,9 @@
                 </div>
             </div>
 
-            <form class="mt-4 border-t" role="form" method="post" action="/participate/apply">
+            <div class="msg fixed bottom-0 right-2 z-10 my-5 text-lg"></div>
+            <form class="mt-4 border-t" role="form" method="post" action="/participate/apply" data-content=".msg" data-redirect = "/:2000">
+                
                 <div class="py-5">
                     <div class="generated-form">
                         <script>$(()=>{ window.buildForm(`{$survey->data|noescape}`) })</script>

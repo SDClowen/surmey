@@ -176,47 +176,74 @@ class Participate extends Controller
 		if(!session_check("surveySlug"))
 			redirect("/");
 	
-		$slug = session_get("surveySlug");
+		$surveyId = session_get("surveyId");
 		if (!session_check("participator"))
-<<<<<<< HEAD
 			warning("INVALID_SURVEY");
 
-		$survey = Survey::exists("slug", $slug);
+		$survey = Survey::exists("id", $surveyId);
 		if(!$survey)
 			error("INVALID_SURVEY_DATA");
-=======
-			warning(redirect: "/d/$slug");
->>>>>>> 2ae60f26b6a9e8182a33fd3d67d9ffeef6f357a4
 
 		$post = Request::post();
 
 		$rules = [];
 
+		$formData = json_decode($survey->data);
+		foreach($formData as $key => $value)
+		{
+			if($value->type == "description")
+				continue;
+
+			switch($value->type){
+				case "radio":
+					$rules[$value->slug] = [
+						"name" => "",
+						"required" => $value->isRequired,
+						"min" => 0,
+						"max" => count($value->answers) - 1
+					];
+
+					break;
+
+				case "checkbox":
+
+					$i = 0;
+					foreach($value->answers as $answerValue)
+					{
+						$rules[$value->slug.$i] = [
+							"name" => $answerValue,
+							"required" => $value->isRequired,
+							"is" => "on"
+						];
+
+						$i++;
+					}
+
+					break;
+			}
+		}
+
 		$validate = validate($post, $rules);
 
-<<<<<<< HEAD
 		if ($validate)
-			warning($validate);
+			warning("Lütfen tüm alanları eksiksiz bir şekilde doldurunuz!");
 
 		$user = session_get("participator");
 
-=======
-		$user = session_get("participator");
-
->>>>>>> 2ae60f26b6a9e8182a33fd3d67d9ffeef6f357a4
 		if (Participator::checkSurveyIsParticipated($user->personalId, true))
 			warning("Bu anketi daha önce zaten cevapladınız!");
 
 		$result = Database::get()->from("answers")
+			->where("surveyId", "=", $surveyId)
 			->where("personalId", "=", $user->personalId)
 			->update([
-				"answer" => $post->answer,
-				"done" => true
+				"data" => data_json($post),
+				"done" => 1
 			]);
 
 		if ($result) {
 			session_destroy();
-			successlang("survey.successfully.answered", redirect: "/:2000");
+			successlang("survey.successfully.answered");
 		}
 
 		getDataError();

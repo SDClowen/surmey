@@ -104,7 +104,7 @@
                                 <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
                                     <div>
                                         <h2 class="font-medium text-gray-800 dark:text-white"><a href="/d/{$survey->slug}" data-content="#container" target="blank">{$survey->title}</a></h2>
-                                        <p class="text-sm font-normal text-gray-600 dark:text-gray-400">0 katılım - <span class="text-blue-600">{Core\Request::getHost()}/d/{$survey->slug}</span></p>
+                                        <p class="text-sm font-normal text-gray-600 dark:text-gray-400">{$survey->answersCount} katılım - <span class="text-blue-600">{Core\Request::getHost()}/d/{$survey->slug}</span></p>
                                     </div>
                                 </td>
                                 <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
