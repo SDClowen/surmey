@@ -95,8 +95,22 @@ class Surveys extends Controller
 
         $result = false;
 
+        $randomString = function ($length) {
+
+            $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $randomString = '';
+
+            for ($i = 0; $i < $length; $i++) {
+                $index = rand(0, strlen($chars) - 1);
+                $randomString .= $chars[$index];
+            }
+
+            return $randomString;
+        };
+
         if ($id == 0) {
             $post->userId = User::id();
+            $post->slug = $randomString(5);
             $result = $this->db->from("surveys")->insert((array) $post);
         } else
             $result = $this->db->from("surveys")->where("id", "=", $id)->update((array) $post);
@@ -113,7 +127,7 @@ class Surveys extends Controller
         if (! $surveyId)
             warning("DATA_WAS_ZERO");
 
-        $result = $this->db->from("surveys")->where("id", "=", $surveyId)->result();
+        $result = Survey::exists("id", $surveyId);
         if (! $result)
             warning("DATA_NOT_FOUND");
 
@@ -131,5 +145,25 @@ class Surveys extends Controller
             "url" => $isOnEditMode ? "apply/$surveyId" : "apply",
             "showIfOnEditMode" => $isOnEditMode ? "<script>$(()=>{window.prepareSurveyForEditing('$result', '$data')})</script>" : ""
         ]);
+    }
+
+    #[route(method: route::get | route::xhr_get, session: "user")]
+    public function delete(int $surveyId)
+    {
+        if (! $surveyId)
+            warning("DATA_WAS_ZERO");
+
+        $result = Survey::exists("id", $surveyId);
+        if (! $result)
+            warning("DATA_NOT_FOUND");
+
+        $isUpdated = Survey::update($surveyId, [
+            "status" => 2
+        ]);
+
+        if($isUpdated)
+            success();
+
+        getDataError();
     }
 }
