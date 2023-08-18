@@ -1,1 +1,1 @@
-<h1 class="text-center">This is reports page</h1>
+<pre>{$data}</pre>

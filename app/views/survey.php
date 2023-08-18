@@ -37,17 +37,17 @@
     </div>
 
     <hr class="my-4 border-t dark:border-slate-700">
-    <div class="mt-6 md:flex md:items-center md:justify-between">
+    <div x-data="{ current: 1 }" class="mt-6 md:flex md:items-center md:justify-between">
         <div class="inline-flex overflow-hidden bg-white border divide-x rounded-lg dark:bg-gray-900 rtl:flex-row-reverse dark:border-gray-700 dark:divide-gray-700">
-            <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 bg-gray-100 sm:text-sm dark:bg-gray-800 dark:text-gray-300">
+            <button x-on:click="current = 1" x-bind:class="{ 'bg-gray-100 dark:bg-gray-800': current === 1 }" class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:text-gray-300">
                 View all
             </button>
 
-            <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:hover:bg-gray-800 dark:text-gray-300 hover:bg-gray-100">
+            <button x-on:click="current = 2" x-bind:class="{ 'bg-gray-100 dark:bg-gray-800': current === 2 }" class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:hover:bg-gray-800 hover:bg-gray-100 dark:text-gray-300">
                 Monitored
             </button>
 
-            <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:hover:bg-gray-800 dark:text-gray-300 hover:bg-gray-100">
+            <button x-on:click="current = 3" x-bind:class="{ 'bg-gray-100 dark:bg-gray-800': current === 3 }" class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:hover:bg-gray-800 hover:bg-gray-100 dark:text-gray-300">
                 Unmonitored
             </button>
         </div>
@@ -66,7 +66,7 @@
     <div class="flex flex-col mt-6">
         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+                <div x-show="current === 1" class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>
@@ -108,8 +108,8 @@
                                     </div>
                                 </td>
                                 <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
-                                    <div class="inline px-3 py-1 text-sm font-normal rounded-full gap-x-2 {$survey->status ? ' text-emerald-500 bg-emerald-100/60' : 'text-gray-500 bg-gray-100 dark:text-gray-400'} dark:bg-gray-800">
-                                        {$survey->status ? 'ACTIVE' : 'PASSIVE'}
+                                    <div class="inline px-3 py-1 text-sm font-normal rounded-full gap-x-2 {$survey->status == 1 ? ' text-emerald-500 bg-emerald-100/60' : 'text-gray-500 bg-gray-100 dark:text-gray-400'} dark:bg-gray-800">
+                                        {$survey->status == 1 ? 'ACTIVE' : 'PASSIVE'}
                                     </div>
                                 </td>
                                 <td class="px-4 py-4 text-sm whitespace-wrap">
@@ -135,9 +135,9 @@
                                 </td>-->
 
                                 <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <a live="true" href="/reports/view/{$survey->id}" data-content="#container" class="bg-blue-600 text-white px-4 transition-colors duration-200 rounded-xl py-1">Reports</a>
-                                    <a live="true" href="/surveys/edit/{$survey->id}" data-content="#container" class="bg-gray-300 text-black px-4 transition-colors duration-200 rounded-xl py-1">Edit</a>
-                                    <a data-url="/surveys/delete/{$survey->id}" class="bg-red-600 text-white px-4 transition-colors duration-200 rounded-xl py-1">Delete</a>
+                                    <a live="true" href="/reports/watch/{$survey->id}" data-content="#container" class="bg-blue-600 text-white px-4 transition-colors duration-200 rounded-xl py-1 select-none">Reports</a>
+                                    <a live="true" href="/surveys/edit/{$survey->id}" data-content="#container" class="bg-gray-300 text-black px-4 transition-colors duration-200 rounded-xl py-1 select-none">Edit</a>
+                                    <a href="#" data-url="/surveys/delete/{$survey->id}" class="bg-red-600 text-white px-4 transition-colors duration-200 rounded-xl py-1 select-none">Delete</a>
                                 </td>
                             </tr>
                         </tbody>
