@@ -146,6 +146,7 @@ $(function () {
 
     const generate = () => {
         const questions = $(".questions #question")
+        $(".preview-content").html("")
 
         var result = [];
         questions.each(function () {
