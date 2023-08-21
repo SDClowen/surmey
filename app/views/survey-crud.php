@@ -102,6 +102,7 @@
                             <a x-on:click="isOpen = !isOpen" type="checkbox" question-text="New Question" answer-text="New Answer" href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Check List </a>
                             <a x-on:click="isOpen = !isOpen" type="textarea" question-text="New Question" answer-text="...." href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Text Area </a>
                             <a x-on:click="isOpen = !isOpen" type="description" question-text="Description Title" answer-text="Description..." href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Description </a>
+                            <!--<a x-on:click="isOpen = !isOpen" type="group" question-text="Group Title" answer-text="Title..." href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Group </a>-->
                         </div>
                     </div>
                 </h2>
