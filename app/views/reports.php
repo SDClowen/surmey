@@ -1,1 +1,1 @@
-<pre>{$data}</pre>
+<pre>{$generalStatisticsj}</pre>

@@ -307,17 +307,18 @@ $(function () {
         const answerDummyText = $(this).attr("answer-text");
 
         var content = ''
+        var slug = randomString(6);
 
         switch (type) {
             case "radio":
             case "checkbox":
-                content = createCheckableList(type, questionDummyText, answerDummyText);
+                content = createCheckableList(type, questionDummyText, answerDummyText, slug);
                 break
             case "textarea":
-                content = createTextArea(questionDummyText)
+                content = createTextArea(questionDummyText, slug)
                 break
             case "description":
-                content = createDescription(questionDummyText)
+                content = createDescription(questionDummyText, slug)
                 break
         }
 

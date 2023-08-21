@@ -11,7 +11,11 @@ class Main extends Controller
     #[route(method: route::get | route::xhr_get, session: "user", otherwise: "/auth")]
     public function index()
     {
-        $this->view("main", "dashboard", "Surmey", ["user" => User::info()]);
+        $this->view("main", "dashboard", "Surmey", [
+            "user" => User::info(),
+            "surveyCount" => Survey::count(User::id()),
+            "participateCount" => Survey::participateCount(User::id())
+        ]);
     }
 
     public function auth()
