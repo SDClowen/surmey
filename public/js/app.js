@@ -18,7 +18,7 @@ $(function () {
         }
     });
 
-    function createCheckableList(type, questionDummyText, answerDummyText, answers = [], isHorizontal = false, isRequired = true) {
+    function createCheckableList(type, questionDummyText, answerDummyText, slug, answers = [], isHorizontal = false, isRequired = true) {
 
         var generatedAnswers = '';
         for (const v of Object.values(answers))
@@ -41,7 +41,7 @@ $(function () {
                     </svg>
                 </button>
 
-                <div contenteditable="true" class="bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
+                <div contenteditable="true" data-slug="${slug}" class="bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
 
                 <div class="ml-8 my-3">
                     <div id="answers">
@@ -71,7 +71,7 @@ $(function () {
         `;
     }
 
-    function createTextArea(questionDummyText, isRequired = true) {
+    function createTextArea(questionDummyText, slug, isRequired = true) {
         return `
             <div data-type="textarea" id="question" class="relative border-2 border-dashed border-gray-400 bg-white dark:bg-gray-800 dark:border-gray-600 px-2 pt-2 text-sm m-3">
             <button type="button" class="remove absolute -top-3 -right-3 bg-red-500/80 transition duration-400 shadow-md rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-red-600 focus:outline-none">
@@ -81,7 +81,7 @@ $(function () {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
-            <div contenteditable="true" class="mb-3 bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
+            <div contenteditable="true" data-slug="${slug}" class="mb-3 bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
             <div class="rounded-t-lg bg-yellow-100 dark:bg-gray-900 p-2">
                 <div class="col-span-4">
                     <label class="relative inline-flex items-center mb-4 cursor-pointer">
@@ -97,7 +97,7 @@ $(function () {
         `
     }
 
-    function createDescription(questionDummyText, subType = 0) {
+    function createDescription(questionDummyText, slug, subType = 0) {
         return `
             <div data-type="description" id="question" class="relative border-2 border-dashed border-gray-400 bg-white dark:bg-gray-800 dark:border-gray-600 px-2 pt-2 text-sm m-3">
                 <button type="button" class="remove absolute -top-3 -right-3 bg-red-500/80 transition duration-400 shadow-md rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-red-600 focus:outline-none">
@@ -107,7 +107,7 @@ $(function () {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
-                <div contenteditable="true" class="mb-3 h-14 bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
+                <div contenteditable="true" data-slug="${slug}" class="mb-3 h-14 bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
             
                 <div class="rounded-t-lg bg-yellow-100 dark:bg-gray-900 p-2">
                     <div class="col-span-4">
@@ -152,9 +152,13 @@ $(function () {
         questions.each(function () {
             $this = $(this)
 
+            var slug = $this.find("div:eq(0)").data("slug")
+            if(!slug)
+                slug = randomString(6)
+
             var question = {
                 title: $this.find("div:eq(0)").text().trim(),
-                slug: randomString(6),
+                slug: slug,
                 type: $this.data("type"),
                 isHorizontal: $this.find("input[type=checkbox]:eq(0)").prop("checked"),
                 isRequired: $this.find("input[type=checkbox]:eq(1)").prop("checked"),
@@ -192,13 +196,13 @@ $(function () {
             switch (v.type) {
                 case "radio":
                 case "checkbox":
-                    content = createCheckableList(v.type, v.title, "...", v.answers, v.isHorizontal, v.isRequired);
+                    content = createCheckableList(v.type, v.title, "...", v.slug, v.answers, v.isHorizontal, v.isRequired);
                     break
                 case "textarea":
-                    content = createTextArea(v.title, v.isRequired)
+                    content = createTextArea(v.title, v.slug, v.isRequired)
                     break
                 case "description":
-                    content = createDescription(v.title, v.subType)
+                    content = createDescription(v.title, v.slug, v.subType)
                     break
             }
 
@@ -216,7 +220,7 @@ $(function () {
 
         if (element.type != "description")
             content += `
-                <h1 class="text-clip border-b border-gray-200 pb-3 pt-1 text-lg font-medium dark:border-gray-600 mb-4">
+                <h1 data-slug="${element.slug}" class="text-clip border-b border-gray-200 pb-3 pt-1 text-lg font-medium dark:border-gray-600 mb-4">
                     ${element.title}
                 </h1>
             `;
