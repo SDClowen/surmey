@@ -38,7 +38,7 @@ class Reports extends Controller
                 ];
             }
 
-            /*$filterResults = array_filter($answerData, function($v, $k) use ($value) {
+            $filterResults = array_filter($answerData, function($v, $k) use ($value) {
                 $decodedJson = json_decode($v->data, true);
                 
                 return array_key_exists($value->slug, $decodedJson);
@@ -59,15 +59,11 @@ class Reports extends Controller
                     "value" => $decodedJson[$value->slug],
                     "title" => $value->answers[$decodedJson[$value->slug]]
                 ];
-            }*/
+            }
         }
 
-        die("<pre>".print_r($jsonData, true));
-
-        return;
         $this->view("main", "reports", lang("reports"), [
             "user" => User::info(),
-            "data" => print_r(json_decode($survey->data), true),
             "generalStatistics" => $generalStatistics,
             "generalStatisticsj" => json_encode($generalStatistics, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
         ]);

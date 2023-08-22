@@ -16,7 +16,9 @@
     {acss("app")|noescape}
     {njs("jquery/dist/jquery.min")|noescape}
     {njs("sdeasy/sdeasy")|noescape}
+    {njs("apexcharts/dist/apexcharts.min")|noescape}
     {ajs("app")|noescape}
+
 </head>
 
 <body class="bg-gray-50 dark:bg-gray-900">

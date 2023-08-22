@@ -19,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "@tinymce/tinymce-jquery": "^2.1.0",
+    "apexcharts": "^3.41.1",
     "fs-extra": "^11.1.1",
     "jquery": "^3.7.0",
     "sdeasy": "^1.0.1",
