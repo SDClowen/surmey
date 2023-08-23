@@ -33,7 +33,7 @@ class Reports extends Controller
 
                 return array_key_exists($value->slug, $decodedJson);
             }, ARRAY_FILTER_USE_BOTH);
-
+            
             foreach ($filterResults as $fValue) {
                 $decodedJson = json_decode($fValue->data, true);
 
