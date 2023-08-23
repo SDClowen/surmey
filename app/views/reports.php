@@ -14,19 +14,23 @@
         </a>
     </div>
     <div class="rounded-lg p-2 shadow-md bg-slate-50 border-slate-100 dark:border-slate-600 dark:bg-slate-700">
-        <div x-show="current === 1" class="questions">
+        <div x-show="current === 2">
 
             <div id="chart"></div>
 
             <script>
 
+                // TODO: Parse from json!!!
+                let ajaxSeries = [];
+                let ajaxLabels = [];
+
                 var options = {
-                    series: [44, 55, 13, 43, 22],
+                    series: [66, 55, 13, 43, 22],
                     chart: {
                         width: 380,
                         type: 'pie',
                     },
-                    labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+                    labels: ["A", "B", "C", "D", "E"],
                     responsive: [{
                         breakpoint: 480,
                         options: {
@@ -42,8 +46,6 @@
 
                 var chart = new ApexCharts(document.querySelector("#chart"), options);
                 chart.render();
-
-
             </script>
 
             <div n:for="$i = 0; $i < 6; $i++" class="p-4 mb-2 border-b">
@@ -53,8 +55,8 @@
                 </div>
             </div>
         </div>
-        <div class="p-2" x-show="current === 2">
-            <pre>{$generalStatisticsj}</pre>
+        <div class="p-2" x-show="current === 1">
+            <pre>{$generatedDataJ}</pre>
         </div>
     </div>
 </div>
