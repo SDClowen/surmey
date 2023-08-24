@@ -34,6 +34,11 @@
 </body>
 
 <script type="text/javascript">
+    
+    $(()=>{
+        $('#codefield_0').focus()
+    })
+    
     function app() {
         return {
             pinlength: 6,
