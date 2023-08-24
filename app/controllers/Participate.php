@@ -98,7 +98,7 @@ class Participate extends Controller
 				->update([
 					"token" => $pin,
 					"tokenTime" => $tokenTime,
-					"done" => false
+					"done" => 0
 				]);
 
 		#\SmsHelper::send($post->phone, "HAUS - Çalışma saatleri değerlendirme anketi onay kodu: ". $pin);
@@ -176,6 +176,8 @@ class Participate extends Controller
 		if(!session_check("surveySlug"))
 			redirect("/");
 	
+		$slug = session_get("surveySlug");
+	
 		$surveyId = session_get("surveyId");
 		if (!session_check("participator"))
 			warning("INVALID_SURVEY");
@@ -187,6 +189,7 @@ class Participate extends Controller
 		$post = Request::post();
 
 		$rules = [];
+		$validate2 = false;
 
 		$formData = json_decode($survey->data);
 		foreach($formData as $key => $value)
@@ -207,17 +210,26 @@ class Participate extends Controller
 
 				case "checkbox":
 
-					$i = 0;
-					foreach($value->answers as $answerValue)
+					if($value->isRequired)
 					{
-						$rules[$value->slug.$i] = [
-							"name" => $answerValue,
-							"required" => $value->isRequired,
-							"is" => "on"
-						];
+						$actions = [];
 
-						$i++;
+						for($i = 0; $i < count($value->answers); $i++)
+							$actions[$i] = isset($post->{$value->slug.$i});
+
+						$validate2 = !in_array(true, $actions);
 					}
+
+					break;
+
+				case "textarea":
+					
+					$rules[$value->slug] = [
+						"name" => "",
+						"required" => $value->isRequired,
+						"min" => 4,
+						"max" => 255
+					];
 
 					break;
 			}
@@ -225,7 +237,7 @@ class Participate extends Controller
 
 		$validate = validate($post, $rules);
 
-		if ($validate)
+		if ($validate || $validate2)
 			warning("Lütfen tüm alanları eksiksiz bir şekilde doldurunuz!");
 
 		$user = session_get("participator");
@@ -243,7 +255,7 @@ class Participate extends Controller
 
 		if ($result) {
 			session_destroy();
-			successlang("survey.successfully.answered");
+			successlang("survey.successfully.answered", redirect: "/d/$slug:2500");
 		}
 
 		getDataError();
