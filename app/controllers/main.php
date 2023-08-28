@@ -67,9 +67,11 @@ class Main extends Controller
 
         User::updateBy("id", $memberDetail->id, ["pin_token" => $pin]);
         session_set("tempPin", hash("sha256", $pin));
-            
+        
+        
         #disabled for now
-        success(redirect: "/pin");
+		#\SmsHelper::send($memberDetail->phone, "form.hauscloud için onay kodu: ". $pin);
+        #success(redirect: "/pin");
 
         session_regenerate_id(true);
 

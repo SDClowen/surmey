@@ -108,6 +108,21 @@ class Surveys extends Controller
             return $randomString;
         };
 
+        $replacements = [
+            "\r\n" => "<br/>",
+            "\r" => "<br/>",
+            "\t" => "   ",
+        ];
+
+        $post->about = strtr($post->about, $replacements);
+
+        /*
+        $post->about = str_replace("\r\n", "<br/>", $post->about);
+        $post->about = str_replace("\r", "<br/>", $post->about);
+        $post->about = str_replace("\n", "<br/>", $post->about);
+        $post->about = str_replace("\t", "  ", $post->about);
+        */
+
         if ($id == 0) {
             $post->userId = User::id();
             $post->slug = $randomString(5);

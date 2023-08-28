@@ -144,6 +144,10 @@ $(function () {
         return result;
     }
 
+    const clearText = (text) => {
+        return text.trim().replace("\r\n", "<br>").replace("\r", "<br/>").replace("\n", "<br>").replace("\t", "   ")
+    }
+
     const generate = () => {
         const questions = $(".questions #question")
         $(".preview-content").html("")
@@ -157,7 +161,7 @@ $(function () {
                 slug = randomString(6)
 
             var question = {
-                title: $this.find("div:eq(0)").text().trim(),
+                title: clearText($this.find("div:eq(0)").text()),
                 slug: slug,
                 type: $this.data("type"),
                 isRequired: $this.find("input[type=checkbox]:eq(0)").prop("checked"),
@@ -168,7 +172,7 @@ $(function () {
 
             const answers = $this.find("#answers div");
             answers.each(function () {
-                question.answers.push($(this).text().trim())
+                question.answers.push(clearText($(this).text().trim()))
             })
 
             result.push(question)
@@ -187,7 +191,7 @@ $(function () {
         $("input[name=title]").val(formData.title)
         $("input[name=verifyPhone]").prop("checked", formData.verifyPhone);
         $("#cover-photo-result").css({ backgroundImage: `url('/public/images/survey/${formData.photo}')` })
-        $("textarea[name=about]").text(formData.about)
+        $("textarea[name=about]").text(formData.about.replaceAll("<br/>", "\r\n").replaceAll("<br/>", "\r").replaceAll("<br/>", "\n").replaceAll("\t", "    "))
 
         for (const [k, v] of Object.entries(JSON.parse(jsonData))) {
 

@@ -115,7 +115,7 @@
                                 <td class="px-4 py-4 text-sm whitespace-wrap">
                                     <div>
                                         <!--<h4 class="text-gray-700 dark:text-gray-200"></h4>-->
-                                        <p class="text-gray-500 dark:text-gray-400">{$survey->about}</p>
+                                        <p class="text-gray-500 dark:text-gray-400">{$survey->about|noescape}</p>
                                     </div>
                                 </td>
                                 <!--<td class="px-4 py-4 text-sm whitespace-nowrap">

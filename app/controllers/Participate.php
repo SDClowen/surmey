@@ -101,7 +101,11 @@ class Participate extends Controller
 					"done" => 0
 				]);
 
-		#\SmsHelper::send($post->phone, "HAUS - Çalışma saatleri değerlendirme anketi onay kodu: ". $pin);
+		
+		$surveyId = session_get("surveyId");
+		$survey = Survey::exists("id", $surveyId);
+
+		\SmsHelper::send($post->phone, $survey->title." için onay kodu: ". $pin);
 		if ($result)
 			success(redirect: "/participate/pin");
 
@@ -200,11 +204,14 @@ class Participate extends Controller
 			switch($value->type){
 				case "radio":
 					$rules[$value->slug] = [
-						"name" => "",
-						"required" => $value->isRequired,
+						"name" => $value->title,
+						#"required" => $value->isRequired,
 						"min" => 0,
 						"max" => count($value->answers) - 1
 					];
+
+					if($value->isRequired)
+						$rules[$value->slug]["required"] = $value->isRequired;
 
 					break;
 
@@ -226,16 +233,19 @@ class Participate extends Controller
 					
 					$rules[$value->slug] = [
 						"name" => "",
-						"required" => $value->isRequired,
+						#"required" => $value->isRequired,
 						"min" => 4,
 						"max" => 255
 					];
 
+					if($value->isRequired)
+						$rules[$value->slug]["required"] = $value->isRequired;
+					
 					break;
 			}
 		}
 
-		$validate = validate($post, $rules);
+		$validate = validate($post, $rules, false);
 
 		if ($validate || $validate2)
 			warning("Lütfen tüm alanları eksiksiz bir şekilde doldurunuz!");

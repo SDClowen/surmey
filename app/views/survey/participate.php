@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/public/favicon.png" sizes="16x16 32x32" type="image/png">
     <title> {$title} </title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +25,7 @@
 
         <div class="p-6">
             <a href="#" class="text-center block my-1 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 hover:underline" tabindex="0" role="link">{$survey->title}</a>
-            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{$survey->about}</p>
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{$survey->about|noescape}</p>
 
             <div class="mt-4 hidden">
                 <div class="flex items-center">
