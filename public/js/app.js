@@ -234,7 +234,7 @@ $(function () {
             case "checkbox":
                 let divClass = "inline"
                 if (element.isHorizontal)
-                    divClass = "grid grid-flow-col justify-stretch"
+                    divClass = "grid max-[980px]:grid-flow-col justify-stretch"
 
                 content += `<div class="${divClass}">`;
                 break

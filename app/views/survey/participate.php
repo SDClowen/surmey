@@ -18,7 +18,7 @@
     {ajs("app")|noescape}
 </head>
 
-<body class="bg-slate-200/75 text-slate-900 dark:bg-slate-900 dark:text-slate-50">
+<body class="bg-slate-200/75 text-slate-900 dark:bg-slate-900 dark:text-slate-50 p-2">
 
     <div class="max-w-2xl mx-auto my-5 overflow-hidden bg-white rounded-lg dark:bg-gray-800 relative shadow-xl ring-1 ring-gray-900/5">
         <img n:if="!empty($survey->photo)" class="object-cover w-full h-64" src="/public/images/survey/{$survey->photo}" alt="Article">
@@ -46,7 +46,7 @@
                     <div class="generated-form">
                         <script>$(()=>{ window.buildForm(`{$survey->data|noescape}`) })</script>
                     </div>
-                    <button class="bg-blue-600 px-5 m-auto rounded-md text-white py-2">DEVAM ET...</button>
+                    <button class="bg-blue-600 px-5 m-auto rounded-md text-white py-2">Gönder</button>
                 </div>
             </form>
         </div>
