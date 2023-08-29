@@ -44,7 +44,15 @@
                 
                 <div class="py-5">
                     <div class="generated-form">
-                        <script>$(function(){ window.buildForm(`{$survey->data|noescape}`) })</script>
+                        <script>
+                            $(function(){
+                                try {
+                                    window.buildForm(`{$survey->data|noescape}`);            
+                                } catch (error) {
+                                    alert(error.message);
+                                }
+                            })
+                        </script>
                     </div>
                     <button class="bg-blue-600 px-5 m-auto rounded-md text-white py-2">Gönder</button>
                 </div>
