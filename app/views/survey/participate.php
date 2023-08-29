@@ -43,16 +43,7 @@
             <form class="mt-4 border-t" role="form" method="post" action="/participate/apply" data-content=".msg" data-redirect = "/:2000">
                 
                 <div class="py-5">
-                    <div class="generated-form">
-                        <script>
-                            $(function(){
-                                try {
-                                    $(".generated-form").buildForm(`{$survey->data|noescape}`);
-                                } catch (error) {
-                                    alert(error.message);
-                                }
-                            })
-                        </script>
+                    <div class="generated-form" data-render="true">
                     </div>
                     <button class="bg-blue-600 px-5 m-auto rounded-md text-white py-2">Gönder</button>
                 </div>

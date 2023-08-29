@@ -270,4 +270,21 @@ class Participate extends Controller
 
 		getDataError();
 	}
+
+	#[route(method: route::xhr_get, session: "participator", uri: "data")]
+	public function getSurveyData()
+	{
+		if(!session_check("surveyId"))
+			die("data-not-found");
+	
+		$surveyId = session_get("surveyId");
+		if (!session_check("participator"))
+			warning("INVALID_SURVEY");
+
+		$survey = Survey::exists("id", $surveyId);
+		if(!$survey)
+			error("INVALID_SURVEY_DATA");
+
+		die($survey->data);
+	}
 }

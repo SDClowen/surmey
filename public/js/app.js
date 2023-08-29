@@ -270,8 +270,7 @@ $(function () {
     };
     window.generateSurvey = generate;
     window.prepareSurveyForEditing = prepareSurveyForEditing;
-    $.fn.buildForm = function(data) {
-        data = JSON.parse(data);
+    const buildForm = function(data) {
         $(".generated-form").html("");
         for (const [k, element] of Object.entries(data))
             $(".generated-form").append(renderFormEntry(element));
@@ -280,6 +279,7 @@ $(function () {
     $(document).on("click", ".remove", function (event) {
         $(this).parent().remove();
     });
+
     $(document).on("click", "#preview", function (event) {
         const array = generate();
         $(".preview-content").html("");
@@ -323,5 +323,16 @@ $(function () {
                 break;
         }
         $(".questions").append(content);
+    });
+
+
+    $("[data-render]").each(function(){
+        $.ajax({
+            url: "/participate/data",
+            dataType: "json",
+            success: function(data){
+                buildForm(data);
+            }
+        });
     });
 });
