@@ -227,7 +227,7 @@ $(function () {
         if (element.type != "description")
             content += `
                   <h1 data-slug="${element.slug}" class="text-clip border-b border-gray-200 pb-3 pt-1 text-lg font-medium dark:border-gray-600 mb-4">
-                      ${element.title}
+                      ${element.title}  ${element.isRequired ? "<b class='text-red-600'>*</b>" : ""}
                   </h1>
               `;
         switch (element.type) {

@@ -245,10 +245,10 @@ class Participate extends Controller
 			}
 		}
 
-		$validate = validate($post, $rules, false);
+		$validate = validate($post, $rules);
 
 		if ($validate || $validate2)
-			warning("Lütfen tüm alanları eksiksiz bir şekilde doldurunuz!");
+			warning("Lütfen zorunlu alanları eksiksiz bir şekilde doldurunuz!");
 
 		$user = session_get("participator");
 
