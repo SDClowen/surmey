@@ -270,13 +270,13 @@ $(function () {
     };
     window.generateSurvey = generate;
     window.prepareSurveyForEditing = prepareSurveyForEditing;
-    window.buildForm = function(data) {
+    $.fn.buildForm = function(data) {
         data = JSON.parse(data);
         $(".generated-form").html("");
         for (const [k, element] of Object.entries(data))
             $(".generated-form").append(renderFormEntry(element));
     };
-    
+
     $(document).on("click", ".remove", function (event) {
         $(this).parent().remove();
     });

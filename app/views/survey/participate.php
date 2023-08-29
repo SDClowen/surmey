@@ -47,7 +47,7 @@
                         <script>
                             $(function(){
                                 try {
-                                    window.buildForm(`{$survey->data|noescape}`);            
+                                    $(".generated-form").buildForm(`{$survey->data|noescape}`);
                                 } catch (error) {
                                     alert(error.message);
                                 }
