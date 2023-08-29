@@ -325,8 +325,7 @@ $(function () {
         $(".questions").append(content);
     });
 
-
-    $("[data-render]").each(function(){
+    try {
         $.ajax({
             url: "/participate/data",
             dataType: "json",
@@ -334,5 +333,7 @@ $(function () {
                 buildForm(data);
             }
         });
-    });
+    } catch (error) {
+        alert(error.message);
+    }
 });

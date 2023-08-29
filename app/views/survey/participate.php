@@ -40,11 +40,10 @@
             </div>
 
             <div class="msg fixed bottom-0 right-2 z-10 my-5 text-lg"></div>
-            <form class="mt-4 border-t" role="form" method="post" action="/participate/apply" data-content=".msg" data-redirect = "/:2000">
-                
+            <form class="mt-4 border-t" role="form" method="post" action="/participate/apply" data-content=".msg" data-redirect="/:2000">
+
                 <div class="py-5">
-                    <div class="generated-form" data-render="true">
-                    </div>
+                    <div class="generated-form"></div>
                     <button class="bg-blue-600 px-5 m-auto rounded-md text-white py-2">Gönder</button>
                 </div>
             </form>
