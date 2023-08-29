@@ -1,7 +1,7 @@
 $(function () {
-    navigation.addEventListener("navigate", (e) => {
+    /*navigation.addEventListener("navigate", function(e){
         console.log(`navigate ->`, e);
-    });
+    });*/
     $("#file-upload").on("change", function (event) {
         var input = event.currentTarget;
         if (input.files && input.files[0]) {
@@ -235,7 +235,7 @@ $(function () {
             case "checkbox":
                 let divClass = "inline";
                 if (element.isHorizontal)
-                    divClass = "grid max-[980px]:grid-flow-col justify-stretch";
+                    divClass = "grid justify-stretch";
                 content += `<div class="${divClass}">`;
                 break;
             case "textarea":
@@ -328,8 +328,6 @@ $(function () {
                 $(".generated-form").html("");
                 for (const [k, element] of Object.entries(data))
                     $(".generated-form").append(renderFormEntry(element));
-
-                $("body").prepend("<center>HAUS - Konser etkinliği anketi'ne hoşgeldiniz.</center>");
             }
         });
     } catch (error) {
