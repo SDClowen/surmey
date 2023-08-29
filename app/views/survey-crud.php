@@ -191,7 +191,7 @@
             </div>
 
             <div class="flex items-center sticky bottom-0 justify-end gap-x-6 p-3 backdrop-blur-xl border-t">
-                <button type="button" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50 hover:underline">Cancel</button>
+                <a href="/surveys" live="true" data-content="#container" spinner="false" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50 hover:underline">Cancel</a>
                 <button type="submit" class="rounded-md bg-blue-600 dark:bg-blue-800 px-8 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 dark:hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Save</button>
             </div>
         </form>

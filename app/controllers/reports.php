@@ -46,6 +46,8 @@ class Reports extends Controller
 
             $filterResults = array_filter($answerData, function ($v, $k) use ($value) {
                 $decodedJson = json_decode($v->data, true);
+                if($decodedJson == null)
+                    return false;
                 
                 return array_key_exists($value->slug, $decodedJson);
 
