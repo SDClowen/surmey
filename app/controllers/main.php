@@ -179,6 +179,9 @@ class Main extends Controller
 		if (!$survey)
 			die("Anket bulunamadı veya belirtilen anketin süresi bitmiş olabilir!");
 
+        if(session_check("user"))
+            session_set("survey", $survey);
+
 		if (!session_check("user") && !session_check("participator"))
 		{
             session_set("surveySlug", $slug);

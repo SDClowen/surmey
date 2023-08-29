@@ -1,7 +1,10 @@
 $(function () {
-    /*navigation.addEventListener("navigate", function(e){
+    /*
+    // i got errors on safari & chrome with iphones
+    navigation.addEventListener("navigate", function(e){
         console.log(`navigate ->`, e);
     });*/
+    
     $("#file-upload").on("change", function (event) {
         var input = event.currentTarget;
         if (input.files && input.files[0]) {
@@ -320,17 +323,21 @@ $(function () {
         $(".questions").append(content);
     });
 
-    try {
-        $.ajax({
-            url: "/participate/data",
-            dataType: "json",
-            success: function (data) {
-                $(".generated-form").html("");
-                for (const [k, element] of Object.entries(data))
-                    $(".generated-form").append(renderFormEntry(element));
-            }
-        });
-    } catch (error) {
-        alert(error.message);
-    }
+    $(".generated-form").each(function(){
+        try {
+            
+            const $this = $(this);
+            $.ajax({
+                url: "/participate/data",
+                dataType: "json",
+                success: function (data) {
+                    $this.html("");
+                    for (const [k, element] of Object.entries(data))
+                        $this.append(renderFormEntry(element));
+                }
+            });
+        } catch (error) {
+            alert(error.message);
+        }
+    })
 });

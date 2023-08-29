@@ -13,9 +13,9 @@ class Participate extends Controller
 {
 	public function index()
 	{
-		if(!session_check("surveySlug"))
+		if (! session_check("surveySlug"))
 			redirect("/");
-	
+
 		$slug = session_get("surveySlug");
 		$survey = Survey::exists("slug", $slug);
 
@@ -27,7 +27,7 @@ class Participate extends Controller
 			redirect("/d/$slug");
 
 		$this->render("survey/auth", [
-			"title" => Config::get()->title." - ".$survey->title,
+			"title" => Config::get()->title . " - " . $survey->title,
 			"survey" => $survey
 		]);
 	}
@@ -38,9 +38,9 @@ class Participate extends Controller
 		if (session_check("tempPin"))
 			warning(redirect: "/participate/pin");
 
-		if(!session_check("surveySlug"))
+		if (! session_check("surveySlug"))
 			redirect("/");
-	
+
 		$slug = session_get("surveySlug");
 		if (session_check("participator"))
 			warning(redirect: "/d/$slug");
@@ -69,7 +69,8 @@ class Participate extends Controller
 			warning("Bu anketi daha önce zaten cevapladınız!");
 
 		# find a unique usable pin for the participator
-		while (Participator::checkToken(($pin = join(randomSequence(6)))));
+		while (Participator::checkToken(($pin = join(randomSequence(6)))))
+			;
 
 		$post->pin = $pin;
 		$tokenTime = time();
@@ -85,7 +86,7 @@ class Participate extends Controller
 		]);
 
 		$answerId = Participator::answerExists($surveyId, $personalId);
-		if (!$answerId)
+		if (! $answerId)
 			$result = $this->db->from("answers")->insert([
 				"surveyId" => $surveyId,
 				"personalId" => $personalId,
@@ -101,11 +102,11 @@ class Participate extends Controller
 					"done" => 0
 				]);
 
-		
+
 		$surveyId = session_get("surveyId");
 		$survey = Survey::exists("id", $surveyId);
 
-		\SmsHelper::send($post->phone, $survey->title." için onay kodu: ". $pin);
+		\SmsHelper::send($post->phone, $survey->title . " için onay kodu: " . $pin);
 		if ($result)
 			success(redirect: "/participate/pin");
 
@@ -115,7 +116,7 @@ class Participate extends Controller
 	#[route(method: route::xhr_get | route::get)]
 	public function pin()
 	{
-		if (!session_check("tempPin"))
+		if (! session_check("tempPin"))
 			redirect("/");
 
 		$tempPin = session_get("tempPin");
@@ -138,9 +139,9 @@ class Participate extends Controller
 	#[route(method: route::xhr_post, uri: "pin")]
 	public function verifyPin()
 	{
-		if(!session_check("surveySlug"))
+		if (! session_check("surveySlug"))
 			redirect("/");
-	
+
 		$slug = session_get("surveySlug");
 		if (session_check("participator"))
 			warning(redirect: "/d/$slug");
@@ -177,17 +178,17 @@ class Participate extends Controller
 	#[route(method: route::xhr_post, session: "participator", uri: "apply")]
 	public function apply()
 	{
-		if(!session_check("surveySlug"))
+		if (! session_check("surveySlug"))
 			redirect("/");
-	
+
 		$slug = session_get("surveySlug");
-	
+
 		$surveyId = session_get("surveyId");
-		if (!session_check("participator"))
+		if (! session_check("participator"))
 			warning("INVALID_SURVEY");
 
 		$survey = Survey::exists("id", $surveyId);
-		if(!$survey)
+		if (! $survey)
 			error("INVALID_SURVEY_DATA");
 
 		$post = Request::post();
@@ -196,12 +197,11 @@ class Participate extends Controller
 		$validate2 = false;
 
 		$formData = json_decode($survey->data);
-		foreach($formData as $key => $value)
-		{
-			if($value->type == "description")
+		foreach ($formData as $key => $value) {
+			if ($value->type == "description")
 				continue;
 
-			switch($value->type){
+			switch ($value->type) {
 				case "radio":
 					$rules[$value->slug] = [
 						"name" => $value->title,
@@ -210,27 +210,26 @@ class Participate extends Controller
 						"max" => count($value->answers) - 1
 					];
 
-					if($value->isRequired)
+					if ($value->isRequired)
 						$rules[$value->slug]["required"] = $value->isRequired;
 
 					break;
 
 				case "checkbox":
 
-					if($value->isRequired)
-					{
+					if ($value->isRequired) {
 						$actions = [];
 
-						for($i = 0; $i < count($value->answers); $i++)
-							$actions[$i] = isset($post->{$value->slug.$i});
+						for ($i = 0; $i < count($value->answers); $i++)
+							$actions[$i] = isset($post->{$value->slug . $i});
 
-						$validate2 = !in_array(true, $actions);
+						$validate2 = ! in_array(true, $actions);
 					}
 
 					break;
 
 				case "textarea":
-					
+
 					$rules[$value->slug] = [
 						"name" => "",
 						#"required" => $value->isRequired,
@@ -238,9 +237,9 @@ class Participate extends Controller
 						"max" => 255
 					];
 
-					if($value->isRequired)
+					if ($value->isRequired)
 						$rules[$value->slug]["required"] = $value->isRequired;
-					
+
 					break;
 			}
 		}
@@ -259,9 +258,9 @@ class Participate extends Controller
 			->where("surveyId", "=", $surveyId)
 			->where("personalId", "=", $user->personalId)
 			->update([
-				"data" => data_json($post),
-				"done" => 1
-			]);
+					"data" => data_json($post),
+					"done" => 1
+				]);
 
 		if ($result) {
 			session_destroy();
@@ -271,19 +270,28 @@ class Participate extends Controller
 		getDataError();
 	}
 
-	#[route(method: route::xhr_get, session: "participator", uri: "data")]
+	#[route(method: route::xhr_get, uri: "data")]
 	public function getSurveyData()
 	{
-		if(!session_check("surveyId"))
-			die("data-not-found");
-	
-		$surveyId = session_get("surveyId");
-		if (!session_check("participator"))
-			warning("INVALID_SURVEY");
 
-		$survey = Survey::exists("id", $surveyId);
-		if(!$survey)
-			error("INVALID_SURVEY_DATA");
+		if (session_check("survey"))
+			$survey = session_get("survey");
+		else {
+			if (! session_check("participator"))
+				die("PARTICIPATE_ERRROR");
+
+			if (! session_check("surveyId"))
+				die("data-not-found");
+
+			$surveyId = session_get("surveyId");
+			if (! session_check("participator"))
+				warning("INVALID_SURVEY");
+
+			$survey = Survey::exists("id", $surveyId);
+			if (! $survey)
+				error("INVALID_SURVEY_DATA");
+		}
+
 
 		die($survey->data);
 	}
