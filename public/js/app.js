@@ -270,11 +270,6 @@ $(function () {
     };
     window.generateSurvey = generate;
     window.prepareSurveyForEditing = prepareSurveyForEditing;
-    const buildForm = function(data) {
-        $(".generated-form").html("");
-        for (const [k, element] of Object.entries(data))
-            $(".generated-form").append(renderFormEntry(element));
-    };
 
     $(document).on("click", ".remove", function (event) {
         $(this).parent().remove();
@@ -329,8 +324,12 @@ $(function () {
         $.ajax({
             url: "/participate/data",
             dataType: "json",
-            success: function(data){
-                buildForm(data);
+            success: function (data) {
+                $(".generated-form").html("");
+                for (const [k, element] of Object.entries(data))
+                    $(".generated-form").append(renderFormEntry(element));
+
+                $("body").prepend("<center>HAUS - Konser etkinliği anketi'ne hoşgeldiniz.</center>");
             }
         });
     } catch (error) {
