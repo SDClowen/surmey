@@ -75,10 +75,10 @@ class Reports extends Controller
                 
                 $answerTitle = $value->answers[$decodedJson[$value->slug]];
 
-                foreach ($value->answers as $answer)
-                    $generatedData[$group0][$value->slug][$answer] = [];
+                #foreach ($value->answers as $answer)
+                    #$generatedData[$group0][$value->slug][$answer] = [];
 
-                $generatedData[$group0][$value->slug][$answerTitle] = [
+                $generatedData[$group0][$value->slug][$answerTitle][] = [
                     "type" => $value->type,
                     "id" => $fValue->personalId,
                     "fullname" => $fValue->fullname,
