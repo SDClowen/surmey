@@ -26,7 +26,7 @@ class Reports extends Controller
 
         $groupIndex = 0;
         #for IK
-        if($survey->id == 1)
+        if ($survey->id == 1)
             $groups = ["Yönetici-Çalışan İlişkileri", "İletişim", "Göreve İlişkin Sorular", "Çalışma Koşulları", "Eğitim /Gelişim", "Kariyer", "Ücret Sosyal Yardımlar ve Ödüllendirme", "Genel Algı"];
         else
             $groups = ["default"];
@@ -34,35 +34,32 @@ class Reports extends Controller
         $isFirstDescription = true;
 
         foreach ($jsonData as $value) {
-            if ($value->type == "description")
-            {
-                if(!$isFirstDescription)
+            if ($value->type == "description") {
+                if (! $isFirstDescription)
                     $isFirstDescription = false;
-                else 
+                else
                     $groupIndex++;
-                
-                    continue;
+
+                continue;
             }
 
             $filterResults = array_filter($answerData, function ($v, $k) use ($value) {
                 $decodedJson = json_decode($v->data, true);
-                if($decodedJson == null)
+                if ($decodedJson == null)
                     return false;
-                
+
                 return array_key_exists($value->slug, $decodedJson);
 
             }, ARRAY_FILTER_USE_BOTH);
-            
+
             foreach ($filterResults as $fValue) {
                 $decodedJson = json_decode($fValue->data, true);
 
                 $group0 = $groups[$groupIndex];
                 $answerValue = $decodedJson[$value->slug];
 
-                if($value->type == "textarea")
-                {
-                    $generatedData[$group0][$value->slug][] = [
-                        "type" => $value->type,
+                if ($value->type == "textarea") {
+                    $generatedData[$group0][$value->type . "::" . $value->title][] = (object) [
                         "id" => $fValue->personalId,
                         "fullname" => $fValue->fullname,
                         "department" => $fValue->department,
@@ -72,14 +69,13 @@ class Reports extends Controller
 
                     continue;
                 }
-                
+
                 $answerTitle = $value->answers[$decodedJson[$value->slug]];
 
                 #foreach ($value->answers as $answer)
-                    #$generatedData[$group0][$value->slug][$answer] = [];
+                #$generatedData[$group0][$value->slug][$answer] = [];
 
-                $generatedData[$group0][$value->slug][$answerTitle][] = [
-                    "type" => $value->type,
+                $generatedData[$group0][$value->type . "::" . $value->title][$answerTitle][] = (object) [
                     "id" => $fValue->personalId,
                     "fullname" => $fValue->fullname,
                     "department" => $fValue->department,
@@ -89,11 +85,47 @@ class Reports extends Controller
             }
         }
 
+        $result = [];
 
+        $group0Data = current($generatedData);
+        if(!$group0Data)
+            $group0Data = [];
+        
+        foreach ($group0Data as $key => $question) {
+            $split = explode("::", $key);
+
+            $type = $split[0];
+            $title = $split[1];
+
+            $result[$title] = [
+                "type" => $type
+            ];
+
+            if ($type === "radio" || $type === "checkbox") {
+                
+                foreach ($question as $answerK => $answerV)
+                    $result[$title][$answerK] = count($answerV);
+
+            } else {
+                $emptyCount = $fillCount = 0;
+                foreach ($question as $answerK => $answerV) {
+                    if (empty($answerV->value))
+                        $emptyCount++;
+                    else
+                        $fillCount++;
+                }
+
+                $result[$title] = [
+                    "Katılan" => $fillCount,
+                    "Katılmayan" => $emptyCount
+                ];
+            }
+        }
+    
         $this->view("main", "reports", lang("reports"), [
             "user" => User::info(),
-            "generatedData" => $generatedData,
-            "generatedDataJ" => json_encode($generatedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
+            "generatedData" => $result,
+            "generatedDataJ" => json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
         ]);
     }
 }
