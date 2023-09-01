@@ -44,7 +44,6 @@
                                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                                 <li><a class="transition-colors duration-300 transform text-gray-100 hover:bg-blue-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium d-flex" aria-current="page" href="/" live="true" data-content="#container" spinner="false">Dashboard</a></li>
                                 <li><a class="transition-colors duration-300 transform text-gray-100 hover:bg-blue-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium" href="/surveys" live="true" data-content="#container" spinner="false">Surveys</a></li>
-                                <li><a class="transition-colors duration-300 transform text-gray-100 hover:bg-blue-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium" href="/reports" live="true" data-content="#container" spinner="false">Reports</a></li>
                                 <li><a class="transition-colors duration-300 transform text-gray-100 hover:bg-blue-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium" href="/settings" live="true" data-content="#container" spinner="false">Settings</a></li>
                             </ul>
                         </div>
