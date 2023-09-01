@@ -234,7 +234,7 @@ class Participate extends Controller
 						"name" => "",
 						#"required" => $value->isRequired,
 						"min" => 4,
-						"max" => 255
+						"max" => 1000
 					];
 
 					if ($value->isRequired)
