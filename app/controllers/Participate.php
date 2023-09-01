@@ -195,6 +195,7 @@ class Participate extends Controller
 
 		$rules = [];
 		$validate2 = false;
+		$errors = [];
 
 		$formData = json_decode($survey->data);
 		foreach ($formData as $key => $value) {
@@ -224,6 +225,9 @@ class Participate extends Controller
 							$actions[$i] = isset($post->{$value->slug . $i});
 
 						$validate2 = ! in_array(true, $actions);
+
+						if($validate2)
+							$errors[] = $value->title. " sorusunu cevaplayınız!";
 					}
 
 					break;
@@ -231,7 +235,7 @@ class Participate extends Controller
 				case "textarea":
 
 					$rules[$value->slug] = [
-						"name" => "",
+						"name" => $value->title."<br>",
 						#"required" => $value->isRequired,
 						"min" => 4,
 						"max" => 1000
@@ -246,12 +250,12 @@ class Participate extends Controller
 
 		$validate = validate($post, $rules);
 
-		if ($validate2)
-			warning("Lütfen zorunlu alanları eksiksiz bir şekilde doldurunuz!");
+		if (count($errors) != 0)
+			warning(join("<br>", $errors));
 
 		if($validate)
 			warning($validate);
-		
+
 		$user = session_get("participator");
 
 		if (Participator::checkSurveyIsParticipated($user->personalId, true))

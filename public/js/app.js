@@ -4,7 +4,7 @@ $(function () {
     navigation.addEventListener("navigate", function(e){
         console.log(`navigate ->`, e);
     });*/
-    
+
     $("#file-upload").on("change", function (event) {
         var input = event.currentTarget;
         if (input.files && input.files[0]) {
@@ -243,7 +243,7 @@ $(function () {
                 break;
             case "textarea":
                 content +=
-                    '<textarea name="' +
+                    '<textarea maxlength="1000" name="' +
                     element.slug +
                     '" class="w-full rounded-lg border mb-3 text-gray-900 dark:text-gray-50 border-gray-200 shadow-sm bg-white p-2 focus:outline-blue-500 dark:focus:outline-blue-600 dark:border-gray-600 dark:bg-slate-900"></textarea>';
                 break;
@@ -323,9 +323,9 @@ $(function () {
         $(".questions").append(content);
     });
 
-    $(".generated-form").each(function(){
+    $(".generated-form").each(function () {
         try {
-            
+
             const $this = $(this);
             $.ajax({
                 url: "/participate/data",
@@ -339,5 +339,5 @@ $(function () {
         } catch (error) {
             alert(error.message);
         }
-    })
+    });
 });
