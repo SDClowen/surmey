@@ -246,9 +246,12 @@ class Participate extends Controller
 
 		$validate = validate($post, $rules);
 
-		if ($validate || $validate2)
+		if ($validate2)
 			warning("Lütfen zorunlu alanları eksiksiz bir şekilde doldurunuz!");
 
+		if($validate)
+			warning($validate);
+		
 		$user = session_get("participator");
 
 		if (Participator::checkSurveyIsParticipated($user->personalId, true))
