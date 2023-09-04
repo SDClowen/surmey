@@ -8,7 +8,7 @@ use Core\Attributes\route;
 
 class Reports extends Controller
 {
-    #[route(method: route::get | route::xhr_get)]
+    #[route(method: route::get | route::xhr_get, session: "user", otherwise: "/auth")]
     public function watch(int $surveyId)
     {
         $survey = Survey::exists("id", $surveyId);
