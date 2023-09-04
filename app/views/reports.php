@@ -46,6 +46,20 @@
 
                 var chart = new ApexCharts(document.querySelector("#chart"), options);
                 chart.render();
+
+                $(function () {
+                    function showAnswers(data) {
+                        data = JSON.parse(data);
+
+                        for (const [k, v] of Object.entries(data))
+                            console.log("Key:" + k + "  " + v);
+                    }
+
+                    $("[data-json]").on("click", function(){
+                        const data = JSON.parse($(this).data("json"));
+                        console.log(data)
+                    })
+                })
             </script>
 
             <div n:for="$i = 0; $i < 6; $i++" class="p-4 mb-2 border-b">
@@ -56,7 +70,22 @@
             </div>
         </div>
         <div class="p-2" x-show="current === 1">
-            <pre>{$generatedDataJ}</pre>
+            <div class="dark:bg-gray-900 bg-white rounded-lg m-1 my-2 p-3 shadow-sm" n:foreach="$data as $key => $value">
+                <h1 class="text-xl text-center">{$key}</h1>
+                <div class="grid grid-flow-col mt-2">
+                    <div class="dark:bg-gray-700 bg-gray-100 rounded-xl m-1 my-3 overflow-hidden" n:foreach="$value['answers'] as $aK => $aV">
+                        <span class="block text-center bg-blue-500 text-white p-1">{$aK}</span>
+                        <span class="block text-4xl text-center text-gray-500 p-1 dark:text-gray-300">
+                            {if $value["type"] != "radio" && $value["type"] != "checkbox" && $aK != "Katılmayan"}
+                            <a href="#" title="Anonim Cevapları Göster" class="text-blue-500 underline dark:text-blue-400 font-bold hover:bg-blue-500 rounded-xl transition-colors duration-200 hover:text-white" data-json='{$value["list-json"]|noescape}")'>{$aV}</a>
+                            {else}
+                            {$aV}
+                            {/if}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <pre>{print_r($data, true)}</pre>
         </div>
     </div>
 </div>

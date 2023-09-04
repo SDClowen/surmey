@@ -104,7 +104,7 @@ class Reports extends Controller
             if ($type === "radio" || $type === "checkbox") {
                 
                 foreach ($question as $answerK => $answerV)
-                    $result[$title][$answerK] = count($answerV);
+                    $result[$title]["answers"][$answerK] = count($answerV);
 
             } else {
                 $emptyCount = $fillCount = 0;
@@ -112,19 +112,25 @@ class Reports extends Controller
                     if (empty($answerV->value))
                         $emptyCount++;
                     else
+                    {
                         $fillCount++;
+                        $result[$title]["list-json"][] = $answerV;
+                    }   
+
                 }
 
-                $result[$title] = [
+                $result[$title]["answers"] = [
                     "Katılan" => $fillCount,
-                    "Katılmayan" => $emptyCount
+                    "Katılmayan" => $emptyCount,
                 ];
+
+                $result[$title]["list-json"] = json_encode($result[$title]["list-json"], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
             }
         }
     
         $this->view("main", "reports", lang("reports"), [
             "user" => User::info(),
-            "generatedData" => $result,
+            "data" => $result,
             "generatedDataJ" => json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
         ]);
     }
