@@ -176,9 +176,9 @@ class Main extends Controller
 	public function participateSurvey(string $slug)
 	{
         $survey = Survey::exists("slug", $slug);
-		if (!$survey)
-			die("Anket bulunamadı veya belirtilen anketin süresi bitmiş olabilir!");
-
+		if (!$survey || $survey->status != 1)
+            redirect();
+        
         if(session_check("user"))
             session_set("survey", $survey);
 

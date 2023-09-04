@@ -120,18 +120,17 @@ class Reports extends Controller
                 }
 
                 $result[$title]["answers"] = [
-                    "Katılan" => $fillCount,
-                    "Katılmayan" => $emptyCount,
+                    "Dolu" => $fillCount,
+                    "Boş" => $emptyCount,
                 ];
 
-                $result[$title]["list-json"] = json_encode($result[$title]["list-json"], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                $result[$title]["list-json"] = data_json($result[$title]["list-json"]);
             }
         }
     
         $this->view("main", "reports", lang("reports"), [
             "user" => User::info(),
-            "data" => $result,
-            "generatedDataJ" => json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
+            "data" => $result
         ]);
     }
 }
