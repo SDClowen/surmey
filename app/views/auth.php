@@ -54,7 +54,7 @@
 
     <div class="mt-3 w-full">
         <p class="text-center text-gray-500 dark:text-gray-400">Copyright ©
-            <?= date("Y") ?> <a href="https://github.com/SDClowen">All rights reserved.</a>
+            {date("Y")} <a href="https://github.com/SDClowen">All rights reserved.</a>
         </p>
     </div>
 

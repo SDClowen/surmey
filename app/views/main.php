@@ -227,7 +227,7 @@
                     <span class="text-gray-500">Surmey - <small class="text-gray-400 font-thin">A simple survey system</small></span>
                     <small class="text-gray-400 ml-auto font-thin font">
                         Copyright ©
-                        <?= date("Y") ?> <a href="https://github.com/SDClowen">All rights reserved.</a>
+                        {date("Y")} <a href="https://github.com/SDClowen">All rights reserved.</a>
                     </small>
                 </h1>
             </div>
