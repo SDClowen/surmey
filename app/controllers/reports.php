@@ -15,7 +15,7 @@ class Reports extends Controller
         if (! $survey)
             redirect();
 
-        $jsonData = json_decode($survey->data);
+        $questionData = json_decode($survey->data);
         $answerData = $this->db->select("answers.*, personals.fullname, personals.department")
             ->from("answers")
             ->join("personals", "personals.id = answers.personalId")
@@ -33,9 +33,9 @@ class Reports extends Controller
 
         $isFirstDescription = true;
 
-        foreach ($jsonData as $value) {
-            if ($value->type == "description") {
-                if (! $isFirstDescription)
+        foreach ($questionData as $question) {
+            if ($question->type == "description") {
+                if ($isFirstDescription)
                     $isFirstDescription = false;
                 else
                     $groupIndex++;
@@ -43,18 +43,18 @@ class Reports extends Controller
                 continue;
             }
 
-            $filterResults = array_filter($answerData, function ($v, $k) use ($value) {
+            $filterResults = array_filter($answerData, function ($v, $k) use ($question) {
                 $decodedJson = json_decode($v->data, true);
                 if ($decodedJson == null)
                     return false;
 
-                if ($value->type == "checkbox") {
-                    foreach ($value->answers as $answerKey => $answerValue) 
-                        if (array_key_exists($value->slug . $answerKey, $decodedJson)) 
+                if ($question->type == "checkbox") {
+                    foreach ($question->answers as $answerKey => $answerValue) 
+                        if (array_key_exists($question->slug . $answerKey, $decodedJson)) 
                             return true;
                 } 
                 else 
-                    return array_key_exists($value->slug, $decodedJson); 
+                    return array_key_exists($question->slug, $decodedJson); 
                 
                 return false;
             }, ARRAY_FILTER_USE_BOTH); 
@@ -65,20 +65,20 @@ class Reports extends Controller
                 $group0 = $groups[$groupIndex];
                 try {
 
-                    if ($value->type == "checkbox") {
-                        foreach ($value->answers as $akey => $avalue) {
+                    if ($question->type == "checkbox") {
+                        foreach ($question->answers as $akey => $avalue) {
 
-                            if(!isset($decodedJson[$value->slug.$akey]))
+                            if(!isset($decodedJson[$question->slug.$akey]))
                                 continue;
                             
-                            $answerValue = $decodedJson[$value->slug.$akey];
+                            $answerValue = $decodedJson[$question->slug.$akey];
 
-                            $answerTitle = $value->answers[$answerValue];
+                            $answerTitle = $question->answers[$answerValue];
 
                             #foreach ($value->answers as $answer)
                             #$generatedData[$group0][$value->slug][$answer] = [];
 
-                            $generatedData[$group0][$value->type . "::" . $value->title][$answerTitle][] = (object) [
+                            $generatedData[$group0][$question->type . "::" . $question->title][$answerTitle][] = (object) [
                                 "id" => $fValue->personalId,
                                 "fullname" => $fValue->fullname,
                                 "department" => $fValue->department,
@@ -90,10 +90,10 @@ class Reports extends Controller
                         continue;
                     }
 
-                    $answerValue = $decodedJson[$value->slug];
+                    $answerValue = $decodedJson[$question->slug];
 
-                    if ($value->type == "textarea") {
-                        $generatedData[$group0][$value->type . "::" . $value->title][] = (object) [
+                    if ($question->type == "textarea") {
+                        $generatedData[$group0][$question->type . "::" . $question->title][] = (object) [
                             "id" => $fValue->personalId,
                             "fullname" => $fValue->fullname,
                             "department" => $fValue->department,
@@ -104,12 +104,12 @@ class Reports extends Controller
                         continue;
                     }
                     
-                    $answerTitle = $value->answers[$answerValue];
+                    $answerTitle = $question->answers[$answerValue];
 
                     #foreach ($value->answers as $answer)
                     #$generatedData[$group0][$value->slug][$answer] = [];
 
-                    $generatedData[$group0][$value->type . "::" . $value->title][$answerTitle][] = (object) [
+                    $generatedData[$group0][$question->type . "::" . $question->title][$answerTitle][] = (object) [
                         "id" => $fValue->personalId,
                         "fullname" => $fValue->fullname,
                         "department" => $fValue->department,
