@@ -31,6 +31,11 @@ final class Survey extends Model
         return Database::get()->from("surveys")->where($column, "=", $value)->result();
     }
 
+    public static function existsByUserId(int $userId, string $column, string $value)
+    {
+        return Database::get()->from("surveys")->where("userId", "=", $userId)->where($column, "=", $value)->result();
+    }
+
     public static function update(string $surveyId, array $data)
     {
         return Database::get()->from("surveys")->where("id", "=", $surveyId)->update($data);

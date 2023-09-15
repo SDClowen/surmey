@@ -142,7 +142,7 @@ class Surveys extends Controller
         if (! $surveyId)
             warning("DATA_WAS_ZERO");
 
-        $result = Survey::exists("id", $surveyId);
+        $result = Survey::existsByUserId(User::id(), "id", $surveyId);
         if (! $result)
             warning("DATA_NOT_FOUND");
 
@@ -168,7 +168,7 @@ class Surveys extends Controller
         if (! $surveyId)
             warning("DATA_WAS_ZERO");
 
-        $result = Survey::exists("id", $surveyId);
+        $result = Survey::existsByUserId(User::id(), "id", $surveyId);
         if (! $result)
             warning("DATA_NOT_FOUND");
 
