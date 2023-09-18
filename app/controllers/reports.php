@@ -11,7 +11,7 @@ class Reports extends Controller
     #[route(method: route::get | route::xhr_get, session: "user", otherwise: "/auth")]
     public function watch(int $surveyId)
     {
-        $survey = Survey::exists("id", $surveyId);
+        $survey = Survey::existsByUserId(User::id(), "id", $surveyId);
         if (! $survey)
             redirect();
 
@@ -32,6 +32,40 @@ class Reports extends Controller
             $groups = ["default"];
 
         $isFirstDescription = true;
+        $data = [];
+        
+        # TODO: generate dummy answer data
+        foreach($questionData as $question)
+        {
+            if($question->type == "radio" || 
+                $question->type == "checkbox")
+            {
+                foreach($question->answers as $key => $answers)
+                {
+                    $data[$question->type == "radio" ? $question->slug : $question->slug.$key] = 0;
+                }
+
+                continue;
+            }
+
+            $data[$question->slug] = 0;
+        }
+
+        /*array_unshift($answerData, (object)[     
+            "id" =>  0,
+            "surveyId" =>  0,
+            "personalId" =>  0,
+            "data" => json_encode($data),
+            "token" =>  0,
+            "tokenTime" =>  0,
+            "done" =>  0,
+            "updated_at" =>  "2023-09-14 00:00",
+            "created_at" =>  "2023-09-14 00:00",
+            "fullname" =>  "dummy",
+            "department" =>  "dummy"
+        ]);*/
+
+        #unset($answerData[0]);
 
         foreach ($questionData as $question) {
             if ($question->type == "description") {
@@ -43,6 +77,8 @@ class Reports extends Controller
                 continue;
             }
 
+            $group0 = $groups[$groupIndex];
+
             $filterResults = array_filter($answerData, function ($v, $k) use ($question) {
                 $decodedJson = json_decode($v->data, true);
                 if ($decodedJson == null)
@@ -52,7 +88,7 @@ class Reports extends Controller
                     foreach ($question->answers as $answerKey => $answerValue) 
                         if (array_key_exists($question->slug . $answerKey, $decodedJson)) 
                             return true;
-                } 
+                }
                 else 
                     return array_key_exists($question->slug, $decodedJson); 
                 
@@ -62,7 +98,6 @@ class Reports extends Controller
             foreach ($filterResults as $fValue) {
                 $decodedJson = json_decode($fValue->data, true);
 
-                $group0 = $groups[$groupIndex];
                 try {
 
                     if ($question->type == "checkbox") {
