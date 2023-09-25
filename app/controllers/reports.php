@@ -206,4 +206,52 @@ class Reports extends Controller
             "data" => $result
         ]);
     }
+
+    #[route(uri: "download-csv")]
+    public function downloadCsv(int $surveyId)
+    {
+        $survey = Survey::existsByUserId(User::id(), "id", $surveyId);
+        if(!$survey)
+            redirect();
+
+        header('Pragma: private');
+        header('Cache-control: private, must-revalidate');
+        header('Content-type: text/csv');
+        $csvFileName = preg_replace('/[^A-Za-z0-9_-]/', '', str_replace(' ', '_', $survey->title));
+        header('Content-Disposition: attachment; filename=' . $csvFileName . '.csv');
+
+        $fp = fopen('php://output', 'w');
+
+        $survey->questions = json_decode($survey->data);
+        $headers = [];
+        foreach ($survey->questions as $question) {
+            if($question->type == "description")
+                continue;
+
+            $headers[] = $question->title; #iconv('UTF-8', 'WINDOWS-1254', $question->title);
+        }
+
+        fputcsv($fp, $headers);
+
+        $survey->responses = $this->db->select("answers.*, personals.fullname, personals.department")
+                        ->from("answers")
+                        ->join("personals", "personals.id = answers.personalId")
+                        ->where("surveyId", "=", $surveyId)
+                        ->results();
+                        
+        foreach ($survey->responses as $response) {
+            $row = [];
+            foreach ($survey->questions as $question) {
+                $data = json_decode($response->data);
+                
+                foreach ($data as $key => $value) {
+                    $row[] = $value;
+                }
+            }
+            fputcsv($fp, $row);
+        }
+
+        fclose($fp);
+        exit;
+    }
 }
