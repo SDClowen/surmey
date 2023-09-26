@@ -239,7 +239,7 @@ class Reports extends Controller
                         ->where("surveyId", "=", $surveyId)
                         ->results();
                         
-        foreach ($survey->responses as $response) {
+        /*foreach ($survey->responses as $response) {
             $row = [];
             foreach ($survey->questions as $question) {
                 $data = json_decode($response->data);
@@ -249,7 +249,7 @@ class Reports extends Controller
                 }
             }
             fputcsv($fp, $row);
-        }
+        }*/
 
         fclose($fp);
         exit;
