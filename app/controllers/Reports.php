@@ -11,8 +11,63 @@ class Reports extends Controller
     #[route(method: route::get | route::xhr_get, session: "user", otherwise: "/auth")]
     public function watch(int $surveyId)
     {
+        #$survey = Survey::existsByUserId(User::id(), "id", $surveyId);
+        $survey = Survey::exists("id", $surveyId);
+        if (!$survey)
+            redirect();
+
+        $answerData = $this->db->select("answers.*, personals.fullname, personals.department")
+            ->from("answers")
+            ->join("personals", "personals.id = answers.personalId")
+            ->where("surveyId", "=", $surveyId)
+            ->results();
+
+        echo "<pre>";
+        print_r($answerData);
+
+        $questionData = json_decode($survey->data);
+
+        foreach ($questionData as $key => $value) {
+
+            if($value->type == "description")
+                continue;
+            
+            echo "<b>".$value->title."</b><br>";
+            echo "***************************************";
+            
+            foreach ($value->answers as $k => $answer) {
+
+                $count = 0;
+                $search = function($slug) use ($count, $answerData){
+                    array_walk($answerData, function($aw_V, $aw_K) use ($count, $slug){
+
+                        $decodedJson = json_decode($aw_V->data, JSON_OBJECT_AS_ARRAY);
+
+                        $hasValue = array_key_exists($slug, $decodedJson);
+                        if($hasValue)
+                            $count++;
+
+                        #echo print_r($decodedJson, true)."<br>";
+
+                    });
+                };
+                
+                $slug = ($value->type == "checkbox" ? $value->slug.$k : $value->slug);
+
+                $search($slug);
+
+                echo "<br><i>$k [ $slug ]-$answer (<b>$count</b>)</i>";
+            }
+
+            echo "<hr>";
+        }
+    }
+
+    #[route(method: route::get | route::xhr_get, session: "user", otherwise: "/auth")]
+    public function watch2(int $surveyId)
+    {
         $survey = Survey::existsByUserId(User::id(), "id", $surveyId);
-        if (! $survey)
+        if (!$survey)
             redirect();
 
         $questionData = json_decode($survey->data);
@@ -34,21 +89,25 @@ class Reports extends Controller
         $isFirstDescription = true;
         $data = [];
         
-        # TODO: generate dummy answer data
-        foreach($questionData as $question)
+        $willGenerateDummyData = false; 
+        if($willGenerateDummyData) # not working
         {
-            if($question->type == "radio" || 
-                $question->type == "checkbox")
+             # TODO: generate dummy answer data
+            foreach($questionData as $question)
             {
-                foreach($question->answers as $key => $answers)
+                if($question->type == "radio" || 
+                    $question->type == "checkbox")
                 {
-                    $data[$question->type == "radio" ? $question->slug : $question->slug.$key] = 0;
+                    foreach($question->answers as $key => $answers)
+                    {
+                        $data[$question->type == "radio" ? $question->slug : $question->slug.$key] = 0;
+                    }
+
+                    continue;
                 }
 
-                continue;
+                $data[$question->slug] = 0;
             }
-
-            $data[$question->slug] = 0;
         }
 
         /*array_unshift($answerData, (object)[     
