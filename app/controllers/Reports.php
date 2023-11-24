@@ -9,7 +9,7 @@ use Core\Attributes\route;
 class Reports extends Controller
 {
     #[route(method: route::get | route::xhr_get, session: "user", otherwise: "/auth")]
-    public function watch(int $surveyId)
+    public function watch2(int $surveyId)
     {
         #$survey = Survey::existsByUserId(User::id(), "id", $surveyId);
         $survey = Survey::exists("id", $surveyId);
@@ -22,8 +22,8 @@ class Reports extends Controller
             ->where("surveyId", "=", $surveyId)
             ->results();
 
-        echo "<pre>";
-        print_r($answerData);
+        /*echo "<pre>";
+        print_r($answerData);*/
 
         $questionData = json_decode($survey->data);
 
@@ -64,7 +64,7 @@ class Reports extends Controller
     }
 
     #[route(method: route::get | route::xhr_get, session: "user", otherwise: "/auth")]
-    public function watch2(int $surveyId)
+    public function watch(int $surveyId)
     {
         $survey = Survey::existsByUserId(User::id(), "id", $surveyId);
         if (!$survey)
