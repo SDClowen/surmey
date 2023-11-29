@@ -39,7 +39,7 @@ class Surveys extends Controller
         $post = Request::post();
         $validate = validate($post, [
             "title" => ["name" => lang("title"), "required" => true, "min" => 8, "max" => 255],
-            "about" => ["name" => lang("title"), "min" => 0, "max" => 512],
+            "about" => ["name" => lang("title"), "min" => 0, "max" => 5000],
             "csrf" => ["name" => lang("csrf"), "required" => true],
             #"photo" => ["name" => lang("photo")],
             "data" => ["name" => "data", "required" => true]
