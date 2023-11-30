@@ -131,7 +131,10 @@ class Surveys extends Controller
             $result = $this->db->from("surveys")->where("id", "=", $id)->update((array) $post);
 
         if ($result)
-            successlang("data.successfully.changed");
+            if($id > 0)
+                successlang("data.successfully.changed");
+            else
+                success(lang("succesfully.added", "<b>".$post->title."</b>\n"), "/surveys");
 
         getDataError();
     }
@@ -177,7 +180,7 @@ class Surveys extends Controller
         ]);
 
         if($isUpdated)
-            success();
+            success(refresh: true);
 
         getDataError();
     }

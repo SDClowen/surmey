@@ -88,5 +88,5 @@ return [
 	"create.survey.desc" => "Bu bilgiler herkese açık olarak görüntülenecektir, bu nedenle ne paylaştığınıza dikkat edin.",
 	"settings" => "Ayarlar",
 	"pin.error" => "Doğrulama kodu yanlış! Lütfen kontrol ederek tekrar deneyiniz.",
-	"survey.successfully.answered" => "Anketi cevapladığınız için teşekkür ederiz..."
+	"survey.successfully.answered" => "<span class='loading me-2'></span> Anketi cevapladığınız için teşekkür ederiz..."
 ];

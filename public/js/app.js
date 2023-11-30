@@ -5,7 +5,14 @@ $(function () {
         console.log(`navigate ->`, e);
     });*/
 
-    $("#file-upload").on("change", function (event) {
+    function linkify(text) {
+        var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+        return text.replace(urlRegex, function(url) {
+            return '<a class="text-blue-600 underline" href="' + url + '">' + url + '</a>';
+        });
+    }
+
+    $("body").on("change", "#file-upload", function (event) {
         var input = event.currentTarget;
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -18,6 +25,7 @@ $(function () {
             reader.readAsDataURL(input.files[0]);
         }
     });
+
     function createCheckableList(
         type,
         questionDummyText,
@@ -29,7 +37,7 @@ $(function () {
     ) {
         var generatedAnswers = "";
         for (const v of Object.values(answers))
-            generatedAnswers += `<div id="answer" class="relative mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">
+            generatedAnswers += `<div id="answer" tinymce="true" class="relative mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">
                                       <button type="button" class="remove absolute top-50 right-2 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
                                           <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -161,6 +169,7 @@ $(function () {
         }
         return result;
     };
+    
     const clearText = (text) => {
         return text
             .trim()
@@ -169,6 +178,7 @@ $(function () {
             .replace("\n", "<br>")
             .replace("\t", "   ");
     };
+
     const generate = () => {
         const questions = $(".questions #question");
         $(".preview-content").html("");
@@ -196,13 +206,17 @@ $(function () {
         $("form input[name=data]").val(JSON.stringify(result));
         return result;
     };
+
     const prepareSurveyForEditing = function (formData, jsonData) {
         formData = JSON.parse(formData);
         $("input[name=title]").val(formData.title);
         $("input[name=verifyPhone]").prop("checked", formData.verifyPhone);
-        $("#cover-photo-result").css({
-            backgroundImage: `url('/public/images/survey/${formData.photo}')`
-        });
+
+        $("#cover-photo-result").css(
+            "background-image",
+            `url('/public/images/survey/${formData.photo}')`
+        );
+
         $("textarea[name=about]").text(
             formData.about
                 .replaceAll("<br/>", "\r\n")
@@ -235,6 +249,7 @@ $(function () {
             $(".questions").append(content);
         }
     };
+
     const renderFormEntry = (element) => {
         let content = "";
         if (element.type != "description")
@@ -244,7 +259,7 @@ $(function () {
         if (element.type != "description")
             content += `
                   <h1 data-slug="${element.slug}" class="text-clip border-b border-gray-200 pb-3 pt-1 text-lg font-medium dark:border-gray-600 mb-4">
-                      ${element.title}  ${element.isRequired ? "<b class='text-red-600'>*</b>" : ""}
+                      ${linkify(element.title)}  ${element.isRequired ? "<b class='text-red-600'>*</b>" : ""}
                   </h1>
               `;
         switch (element.type) {
@@ -266,7 +281,7 @@ $(function () {
                 content += `
                       <div class="my-3 shadow-sm text-center rounded-md p-3 text-md ${types[element.subType]
                     }">
-                          ${element.title}
+                          ${linkify(element.title)}
                       </div>
                   `;
                 break;
@@ -278,13 +293,14 @@ $(function () {
                 }" type="${element.type
                 }" value="${i}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                       <label for="link-${element.slug + i
-                }" class="ml-2 text-sm font-normal text-gray-900 dark:text-gray-300">${answer}</label>
+                }" class="ml-2 text-sm font-normal text-gray-900 dark:text-gray-300">${linkify(answer)}</label>
                   </div>
               `;
         });
         if (element.type != "description") content += "</div>";
         return content;
     };
+
     window.generateSurvey = generate;
     window.prepareSurveyForEditing = prepareSurveyForEditing;
 
@@ -322,18 +338,32 @@ $(function () {
             $(".preview-content").append(renderFormEntry(element))
         );
     });
+
     $(document).on("keypress", "#create-answer", function (event) {
         if (!event.shiftKey && event.which == 13) {
             $(this).prev("#answers").append(`
-                  <div class="mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">${$(
-                this
-            ).text()}</div>
+                    <div id="answer" class="relative mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">
+                        <button type="button" class="remove absolute top-50 right-2 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
+                            <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                        <button type="button" class="down absolute top-50 right-14 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
+                        <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                        </button>
+                        <button type="button" class="up absolute top-50 right-8 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
+                        <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M5 15L10 9.84985C10.2563 9.57616 10.566 9.35814 10.9101 9.20898C11.2541 9.05983 11.625 8.98291 12 8.98291C12.375 8.98291 12.7459 9.05983 13.0899 9.20898C13.434 9.35814 13.7437 9.57616 14 9.84985L19 15" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                        </button>
+                        ${$(this).text()}
+                    </div>
               `);
+              
             $(event.target).text("...");
             window.getSelection().selectAllChildren(event.target);
             return false;
         }
     });
+
     $(document).on("click", "#survey-crud a", function (event) {
         const type = $(this).attr("type");
         const questionDummyText = $(this).attr("question-text");

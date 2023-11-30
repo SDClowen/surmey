@@ -22,7 +22,7 @@ final class Survey extends Model
                 ) answersCount, 
                 surveys.*
                 from surveys
-                where surveys.userId = ?"
+                where surveys.userId = ? and surveys.status = 1"
             )->results(params: [$userId]);
     }
 
