@@ -43,7 +43,7 @@ final class Survey extends Model
 
     public static function count(int $userId)
     {
-        return Database::get()->select("count(id)")->from("surveys")->where("userId", "=", $userId)->first();
+        return Database::get()->select("count(id)")->from("surveys")->where("userId", "=", $userId)->where("status", "=", 1)->first();
     }
     
     public static function participateCount(int $userId)

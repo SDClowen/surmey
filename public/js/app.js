@@ -4,6 +4,24 @@ $(function () {
     navigation.addEventListener("navigate", function(e){
         console.log(`navigate ->`, e);
     });*/
+    
+    $("[tinymce=true]").tinymce({
+        max_height: 300,
+        menubar: false,
+        plugins: [
+            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+            'anchor', 'searchreplace', 'visualblocks', 'fullscreen',
+            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | blocks | bold italic | forecolor backcolor | ' +
+            'alignleft aligncenter alignright alignjustify | ' +
+            'bullist numlist outdent indent | removeformat | help',
+        setup: function (editor) {
+            editor.on('change', function () {
+                tinymce.triggerSave();
+            })
+        }
+    });
 
     function linkify(text) {
         var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
@@ -217,6 +235,7 @@ $(function () {
             `url('/public/images/survey/${formData.photo}')`
         );
 
+        //tinymce.activeEditor.execCommand('mceInsertContent', false, formData.about);
         $("textarea[name=about]").text(
             formData.about
                 .replaceAll("<br/>", "\r\n")
@@ -224,6 +243,7 @@ $(function () {
                 .replaceAll("<br/>", "\n")
                 .replaceAll("\t", "    ")
         );
+
         for (const [k, v] of Object.entries(JSON.parse(jsonData))) {
             var content = "";
             switch (v.type) {
