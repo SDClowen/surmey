@@ -39,7 +39,7 @@ class Surveys extends Controller
         $post = Request::post();
         $validate = validate($post, [
             "title" => ["name" => lang("title"), "required" => true, "min" => 8, "max" => 255],
-            "about" => ["name" => lang("title"), "min" => 0, "max" => 5000],
+            "about" => ["name" => lang("about"), "min" => 0, "max" => 65535],
             "csrf" => ["name" => lang("csrf"), "required" => true],
             #"photo" => ["name" => lang("photo")],
             "data" => ["name" => "data", "required" => true]
@@ -107,15 +107,15 @@ class Surveys extends Controller
 
             return $randomString;
         };
-
+        /*
         $replacements = [
             "\r\n" => "<br/>",
             "\r" => "<br/>",
             "\t" => "   ",
         ];
 
-        $post->about = strtr($post->about, $replacements);
-
+        $post->about = strtr($post->about, $replacements);*/
+        #$post->about = htmlentities($post->about);
         /*
         $post->about = str_replace("\r\n", "<br/>", $post->about);
         $post->about = str_replace("\r", "<br/>", $post->about);
@@ -151,6 +151,8 @@ class Surveys extends Controller
 
         $data = $result->data;
         unset($result->data);
+
+        $result->about = (htmlspecialchars(minifier($result->about)));
 
         $result = data_json($result);
 

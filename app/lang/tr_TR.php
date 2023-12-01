@@ -77,6 +77,7 @@ return [
 	"login" => "Giriş Yap",
 	"remember.me" => "Beni Hatırla",
 	"title" => "Başlık",
+	"about" => "Hakkında",
 	"photo" => "Fotoğraf",
 	#Participants must be confirmed by phone
 	"create.survey.phone" => "Katılımcıların telefonla onaylanması gerekmektedir.",

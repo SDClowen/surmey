@@ -5,6 +5,27 @@ $(function () {
         console.log(`navigate ->`, e);
     });*/
 
+    const initTinymces = ()=>{
+        
+        $("[tinymce=true]").tinymce({
+            max_height: 300,
+            menubar: false,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+            ],
+            toolbar: 'undo redo | blocks | bold italic link | forecolor backcolor |  image media | ' +
+                'alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist outdent indent | removeformat | help',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    tinymce.triggerSave();
+                })
+            }
+        });
+    }
+
     function linkify(text) {
         var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
         return text.replace(urlRegex, function(url) {
@@ -217,15 +238,15 @@ $(function () {
             `url('/public/images/survey/${formData.photo}')`
         );
 
-        $("textarea[name=about]").text(
+        /*$("textarea[name=about]").text(
             formData.about
                 .replaceAll("<br/>", "\r\n")
                 .replaceAll("<br/>", "\r")
                 .replaceAll("<br/>", "\n")
                 .replaceAll("\t", "    ")
-        )
+        )*/
         
-        //$("textarea[name=about]").html(formData.about).tinymce();
+        $("textarea[name=about]").html(formData.about)
 
         for (const [k, v] of Object.entries(JSON.parse(jsonData))) {
             var content = "";
@@ -251,6 +272,8 @@ $(function () {
             }
             $(".questions").append(content);
         }
+
+        initTinymces()
     };
 
     const renderFormEntry = (element) => {
