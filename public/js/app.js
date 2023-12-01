@@ -4,24 +4,6 @@ $(function () {
     navigation.addEventListener("navigate", function(e){
         console.log(`navigate ->`, e);
     });*/
-    
-    $("[tinymce=true]").tinymce({
-        max_height: 300,
-        menubar: false,
-        plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-        ],
-        toolbar: 'undo redo | blocks | bold italic | forecolor backcolor | ' +
-            'alignleft aligncenter alignright alignjustify | ' +
-            'bullist numlist outdent indent | removeformat | help',
-        setup: function (editor) {
-            editor.on('change', function () {
-                tinymce.triggerSave();
-            })
-        }
-    });
 
     function linkify(text) {
         var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
@@ -55,7 +37,7 @@ $(function () {
     ) {
         var generatedAnswers = "";
         for (const v of Object.values(answers))
-            generatedAnswers += `<div id="answer" tinymce="true" class="relative mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">
+            generatedAnswers += `<div id="answer" class="relative mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">
                                       <button type="button" class="remove absolute top-50 right-2 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
                                           <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -235,14 +217,15 @@ $(function () {
             `url('/public/images/survey/${formData.photo}')`
         );
 
-        //tinymce.activeEditor.execCommand('mceInsertContent', false, formData.about);
         $("textarea[name=about]").text(
             formData.about
                 .replaceAll("<br/>", "\r\n")
                 .replaceAll("<br/>", "\r")
                 .replaceAll("<br/>", "\n")
                 .replaceAll("\t", "    ")
-        );
+        )
+        
+        //$("textarea[name=about]").html(formData.about).tinymce();
 
         for (const [k, v] of Object.entries(JSON.parse(jsonData))) {
             var content = "";
