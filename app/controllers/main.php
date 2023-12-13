@@ -177,7 +177,7 @@ class Main extends Controller
 	{
         $survey = Survey::exists("slug", $slug);
 		if (!$survey || $survey->status != 1)
-            redirect();
+            warning("SURVEY_ERROR: $slug");
         
         if(session_check("user"))
             session_set("survey", $survey);
