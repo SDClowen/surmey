@@ -39,6 +39,7 @@ final class Participator extends Model
     {
         return Database::get()->from("answers")
             ->where("token", "=", $pin)
+            ->where("done", "=", 0)
             ->result();
     }
 }

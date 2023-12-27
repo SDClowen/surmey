@@ -69,8 +69,7 @@ class Participate extends Controller
 			warning("Bu anketi daha önce zaten cevapladınız!");
 
 		# find a unique usable pin for the participator
-		while (Participator::checkToken(($pin = join(randomSequence(6)))))
-			;
+		while (Participator::checkToken(($pin = join(randomSequence(6)))));
 
 		$post->pin = $pin;
 		$tokenTime = time();
