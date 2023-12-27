@@ -18,8 +18,6 @@
     {njs("jquery/dist/jquery.min")|noescape}
     {njs("sdeasy/sdeasy")|noescape}
     {njs("apexcharts/dist/apexcharts.min")|noescape}
-    {njs("@tinymce/tinymce-jquery/dist/tinymce-jquery.min")|noescape}
-    {njs("tinymce/tinymce.min")|noescape}
     {ajs("app")|noescape}
 </head>
 

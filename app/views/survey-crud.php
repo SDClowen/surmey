@@ -178,3 +178,29 @@
 
     </div>
 </div>
+
+{njs("tinymce/tinymce.min")|noescape}
+{njs("@tinymce/tinymce-jquery/dist/tinymce-jquery.min")|noescape}
+
+<script>
+    $(() => {
+        $("#about").tinymce({
+            height: 300,
+            menubar: false,
+            paste_data_images: true,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+            ],
+            toolbar: 'undo redo | blocks | bold italic link | forecolor backcolor |  image media | ' +
+                'alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist outdent indent | removeformat | help | code',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    tinymce.triggerSave();
+                })
+            }
+        });
+    })
+</script>
