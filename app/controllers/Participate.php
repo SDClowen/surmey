@@ -190,6 +190,11 @@ class Participate extends Controller
 		if (! $survey)
 			error("INVALID_SURVEY_DATA");
 
+		$user = session_get("participator");
+
+		if (Participator::checkSurveyIsParticipated($user->personalId, true))
+			warning("Bu anketi daha önce zaten cevapladınız!");
+
 		$post = Request::post();
 
 		$rules = [];
@@ -254,11 +259,6 @@ class Participate extends Controller
 
 		if($validate)
 			warning($validate);
-
-		$user = session_get("participator");
-
-		if (Participator::checkSurveyIsParticipated($user->personalId, true))
-			warning("Bu anketi daha önce zaten cevapladınız!");
 
 		$result = Database::get()->from("answers")
 			->where("surveyId", "=", $surveyId)
