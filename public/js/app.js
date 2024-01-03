@@ -270,7 +270,7 @@ $(function () {
             case "checkbox":
                 let divClass = "inline";
                 if (element.isHorizontal)
-                    divClass = "grid justify-stretch";
+                    divClass = "w-full space-x-8 grid grid-flow-col flex-nowrap overflow-x-auto scrolling-touch";
                 content += `<div class="${divClass}">`;
                 break;
             case "textarea":
@@ -282,8 +282,7 @@ $(function () {
             case "description":
                 const types = ["info", "warning", "success", "danger"];
                 content += `
-                      <div class="my-3 shadow-sm text-center rounded-md p-3 text-md ${types[element.subType]
-                    }">
+                      <div class="my-3 shadow-sm text-center rounded-md p-3 text-md ${types[element.subType]}">
                           ${linkify(element.title)}
                       </div>
                   `;
@@ -292,11 +291,8 @@ $(function () {
         element.answers.forEach((answer, i) => {
             content += `
                   <div class="flex items-center mb-2 mx-1">
-                      <input id="link-${element.slug + i}" name="${element.type == "radio" ? element.slug : element.slug + i
-                }" type="${element.type
-                }" value="${i}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="link-${element.slug + i
-                }" class="ml-2 text-sm font-normal text-gray-900 dark:text-gray-300">${linkify(answer)}</label>
+                      <input id="link-${element.slug + i}" name="${element.type == "radio" ? element.slug : element.slug + i}" type="${element.type}" value="${i}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                      <label for="link-${element.slug + i}" class="ml-2 text-sm font-normal text-gray-900 dark:text-gray-300" style="min-inline-size: max-content;">${linkify(answer)}</label>
                   </div>
               `;
         });

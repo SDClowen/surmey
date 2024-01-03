@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="scroll-smooth md:scroll-auto">
 
 <head>
     <meta charset="UTF-8">
@@ -232,7 +232,7 @@
             </div>
         </header>
         <main>
-            <div id="container" class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 m-3 rounded-md border shadow-sm bg-white dark:bg-slate-800 dark:border-slate-700 dark:text-white">
+            <div id="container" class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 m-3 rounded-xl border shadow-md bg-white dark:bg-slate-800 dark:border-slate-700 dark:text-white">
                 {$content|noescape}
             </div>
         </main>
