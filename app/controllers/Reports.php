@@ -52,9 +52,8 @@ class Reports extends Controller
                 $csvData[] = $answerKey.":".$answerValue;
             }
 
-            $data = $csvData;
+            fputcsv($fp, $csvData);
         }
-        fputcsv($fp, $data);
 
         fclose($fp);
         exit;

@@ -185,10 +185,17 @@ final class Survey extends Model
 
             $result[$title]["list-json"] = [];
 
+            $totalCount = 0;
             if ($type === "radio" || $type === "checkbox") {
 
                 foreach ($question as $answerK => $answerV)
-                    $result[$title]["answers"][$answerK] = count($answerV);
+                {
+                    $count = count($answerV);
+                    $result[$title]["answers"][$answerK] = $count;
+                    $totalCount += $count;
+                }
+                
+                $result[$title]["total"] = $totalCount;
 
             } else {
                 $emptyCount = $fillCount = 0;
@@ -204,11 +211,15 @@ final class Survey extends Model
 
                 $result[$title]["answers"] = [
                     "Dolu" => $fillCount,
-                    "Boş" => $emptyCount,
+                    "Boş" => $emptyCount
                 ];
+
+                $totalCount = $fillCount + $emptyCount;
 
                 $result[$title]["list-json"] = data_json($result[$title]["list-json"]);
             }
+
+            $result[$title]["total"] = $totalCount;
 
         }
         
