@@ -108,10 +108,10 @@
                         <div class="p-4">
                             <div class="mb-2 flex justify-between items-center">
                                 <h3 class="text-sm font-semibold text-gray-800 dark:text-white">{$aK}</h3>
-                                <span class="text-sm text-gray-800 dark:text-white">{round($aV * 100 / ($value["total"] == 0 ? 0 : $value["total"]), 1)}%</span>
+                                <span class="text-sm text-gray-800 dark:text-white">{round($aV * 100 / ($value["total"] == 0 ? 1 : $value["total"]), 1)}%</span>
                             </div>
                             <div class="flex w-full h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
-                                <div class="flex flex-col justify-center rounded-full overflow-hidden bg-blue-600 text-xs text-white text-center whitespace-nowrap transition duration-500 dark:bg-blue-500" style="width: {round($aV * 100 / ($value["total"] == 0 ? 0 : $value["total"]), 1)|noescape}%"></div>
+                                <div class="flex flex-col justify-center rounded-full overflow-hidden bg-blue-600 text-xs text-white text-center whitespace-nowrap transition duration-500 dark:bg-blue-500" style="width: {round($aV * 100 / ($value["total"] == 0 ? 1 : $value["total"]), 1)|noescape}%"></div>
                             </div>
                         </div>
                         <!-- End Progress -->

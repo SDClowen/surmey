@@ -1,7 +1,7 @@
 <div class="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-6 lg:px-8">
     <div class="mx-auto max-w-2xl">
 
-        <form role="form" action="/surveys/{$url}" before="window.generateSurvey()" method="post" data-content=".survey-create-message">
+        <form role="form" action="/surveys/{$url}" before="window.generateSurvey()" method="post" data-block-reset="true" data-content=".survey-create-message">
             <input type="hidden" name="data"/>
             {csrf()|noescape}
             <div class="survey-create-message fixed bottom-0 right-2 z-10 my-5"></div>
