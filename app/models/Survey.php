@@ -134,17 +134,6 @@ final class Survey extends Model
                     ];
 
                     $answerTitle = $question->answers[$answerValue];
-
-                    #foreach ($value->answers as $answer)
-                    #$generatedData[$group0][$value->slug][$answer] = [];
-
-                    $generatedData[$group0][$question->type . "::" . $question->title][$answerTitle][] = (object) [
-                        "id" => $fValue->personalId,
-                        "fullname" => $fValue->fullname,
-                        "department" => $fValue->department,
-                        #"answer" => $answerTitle,
-                        "value" => $answerValue
-                    ];
                 }
             }
 
