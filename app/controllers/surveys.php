@@ -15,7 +15,11 @@ class Surveys extends Controller
 
         $this->view("main", "survey", lang("survey"), [
             "user" => $user,
-            "surveys" => Survey::all($user->id)
+            "surveys" => [
+                Survey::all($user->id, Survey::ACTIVE),
+                Survey::all($user->id, Survey::PASSIVE),
+                Survey::all($user->id, Survey::ALL),
+            ]
         ]);
     }
 
@@ -168,7 +172,7 @@ class Surveys extends Controller
     }
 
     #[route(method: route::get | route::xhr_get, session: "user")]
-    public function delete(int $surveyId)
+    public function status(int $surveyId, int $status)
     {
         if (! $surveyId)
             warning("DATA_WAS_ZERO");
@@ -178,7 +182,7 @@ class Surveys extends Controller
             warning("DATA_NOT_FOUND");
 
         $isUpdated = Survey::update($surveyId, [
-            "status" => 2
+            "status" => $status
         ]);
 
         if($isUpdated)

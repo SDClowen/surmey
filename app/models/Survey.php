@@ -5,10 +5,11 @@ use Core\{Model, Database};
 
 final class Survey extends Model
 {
-    public const DEACTIVE = 0;
+    public const ALL = 0;
     public const ACTIVE = 1;
+    public const PASSIVE = 2;
 
-    public static function all(int $userId)
+    public static function all(int $userId, $status = self::ACTIVE)
     {
         /*return Database::get()->select("count(answers.id) answersCount, surveys.*")
                 ->from("surveys")
@@ -16,14 +17,19 @@ final class Survey extends Model
                 ->where("surveys.userId", "=", $userId)
                 ->results();*/
 
-        return Database::get()->query("
-                select (
-                    select count(answers.id) from answers where answers.surveyId = surveys.id
-                ) answersCount, 
-                surveys.*
-                from surveys
-                where surveys.userId = ? and surveys.status = 1"
-            )->results(params: [$userId]);
+        $query = "
+            select (
+                select count(answers.id) from answers where answers.surveyId = surveys.id
+            ) answersCount, 
+            surveys.*
+            from surveys
+            where surveys.userId = ?" . ($status != self::ALL ? " and surveys.status = ?" : "");
+
+        $params = [$userId];
+        if ($status != 0)
+            array_push($params, $status);
+
+        return Database::get()->query($query)->results(params: $params);
     }
 
     public static function exists(string $column, string $value)
@@ -45,7 +51,7 @@ final class Survey extends Model
     {
         return Database::get()->select("count(id)")->from("surveys")->where("userId", "=", $userId)->where("status", "=", 1)->first();
     }
-    
+
     public static function participateCount(int $userId)
     {
         return Database::get()->select("count(surveys.id)")
@@ -87,17 +93,17 @@ final class Survey extends Model
             }
 
             $group0 = $groups[$groupIndex];
-            $search = function($k) use ($question, $answerData){
-                return array_filter($answerData, function($aw_V, $aw_K) use ($question, $k){
+            $search = function ($k) use ($question, $answerData) {
+                return array_filter($answerData, function ($aw_V, $aw_K) use ($question, $k) {
 
                     $decodedJson = json_decode($aw_V->data, JSON_OBJECT_AS_ARRAY);
-                    if(!$decodedJson)
+                    if (! $decodedJson)
                         return;
 
-                    $s = $question->type == "checkbox" ? $question->slug.$k : $question->slug;
+                    $s = $question->type == "checkbox" ? $question->slug . $k : $question->slug;
 
-                    $exists = array_key_exists($s, $decodedJson); 
-                    if($exists && $question->type == "radio")
+                    $exists = array_key_exists($s, $decodedJson);
+                    if ($exists && $question->type == "radio")
                         return $decodedJson[$s] == $k;
 
                     return $exists;
@@ -105,19 +111,17 @@ final class Survey extends Model
                 }, ARRAY_FILTER_USE_BOTH);
             };
 
-            foreach($question->answers as $answerKey => $answer)
-            {
+            foreach ($question->answers as $answerKey => $answer) {
                 $filtered = $search($answerKey);
-                if(!count($filtered))
+                if (! count($filtered))
                     $generatedData[$group0][$question->type . "::" . $question->title][$answer] = [];
 
-                foreach($filtered as $fValue)
-                {   
-                    $slug = ($question->type == "checkbox" ? $question->slug.$answerKey : $question->slug);
-    
+                foreach ($filtered as $fValue) {
+                    $slug = ($question->type == "checkbox" ? $question->slug . $answerKey : $question->slug);
+
                     $decodedJson = json_decode($fValue->data, JSON_OBJECT_AS_ARRAY);
 
-                    if(!isset($decodedJson[$slug]))
+                    if (! isset($decodedJson[$slug]))
                         continue;
 
                     $answerValue = $decodedJson[$slug];
@@ -137,13 +141,12 @@ final class Survey extends Model
                 }
             }
 
-            if($question->type != "textarea")
+            if ($question->type != "textarea")
                 continue;
 
             $data = $search(0);
 
-            foreach($data as $answer)
-            {
+            foreach ($data as $answer) {
                 $answerValue = json_decode($answer->data, JSON_OBJECT_AS_ARRAY)[$question->slug];
                 $generatedData[$group0][$question->type . "::" . $question->title][] = (object) [
                     "id" => $answer->personalId,
@@ -177,13 +180,12 @@ final class Survey extends Model
             $totalCount = 0;
             if ($type === "radio" || $type === "checkbox") {
 
-                foreach ($question as $answerK => $answerV)
-                {
+                foreach ($question as $answerK => $answerV) {
                     $count = count($answerV);
                     $result[$title]["answers"][$answerK] = $count;
                     $totalCount += $count;
                 }
-                
+
                 $result[$title]["total"] = $totalCount;
 
             } else {
@@ -211,7 +213,7 @@ final class Survey extends Model
             $result[$title]["total"] = $totalCount;
 
         }
-        
+
         return $result;
     }
 }

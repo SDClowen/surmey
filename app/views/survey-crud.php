@@ -103,10 +103,10 @@
                         </a>
                     </div>
                     <div class="rounded-lg p-1 shadow-md bg-slate-50 border-slate-100 dark:border-slate-600 dark:bg-slate-700">
-                        <div x-show="current === 1" class="questions">
+                        <div x-show="current === 1" x-transition class="questions">
                             {$showIfOnEditMode|noescape}
                         </div>
-                        <div class="preview-content p-2" x-show="current === 2">
+                        <div class="preview-content p-2" x-show="current === 2" x-transition>
                         </div>
                     </div>
                 </div>
