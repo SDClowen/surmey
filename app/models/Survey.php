@@ -95,6 +95,8 @@ final class Survey extends Model
             $group0 = $groups[$groupIndex];
             $search = function ($k) use ($question, $answerData) {
                 return array_filter($answerData, function ($aw_V, $aw_K) use ($question, $k) {
+                    if(!$aw_V || !$aw_V->data)
+                        return;
 
                     $decodedJson = json_decode($aw_V->data, JSON_OBJECT_AS_ARRAY);
                     if (! $decodedJson)
