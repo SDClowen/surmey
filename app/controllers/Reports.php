@@ -25,6 +25,20 @@ class Reports extends Controller
         ]);
     }
 
+    #[route(method: route::xhr_get)]
+    public function reset(int $surveyId)
+    {
+        $survey = Survey::existsByUserId(User::id(), "id", $surveyId);
+        if(!$survey)
+            redirect();
+
+        $count = Survey::reset($surveyId);
+        if($count)
+            success(refresh: true);
+
+        getDataError();
+    }
+
     #[route(method: route::get)]
     public function csv(int $surveyId)
     {

@@ -37,6 +37,11 @@ final class Survey extends Model
         return Database::get()->from("surveys")->where($column, "=", $value)->result();
     }
 
+    public static function reset(int $surveyId)
+    {
+        return Database::get()->from("answers")->where("surveyId", value: $surveyId)->delete();
+    }
+
     public static function existsByUserId(int $userId, string $column, string $value)
     {
         return Database::get()->from("surveys")->where("userId", "=", $userId)->where($column, "=", $value)->result();

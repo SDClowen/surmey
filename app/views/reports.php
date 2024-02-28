@@ -15,6 +15,11 @@
                 <span class="ml-1">Grafik</span>
             </a>
         </div>
+        <div class="flex justify-items-end">
+            <a href="#" data-url="/reports/reset/{$surveyId}" class="shadow-sm mx-auto inline-flex items-center p-2 text-sm font-medium text-center text-gray-50 bg-red-600 hover:bg-red-700 rounded-lg focus:ring-4 focus:outline-none">
+                Katılımcıları Sıfırla
+            </a>
+        </div>
         <div class="relative inline-flex hidden">
             <button id="dropdownMenuIconButton" @click="dropIsOpen = !dropIsOpen" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">
                 <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
@@ -111,7 +116,7 @@
                                 <span class="text-sm text-gray-800 dark:text-white">{round($aV * 100 / ($value["total"] == 0 ? 1 : $value["total"]), 1)}%</span>
                             </div>
                             <div class="flex w-full h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
-                                <div class="flex flex-col justify-center rounded-full overflow-hidden bg-blue-600 text-xs text-white text-center whitespace-nowrap transition duration-500 dark:bg-blue-500" style="width: {round($aV * 100 / ($value["total"] == 0 ? 1 : $value["total"]), 1)|noescape}%"></div>
+                                <div class="flex flex-col justify-center rounded-full overflow-hidden bg-blue-600 text-xs text-white text-center whitespace-nowrap transition duration-500 dark:bg-blue-500" style="width: {round($aV * 100 / ($value[" total"]==0 ? 1 : $value["total"]), 1)|noescape}%"></div>
                             </div>
                         </div>
                         <!-- End Progress -->
