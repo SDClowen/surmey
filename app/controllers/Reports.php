@@ -21,6 +21,7 @@ class Reports extends Controller
         $this->view("main", "reports", lang("reports"), [
             "user" => User::info(),
             "data" => $result,
+            "participators" => Survey::participators($surveyId),
             "surveyId" => $surveyId
         ]);
     }

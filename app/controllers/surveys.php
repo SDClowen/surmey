@@ -190,4 +190,30 @@ class Surveys extends Controller
 
         getDataError();
     }
+
+	#[route(method: route::xhr_get, uri: "data")]
+	public function getSurveyData()
+	{
+
+		if (session_check("survey"))
+			$survey = session_get("survey");
+		else {
+			if (! session_check("participator"))
+				die("PARTICIPATE_ERRROR");
+
+			if (! session_check("surveyId"))
+				die("data-not-found");
+
+			$surveyId = session_get("surveyId");
+			if (! session_check("participator"))
+				warning("INVALID_SURVEY");
+
+			$survey = Survey::exists("id", $surveyId);
+			if (! $survey)
+				error("INVALID_SURVEY_DATA");
+		}
+
+
+		die($survey->data);
+	}
 }
