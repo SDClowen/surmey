@@ -11,19 +11,24 @@ class Reports extends Controller
     #[route(method: route::get | route::xhr_get, session: "user", otherwise: "/auth")]
     public function watch(int $surveyId)
     {
-        #$survey = Survey::existsByUserId(User::id(), "id", $surveyId);
-        $survey = Survey::exists("id", $surveyId);
+        $survey = Survey::existsByUserId(User::id(), "id", $surveyId);
         if (!$survey)
             redirect();
 
         $result = Survey::report($survey);
-
-        $this->view("main", "reports", lang("reports"), [
+        
+        $args = [
+            "surveyTitle" => $survey->title,
             "user" => User::info(),
             "data" => $result,
-            "participators" => Survey::participators($surveyId),
+            "anonymous" => $survey->anonymous,
             "surveyId" => $surveyId
-        ]);
+        ];
+
+        if(!$survey->anonymous)
+            $args["participators"] = Survey::participators($surveyId);
+
+        $this->view("main", "reports", lang("reports"), $args);
     }
 
     #[route(method: route::xhr_get)]

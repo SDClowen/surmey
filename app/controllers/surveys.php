@@ -56,6 +56,7 @@ class Surveys extends Controller
             warninglang("csrf.error");
 
         $post->verifyPhone = (int) isset($post->verifyPhone);
+        $post->anonymous = (int) isset($post->anonymous);
 
         unset($post->csrf);
 
