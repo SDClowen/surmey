@@ -192,7 +192,7 @@
                         </td>
                         <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
                             <div class="inline px-3 py-1 text-sm font-normal rounded-full gap-x-2 {$participator->status == 1 ? ' text-emerald-500 bg-emerald-100/60' : 'text-gray-500 bg-gray-100 dark:text-gray-400'} dark:bg-gray-800">
-                                {$participator->status == 1 ? 'ATKİF' : 'AYRILMIŞ'}
+                                {$participator->status == 1 ? 'ACTIVE' : 'DEACTIVE'}
                             </div>
                         </td>
                     </tr>
