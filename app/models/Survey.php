@@ -71,7 +71,7 @@ final class Survey extends Model
     {
         return Database::get()->select("count(answers.id)")
             ->from("answers")
-            ->join("surveys", "surveys.id = surveys.surveyId")
+            ->join("surveys", "surveys.id = answers.surveyId")
             ->where("surveys.userId", "=", $userId)
             ->first();
     }
