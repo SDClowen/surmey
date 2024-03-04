@@ -15,7 +15,7 @@ final class Participator extends Model
         return $user;
     }
 
-    public static function checkSurveyIsParticipated(int $surveyId, int $personalId, bool $isDone = false) : int
+    public static function checkSurveyIsParticipated(int $surveyId, string $personalId, bool $isDone = false) : int
     {
         return Database::get()->select("count(id)")
             ->from("answers")
@@ -25,7 +25,7 @@ final class Participator extends Model
             ->first();
     }
 
-    public static function answerExists(int $surveyId, int $personalId, bool $isDone = false) : int
+    public static function answerExists(int $surveyId, string $personalId, bool $isDone = false) : int
     {
         return Database::get()->select("id")
             ->from("answers")
