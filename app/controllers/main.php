@@ -14,7 +14,8 @@ class Main extends Controller
         $this->view("main", "dashboard", "Surmey", [
             "user" => User::info(),
             "surveyCount" => Survey::count(User::id()),
-            "participateCount" => Survey::participateCount(User::id())
+            "participateCount" => Survey::participateCount(User::id()),
+            "userCount" => $this->db->select("count(id)")->from("users")->first()
         ]);
     }
 

@@ -9,8 +9,8 @@
             <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900  dark:text-gray-200 sm:text-5xl">{$participateCount}</dd>
         </div>
         <div class="mx-auto flex max-w-xs flex-col gap-y-4">
-            <dt class="text-base leading-7 text-gray-600 dark:text-gray-50">New users annually</dt>
-            <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl dark:text-gray-200">46,000</dd>
+            <dt class="text-base leading-7 text-gray-600 dark:text-gray-50">Toplam Üye</dt>
+            <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl dark:text-gray-200">{$userCount}</dd>
         </div>
     </dl>
 </div>
