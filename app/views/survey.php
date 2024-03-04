@@ -3,8 +3,6 @@
         <div>
             <div class="flex items-center gap-x-3">
                 <h2 class="text-lg font-medium text-gray-800 dark:text-white">Surveys</h2>
-
-                <span class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{count($surveys)}</span>
             </div>
 
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">Oluşturulan tüm anketler burada yer alır.</p>
@@ -41,14 +39,20 @@
         <div class="inline-flex overflow-hidden bg-white border divide-x rounded-lg dark:bg-gray-900 rtl:flex-row-reverse dark:border-gray-700 dark:divide-gray-700">
             <button x-on:click="current = 0" x-bind:class="{ 'bg-gray-100 dark:bg-gray-800': current === 0 }" class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:text-gray-300">
                 Aktif Anketler
+                
+                <span class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{count($surveys[0])}</span>
             </button>
 
             <button x-on:click="current = 1" x-bind:class="{ 'bg-gray-100 dark:bg-gray-800': current === 1 }" class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:hover:bg-gray-800 hover:bg-gray-100 dark:text-gray-300">
                 Pasif Anketler
+                
+                <span class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{count($surveys[1])}</span>
             </button>
 
             <button x-on:click="current = 2" x-bind:class="{ 'bg-gray-100 dark:bg-gray-800': current === 2 }" class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:hover:bg-gray-800 hover:bg-gray-100 dark:text-gray-300">
                 Tüm Anketler
+                
+                <span class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{count($surveys[2])}</span>
             </button>
         </div>
 
@@ -114,26 +118,12 @@
                                         <p class="text-gray-500 dark:text-gray-400">{shortText($survey->about)|noescape}...</p>
                                     </div>
                                 </td>
-                                <!--<td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1256&q=80" alt="">
-                                        <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                        <p class="flex items-center justify-center w-6 h-6 -mx-1 text-xs text-blue-600 bg-blue-100 border-2 border-white rounded-full">+4</p>
-                                    </div>
-                                </td>-->
-
-                                <!--<td class="px-4 py-4 text-sm whitespace-nowrap">
-                                    <div class="w-48 h-1.5 bg-blue-200 overflow-hidden rounded-full">
-                                        <div class="bg-blue-500 w-2/3 h-1.5"></div>
-                                    </div>
-                                </td>-->
 
                                 <td class="px-4 py-4 text-sm whitespace-nowrap">
                                     <a live="true" href="/reports/watch/{$survey->id}" data-content="#container" class="bg-blue-600 text-white px-4 transition-colors duration-200 rounded-xl py-1 select-none">Sonuçlar</a>
                                     <a live="true" href="/surveys/edit/{$survey->id}" data-content="#container" class="bg-gray-300 text-black px-4 transition-colors duration-200 rounded-xl py-1 select-none">Değiştir</a>
-                                    <a href="#" data-url="/surveys/status/{$survey->id}/{$survey->status == 1 ? 2 : 1}" class="{$survey->status == 1 ? 'bg-red-600 text-white' : 'bg-emerald-100/60 text-emerald-500'} shadow-sm px-4 transition-colors duration-200 rounded-xl py-1 select-none">{$survey->status == 1 ? 'Pasif Yap' : 'Aktif Yap'}</a>
+                                    <a href="#" n:if="$survey->status == 1" data-url="/surveys/status/{$survey->id}/2" class="{$survey->status == 1 ? 'bg-red-600 text-white' : 'bg-emerald-100/60 text-emerald-500'} shadow-sm px-4 transition-colors duration-200 rounded-xl py-1 select-none">Pasif Yap</a>
+                                    <a href="#" data-url="/surveys/status/{$survey->id}/{$survey->status == 1 ? 2 : 1}" class="{$survey->status == 1 ? 'bg-red-600 text-white' : 'bg-emerald-100/60 text-emerald-500'} hidden shadow-sm px-4 transition-colors duration-200 rounded-xl py-1 select-none">{$survey->status == 1 ? 'Pasif Yap' : 'Aktif Yap'}</a>
                                 </td>
                             </tr>
                         </tbody>
