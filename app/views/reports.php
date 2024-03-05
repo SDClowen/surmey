@@ -28,45 +28,58 @@
             </a>
         </div>
         <div class="flex justify-items-end">
-            <a href="#" data-url="/reports/reset/{$surveyId}" class="shadow-sm mx-auto inline-flex items-center p-2 text-sm font-medium text-center text-gray-50 bg-red-600 hover:bg-red-700 rounded-lg focus:ring-4 focus:outline-none">
-                Katılımcıları Sıfırla
-            </a>
-        </div>
-        <div class="relative inline-flex hidden">
-            <button id="dropdownMenuIconButton" @click="dropIsOpen = !dropIsOpen" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">
-                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
-                    <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
-                </svg>
-            </button>
+            <div class="relative inline-flex">
+                <button id="dropdownMenuIconButton" @click="dropIsOpen = !dropIsOpen" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
+                        <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
+                    </svg>
+                </button>
 
-            <!-- Dropdown menu -->
-            <div id="dropdownRadioHelper" x-show="dropIsOpen" @click.away="dropIsOpen = false" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90" class="absolute right-0 top-8 py-2 mt-2 overflow-hidden origin-top z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-60 border dark:bg-gray-700 dark:divide-gray-600">
-                <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioHelperButton">
-                    <li>
-                        <a href="/reports/csv/{$surveyId}" target="blank" class="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <div class="flex items-center h-5">
-                                <svg class="w-8 h-8 align-middle" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Dropdown menu -->
+                <div id="dropdownRadioHelper" x-show="dropIsOpen" @click.away="dropIsOpen = false" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90" class="absolute right-0 top-8 py-2 mt-2 overflow-hidden origin-top z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-60 border dark:bg-gray-700 dark:divide-gray-600">
+                    <ul class="p-1 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioHelperButton">
+                        <!--<li>
+                            <a href="/reports/csv/{$surveyId}" target="blank" class="flex items-center content-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                     <g id="SVGRepo_iconCarrier">
-                                        <path d="M19.4998 7.49988L18.0098 8.98988L15.0098 5.98988L16.4998 4.49988C16.9198 4.07988 17.4598 3.87988 17.9998 3.87988C18.5398 3.87988 19.0798 4.07988 19.4998 4.49988C20.3298 5.32988 20.3298 6.66988 19.4998 7.49988Z" fill="#292D32"></path>
-                                        <path opacity="0.4" d="M18.0095 8.99023L6.49945 20.5002C5.66945 21.3302 4.32945 21.3302 3.49945 20.5002C2.66945 19.6702 2.66945 18.3302 3.49945 17.5002L15.0095 5.99023L18.0095 8.99023Z" fill="#292D32"></path>
-                                        <path d="M9.95051 3.50002L10.3605 2.11002C10.4005 1.98002 10.3605 1.84002 10.2705 1.74002C10.1805 1.64002 10.0205 1.60002 9.89051 1.64002L8.50051 2.05002L7.11051 1.64002C6.98051 1.60002 6.84051 1.64002 6.74051 1.73002C6.64051 1.83002 6.61051 1.97002 6.65051 2.10002L7.05051 3.50002L6.64051 4.89002C6.60051 5.02002 6.64051 5.16002 6.73051 5.26002C6.83051 5.36002 6.97051 5.39002 7.10051 5.35002L8.50051 4.95002L9.89051 5.36002C9.93051 5.37002 9.96051 5.38002 10.0005 5.38002C10.1005 5.38002 10.1905 5.34002 10.2705 5.27002C10.3705 5.17002 10.4005 5.03002 10.3605 4.90002L9.95051 3.50002Z" fill="#292D32"></path>
-                                        <path d="M5.95051 9.50002L6.36051 8.11002C6.40051 7.98002 6.36051 7.84002 6.27051 7.74002C6.17051 7.64002 6.03051 7.61002 5.90051 7.65002L4.50051 8.05002L3.1105 7.64002C2.9805 7.60002 2.84051 7.64002 2.74051 7.73002C2.64051 7.83002 2.61051 7.97002 2.65051 8.10002L3.05051 9.50002L2.64051 10.89C2.60051 11.02 2.64051 11.16 2.73051 11.26C2.83051 11.36 2.9705 11.39 3.1005 11.35L4.4905 10.94L5.88051 11.35C5.91051 11.36 5.95051 11.36 5.9905 11.36C6.0905 11.36 6.18051 11.32 6.26051 11.25C6.36051 11.15 6.39051 11.01 6.35051 10.88L5.95051 9.50002Z" fill="#292D32"></path>
-                                        <path d="M20.9497 14.5L21.3597 13.11C21.3997 12.98 21.3597 12.84 21.2697 12.74C21.1697 12.64 21.0297 12.61 20.8997 12.65L19.5097 13.06L18.1197 12.65C17.9897 12.61 17.8497 12.65 17.7497 12.74C17.6497 12.84 17.6197 12.98 17.6597 13.11L18.0697 14.5L17.6597 15.89C17.6197 16.02 17.6597 16.16 17.7497 16.26C17.8497 16.36 17.9897 16.39 18.1197 16.35L19.5097 15.94L20.8997 16.35C20.9297 16.36 20.9697 16.36 21.0097 16.36C21.1097 16.36 21.1997 16.32 21.2797 16.25C21.3797 16.15 21.4097 16.01 21.3697 15.88L20.9497 14.5Z" fill="#292D32"></path>
+                                        <path opacity="0.5" d="M4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12L4 12Z" fill="#1C274C"></path>
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.5303 7.53033C15.2374 7.82322 14.7626 7.82322 14.4697 7.53033L12.75 5.81066L12.75 14C12.75 14.4142 12.4142 14.75 12 14.75C11.5858 14.75 11.25 14.4142 11.25 14L11.25 5.81066L9.53033 7.53033C9.23744 7.82322 8.76256 7.82322 8.46967 7.53033C8.17678 7.23744 8.17678 6.76256 8.46967 6.46967L11.4697 3.46967C11.7626 3.17678 12.2374 3.17678 12.5303 3.46967L15.5303 6.46967C15.8232 6.76256 15.8232 7.23744 15.5303 7.53033Z" fill="#1C274C"></path>
                                     </g>
                                 </svg>
-                            </div>
-                            <div class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                <div>CSV</div>
-                                <p id="helper-radio-text-4" class="text-xs font-normal text-gray-500 dark:text-gray-300">
-                                    Sonuçları CSV olarak dışarı aktar
-                                </p>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
+                                <div class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    <div>CSV</div>
+                                    <p id="helper-radio-text-4" class="text-xs font-normal text-gray-500 dark:text-gray-300">
+                                        Sonuçları CSV olarak dışarı aktar
+                                    </p>
+                                </div>
+                            </a>
+                        </li>-->
+                        <li>
+                            <a href="#" data-url="/reports/reset/{$surveyId}" class="flex items-center content-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path d="M3 6.52381C3 6.12932 3.32671 5.80952 3.72973 5.80952H8.51787C8.52437 4.9683 8.61554 3.81504 9.45037 3.01668C10.1074 2.38839 11.0081 2 12 2C12.9919 2 13.8926 2.38839 14.5496 3.01668C15.3844 3.81504 15.4756 4.9683 15.4821 5.80952H20.2703C20.6733 5.80952 21 6.12932 21 6.52381C21 6.9183 20.6733 7.2381 20.2703 7.2381H3.72973C3.32671 7.2381 3 6.9183 3 6.52381Z" fill="#1C274C"></path>
+                                        <path opacity="0.5" d="M11.5956 22.0001H12.4044C15.1871 22.0001 16.5785 22.0001 17.4831 21.1142C18.3878 20.2283 18.4803 18.7751 18.6654 15.8686L18.9321 11.6807C19.0326 10.1037 19.0828 9.31524 18.6289 8.81558C18.1751 8.31592 17.4087 8.31592 15.876 8.31592H8.12405C6.59127 8.31592 5.82488 8.31592 5.37105 8.81558C4.91722 9.31524 4.96744 10.1037 5.06788 11.6807L5.33459 15.8686C5.5197 18.7751 5.61225 20.2283 6.51689 21.1142C7.42153 22.0001 8.81289 22.0001 11.5956 22.0001Z" fill="#1C274C"></path>
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.42543 11.4815C9.83759 11.4381 10.2051 11.7547 10.2463 12.1885L10.7463 17.4517C10.7875 17.8855 10.4868 18.2724 10.0747 18.3158C9.66253 18.3592 9.29499 18.0426 9.25378 17.6088L8.75378 12.3456C8.71256 11.9118 9.01327 11.5249 9.42543 11.4815Z" fill="#1C274C"></path>
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.5747 11.4815C14.9868 11.5249 15.2875 11.9118 15.2463 12.3456L14.7463 17.6088C14.7051 18.0426 14.3376 18.3592 13.9254 18.3158C13.5133 18.2724 13.2126 17.8855 13.2538 17.4517L13.7538 12.1885C13.795 11.7547 14.1625 11.4381 14.5747 11.4815Z" fill="#1C274C"></path>
+                                    </g>
+                                </svg>
+                                <div class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    <div>Katılımcıları Sıfırla</div>
+                                    <p id="helper-radio-text-4" class="text-xs font-normal text-gray-500 dark:text-gray-300">
+                                        Geçerli ankete katılan tüm katılımcıları siler ve temizler.
+                                    </p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
+
         </div>
     </div>
     <div class="relative">
@@ -108,7 +121,7 @@
                         const questionTitle = $(this).parent().parent().parent().prev().text();
                         $("#answers-modal-title").text(questionTitle)
 
-                        //$("#answersModalContent").html("")
+                        $("#answersModalContent").html("")
 
                         jsonData.forEach(element => {
                             $("#answersModalContent").prepend('<div class="dark:bg-gray-700 bg-gray-50 my-2 text-sm text-gray-900 dark:text-gray-200 p-3 rounded-md">' + element.value + '</div>');
