@@ -38,7 +38,7 @@
                 <!-- Dropdown menu -->
                 <div id="dropdownRadioHelper" x-show="dropIsOpen" @click.away="dropIsOpen = false" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90" class="absolute right-0 top-8 py-2 mt-2 overflow-hidden origin-top z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-60 border dark:bg-gray-700 dark:divide-gray-600">
                     <ul class="p-1 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioHelperButton">
-                        <!--<li>
+                        <li>
                             <a href="/reports/csv/{$surveyId}" target="blank" class="flex items-center content-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                                 <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -55,7 +55,7 @@
                                     </p>
                                 </div>
                             </a>
-                        </li>-->
+                        </li>
                         <li>
                             <a href="#" data-url="/reports/reset/{$surveyId}" class="flex items-center content-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                                 <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

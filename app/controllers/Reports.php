@@ -55,24 +55,25 @@ class Reports extends Controller
         header('Pragma: private');
         header('Cache-control: private, must-revalidate');
         header('Content-type: text/csv');
-        $csvFileName = preg_replace('/[^A-Za-z0-9_-]/', '', str_replace(' ', '_', $survey->title));
+        $csvFileName = preg_replace('/[^A-Za-z0-9_-]/', '', str_replace(' ', '-', $survey->title));
         header('Content-Disposition: attachment; filename=' . $csvFileName . '.csv');
 
         $fp = fopen('php://output', 'w');
 
         $report = Survey::report($survey);
-        $data = [];
 
+        #values
         foreach($report as $title => $data)
         {
-            $csvData[] = $title;
-
-            foreach($data["answers"] as $answerKey => $answerValue)
+            foreach($data["answers"] as $answerTitle => $participateCount)
             {
-                $csvData[] = $answerKey.":".$answerValue;
+                $answerData[] = $answerTitle;
+                $valueData[] = $participateCount;
             }
 
-            fputcsv($fp, $csvData);
+            fputcsv($fp, [$title]);
+            fputcsv($fp, $answerData);
+            fputcsv($fp, $valueData);
         }
 
         fclose($fp);
