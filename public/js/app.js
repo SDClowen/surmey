@@ -6,8 +6,8 @@ $(function () {
     });*/
 
     function linkify(text) {
-        var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-        return text.replace(urlRegex, function(url) {
+        var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+        return text.replace(urlRegex, function (url) {
             return '<a class="text-blue-600 underline" href="' + url + '">' + url + '</a>';
         });
     }
@@ -26,6 +26,28 @@ $(function () {
         }
     });
 
+
+    const getQuestionComponent = (body) => {
+
+    }
+    
+    const getAnswerComponent = (body) => {
+        return `
+            <div id="answer" class="relative mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">
+                    <button type="button" class="remove absolute top-50 right-2 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
+                        <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                    <button type="button" class="down absolute top-50 right-14 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
+                        <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    </button>
+                    <button type="button" class="up absolute top-50 right-8 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
+                        <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M5 15L10 9.84985C10.2563 9.57616 10.566 9.35814 10.9101 9.20898C11.2541 9.05983 11.625 8.98291 12 8.98291C12.375 8.98291 12.7459 9.05983 13.0899 9.20898C13.434 9.35814 13.7437 9.57616 14 9.84985L19 15" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    </button>
+                ${body}
+            </div>
+        `
+    }
+
     function createCheckableList(
         type,
         questionDummyText,
@@ -37,30 +59,14 @@ $(function () {
     ) {
         var generatedAnswers = "";
         for (const v of Object.values(answers))
-            generatedAnswers += `<div id="answer" class="inline-block w-full relative mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">
-                                      <div class="btn-group">
-                                        <button type="button" class="remove absolute top-50 right-2 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
-                                            <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                        <button type="button" class="down absolute top-50 right-14 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
-                                        <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                        </button>
-                                        <button type="button" class="up absolute top-50 right-8 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
-                                            <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M5 15L10 9.84985C10.2563 9.57616 10.566 9.35814 10.9101 9.20898C11.2541 9.05983 11.625 8.98291 12 8.98291C12.375 8.98291 12.7459 9.05983 13.0899 9.20898C13.434 9.35814 13.7437 9.57616 14 9.84985L19 15" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                        </button>
-                                      </div>
-                                      ${v}
-                                  </div>`;
+            generatedAnswers += getAnswerComponent(v);
+
         return `
               <div data-type="${type}" id="question" class="relative border-2 rounded-md border-dashed bg-white dark:bg-gray-800 border-gray-900/25 dark:border-gray-300/25 px-2 pt-2 text-sm m-3">
                     <button type="button" class="remove absolute -top-2 -right-3 bg-red-500/80 transition duration-400 shadow-md rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-red-600 focus:outline-none">
                         <span class="sr-only">Close menu</span>
 
-                        <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                     
                     <button type="button" class="up absolute top-4 -right-3 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
@@ -79,20 +85,18 @@ $(function () {
                       </div>
                       <div id="create-answer" contenteditable="true" class="focus:rounded-lg border-b border-gray-500 my-2 p-2 text-sm focus:outline-blue-600">${answerDummyText}</div>
                   </div>
+                  
                   <div class="rounded-t-lg bg-yellow-100 dark:bg-gray-900 p-2">
                       <div class="col-span-4">
                           <label class="relative inline-flex items-center mb-4 cursor-pointer">
-                              <input type="checkbox" ${isRequired ? "checked" : ""
-            } class="sr-only peer">
+                              <input type="checkbox" ${isRequired ? "checked" : ""} class="sr-only peer">
                               <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                               <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">
                                   Zorunlu
                               </span>
                           </label>
-                          <label class="${type == "checkbox" || type == "radio" ? "" : "hidden"
-            } relative inline-flex items-center mb-4 cursor-pointer">
-                              <input type="checkbox" ${isHorizontal ? "checked" : ""
-            } class="sr-only peer">
+                          <label class="${type == "checkbox" || type == "radio" ? "" : "hidden"} relative inline-flex items-center mb-4 cursor-pointer">
+                              <input type="checkbox" ${isHorizontal ? "checked" : ""} class="sr-only peer">
                               <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                               <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">
                                   Yatay olarak dizginle
@@ -103,6 +107,7 @@ $(function () {
               </div>
           `;
     }
+
     function createTextArea(questionDummyText, slug, isRequired = true) {
         return `
               <div data-type="textarea" id="question" class="relative border-2 border-dashed border-gray-400 bg-white dark:bg-gray-800 dark:border-gray-600 px-2 pt-2 text-sm m-3">
@@ -117,8 +122,7 @@ $(function () {
               <div class="rounded-t-lg bg-yellow-100 dark:bg-gray-900 p-2">
                   <div class="col-span-4">
                       <label class="relative inline-flex items-center mb-4 cursor-pointer">
-                          <input type="checkbox" ${isRequired ? "checked" : ""
-            } class="sr-only peer">
+                          <input type="checkbox" ${isRequired ? "checked" : ""} class="sr-only peer">
                           <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                           <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">
                               Zorunlu
@@ -129,6 +133,7 @@ $(function () {
           </div>
           `;
     }
+
     function createDescription(questionDummyText, slug, subType = 0) {
         return `
               <div data-type="description" id="question" class="relative border-2 border-dashed border-gray-400 bg-white dark:bg-gray-800 dark:border-gray-600 px-2 pt-2 text-sm m-3">
@@ -144,20 +149,17 @@ $(function () {
                   <div class="rounded-t-lg bg-yellow-100 dark:bg-gray-900 p-2">
                       <div class="col-span-4">
                           <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md outline-none focus:ring-blue-500 focus:border-blue-500 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                              <option value="0" ${subType == 0 ? "selected" : ""
-            }>Bilgi</option>
-                              <option value="1" ${subType == 1 ? "selected" : ""
-            }>Uyarı</option>
-                              <option value="2" ${subType == 2 ? "selected" : ""
-            }>Başarı</option>
-                              <option value="3" ${subType == 3 ? "selected" : ""
-            }>Tehlike</option>
+                              <option value="0" ${subType == 0 ? "selected" : ""}>Bilgi</option>
+                              <option value="1" ${subType == 1 ? "selected" : ""}>Uyarı</option>
+                              <option value="2" ${subType == 2 ? "selected" : ""}>Başarı</option>
+                              <option value="3" ${subType == 3 ? "selected" : ""}>Tehlike</option>
                           </select>
                       </div>
                   </div>
               </div>
           `;
     }
+
     var uniqueStrings = [];
     const randomString = (length) => {
         const chars =
@@ -171,7 +173,7 @@ $(function () {
         }
         return result;
     };
-    
+
     const clearText = (text) => {
         return text
             .trim()
@@ -201,7 +203,9 @@ $(function () {
             const answers = $this.find("#answers #answer");
             answers.each(function () {
                 const clonedDom = $(this).clone()
-                clonedDom.find(".btn-group").remove()
+                clonedDom.find(".up").remove()
+                clonedDom.find(".down").remove()
+                clonedDom.find(".remove").remove()
 
                 const answerContent = clonedDom.html().trim();
                 question.answers.push(clearText(answerContent));
@@ -231,7 +235,7 @@ $(function () {
                 .replaceAll("<br/>", "\n")
                 .replaceAll("\t", "    ")
         )*/
-        
+
         $("textarea[name=about]").html(formData.about).tinymce()
 
         for (const [k, v] of Object.entries(JSON.parse(jsonData))) {
@@ -295,6 +299,7 @@ $(function () {
                   `;
                 break;
         }
+
         element.answers.forEach((answer, i) => {
             content += `
                   <div class="flex w-fit items-center mb-2 mx-1">
@@ -303,7 +308,10 @@ $(function () {
                   </div>
               `;
         });
-        if (element.type != "description") content += "</div>";
+
+        if (element.type != "description")
+            content += "</div>";
+
         return content;
     };
 
@@ -318,20 +326,20 @@ $(function () {
 
         $parent = $(this).parent()
         $v = $parent.prev()
-       
-        if($parent.attr("id") != "answer")
-            if(!$v.is("[data-type]"))
+
+        if ($parent.attr("id") != "answer")
+            if (!$v.is("[data-type]"))
                 return;
 
         $parent.insertBefore($v)
     });
 
-    $(document).on("click", ".down", function (event) {        
+    $(document).on("click", ".down", function (event) {
         $parent = $(this).parent()
         $v = $parent.next()
-        
-        if($parent.attr("id") != "answer")
-            if(!$v.is("[data-type]"))
+
+        if ($parent.attr("id") != "answer")
+            if (!$v.is("[data-type]"))
                 return;
 
         $parent.insertAfter($v)
@@ -347,25 +355,8 @@ $(function () {
 
     $(document).on("keypress", "#create-answer", function (event) {
         if (!event.shiftKey && event.which == 13) {
-            $(this).prev("#answers").append(`
-                    <div id="answer" class="relative mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">
-                        <div class="btn-group">
-                            <button type="button" class="remove absolute top-50 right-2 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
-                                <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                            <button type="button" class="down absolute top-50 right-14 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
-                            <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                            </button>
-                            <button type="button" class="up absolute top-50 right-8 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
-                            <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M5 15L10 9.84985C10.2563 9.57616 10.566 9.35814 10.9101 9.20898C11.2541 9.05983 11.625 8.98291 12 8.98291C12.375 8.98291 12.7459 9.05983 13.0899 9.20898C13.434 9.35814 13.7437 9.57616 14 9.84985L19 15" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                            </button>
-                        </div>
-                        ${$(this).text()}
-                    </div>
-              `);
-              
+            $(this).prev("#answers").append(getAnswerComponent($(this).text()));
+
             $(event.target).text("...");
             window.getSelection().selectAllChildren(event.target);
             return false;

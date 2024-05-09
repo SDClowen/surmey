@@ -7,5 +7,5 @@
 		"host"		=>	"localhost",
 		"prefix"	=>	"",
 		"user"		=>	"root",
-		"password"	=>	"1234"
+		"password"	=>	""
 	];
