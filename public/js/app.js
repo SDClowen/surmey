@@ -93,13 +93,62 @@ $(function () {
         `;
     }
 
+    $(document).on("click", "#condition", (e) => {
+        const dropdown = $(e.currentTarget).next();
+        $("#condition-dropdown:not(.hidden)").each((i, ee) => {
+            if(dropdown.is($(ee)))
+                return;
+            
+            $(ee).addClass("hidden")
+        })
+
+        dropdown.toggleClass("hidden")
+
+        if (dropdown.hasClass("hidden"))
+            return false
+
+        const parentIndex = $(e.currentTarget).parents("#answer").index()
+
+        const questions = generate()
+        const ul = dropdown.find("ul")
+        ul.html("")
+        ul.append(`
+            <li>
+                <input checked type="radio" id="first-condition-element" name="condition-${parentIndex}" value="none" class="hidden peer" required />
+                <label for="first-condition-element" class="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border border-transparent rounded-lg cursor-pointer dark:hover:text-gray-300 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                Seçili Değil
+                </label>
+            </li>`)
+
+        for (const [k, v] of Object.entries(questions)) {
+            if (v.type == "description")
+                continue;
+
+            ul.append(`<li>
+                <input type="radio" id="${v.slug}" name="condition-${parentIndex}" value="${v.slug}" class="hidden peer" required />
+                <label for="${v.slug}" class="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border border-transparent rounded-lg cursor-pointer dark:hover:text-gray-300 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                ${v.title}
+                </label>
+            </li>`)
+        }
+    })
+
     const getAnswerComponent = (body) => {
         return `
-            <div id="answer" class="relative mt-2 bg-gray-100 focus:outline-blue-600 rounded-md p-2 dark:bg-gray-700" contenteditable="true">
-                    <button type="button" class="if absolute top-50 right-20 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
-                        <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10.962 15.867a2.469 2.469 0 0 1-.69 1.377l-1.029 1.028a2.5 2.5 0 0 1-3.536-3.536l1.029-1.029a2.464 2.464 0 0 1 1.423-.694l1.781-1.781a4.425 4.425 0 0 0-4.619 1.062l-1.028 1.028a4.5 4.5 0 0 0 6.364 6.364l1.029-1.029a4.489 4.489 0 0 0 1.073-4.587zM19.686 4.293a4.511 4.511 0 0 0-6.364 0l-1.029 1.029a4.49 4.49 0 0 0-1.063 4.62l1.779-1.779a2.476 2.476 0 0 1 .7-1.427l1.029-1.029a2.5 2.5 0 0 1 3.536 3.536l-1.029 1.029a2.484 2.484 0 0 1-1.379.693l-1.796 1.794a4.409 4.409 0 0 0 4.587-1.072l1.029-1.029a4.5 4.5 0 0 0 0-6.365z"></path> <path d="M9 16a1 1 0 0 1-.707-1.707l6-6a1 1 0 0 1 1.414 1.414l-6 6A1 1 0 0 1 9 16z"></path> </g></svg>
-                        
-                    </button>
+            <div id="answer" class="relative mt-2 bg-gray-100 focus:outline-blue-600 rounded-md dark:bg-gray-700 flex content-between">
+                <div class="content w-5/6 p-1 m-1 rounded-md focus:outline-blue-600" contenteditable="true">${body}</div>
+                <div class="w-1/6 p-2">
+                    <div class="if absolute top-50 right-20" style="display:ruby">
+                        <button type="button" id="condition" class="bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
+                            <svg fill="currentColor" class="h-3 w-3" viewBox="0 0 32 32" id="icon" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><defs><style>.cls-1{fill:none;}</style></defs><title>align--horizontal-center</title><path d="M24,18H17V14h3a2.0025,2.0025,0,0,0,2-2V8a2.0025,2.0025,0,0,0-2-2H17V2H15V6H12a2.0025,2.0025,0,0,0-2,2v4a2.0025,2.0025,0,0,0,2,2h3v4H8a2.0025,2.0025,0,0,0-2,2v4a2.0025,2.0025,0,0,0,2,2h7v4h2V26h7a2.0025,2.0025,0,0,0,2-2V20A2.0025,2.0025,0,0,0,24,18ZM12,8h8v4H12ZM24,24H8V20H24Z"></path><rect id="_Transparent_Rectangle_" data-name="<Transparent Rectangle>" class="cls-1" width="32" height="32"></rect></g></svg> 
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div id="condition-dropdown" class="dropdown hidden absolute right-0 z-20 w-auto origin-top-right bg-white rounded-lg border dark:border-gray-600 shadow-xl dark:bg-gray-800">
+                            <ul class="p-2 space-y-3 text-sm text-gray-700 h-80 min-w-80 overflow-x-auto dark:text-gray-200">
+                                
+                            </ul>
+                        </div>
+                    </div>
                     <button type="button" class="down absolute top-50 right-14 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
                         <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                     </button>
@@ -109,8 +158,7 @@ $(function () {
                     <button type="button" class="remove absolute top-50 right-2 bg-gray-300 dark:bg-gray-600 transition duration-400 rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-gray-400 focus:outline-none">
                         <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
-                    
-                ${body}
+                </div>
             </div>
         `
     }
@@ -186,10 +234,7 @@ $(function () {
             };
             const answers = $this.find("#answers #answer");
             answers.each(function () {
-                const clonedDom = $(this).clone()
-                clonedDom.find(".up").remove()
-                clonedDom.find(".down").remove()
-                clonedDom.find(".remove").remove()
+                const clonedDom = $(this).clone().find("[contenteditable]")
 
                 const answerContent = clonedDom.html().trim();
                 question.answers.push(clearText(answerContent));
@@ -385,4 +430,18 @@ $(function () {
             alert(error.message);
         }
     });
+
+    $("[data-json]").on("click", function () {
+
+        const jsonData = $(this).data("json");
+
+        const questionTitle = $(this).parent().parent().parent().prev().text();
+        $("#answers-modal-title").text(questionTitle)
+
+        $("#answersModalContent").html("")
+
+        jsonData.forEach(element => {
+            $("#answersModalContent").prepend('<div class="dark:bg-gray-700 bg-gray-50 my-2 text-sm text-gray-900 dark:text-gray-200 p-3 rounded-md">' + element.value + '</div>');
+        });
+    })
 });
