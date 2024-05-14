@@ -104,7 +104,12 @@ $(function () {
         
         arrayIndex = conditions.findIndex(p => p.index == answerIndex)
         if(arrayIndex != -1)
-            conditions[arrayIndex].value = val;
+        {
+            if(val == "none")
+                conditions.splice(arrayIndex, 1)
+            else
+                conditions[arrayIndex].value = val;   
+        }
         else
             conditions.push({
                 index:  answerIndex,
@@ -145,6 +150,8 @@ $(function () {
             </li>`)
     
         const question = $(e.currentTarget).parents("#question");
+        const questionSlug = question.find("[data-slug]").data("slug");
+
         var conditions = JSON.parse(question.attr("conditions") ?? "[]")
         
         for (const [k, v] of Object.entries(questions)) {
