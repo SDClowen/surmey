@@ -49,9 +49,9 @@ $(function () {
         }
     });
 
-    const getQuestionComponent = (type, body, isRequired = false, isCheckable = false, isHorizontal = false) => {
+    const getQuestionComponent = (type, body, isRequired = false, conditions = [], isCheckable = false, isHorizontal = false) => {
         return `
-            <div data-type="${type}" id="question" class="relative border-2 rounded-md border-dashed bg-white dark:bg-gray-800 border-gray-900/25 dark:border-gray-300/25 px-2 pt-2 text-sm m-3">
+            <div data-type="${type}" conditions='${JSON.stringify(conditions)}' id="question" class="relative border-2 rounded-md border-dashed bg-white dark:bg-gray-800 border-gray-900/25 dark:border-gray-300/25 px-2 pt-2 text-sm m-3">
                 <button type="button" class="remove absolute -top-2 -right-3 bg-red-500/80 transition duration-400 shadow-md rounded-full p-1 inline-flex items-center justify-center text-white hover:bg-red-600 focus:outline-none">
                     <span class="sr-only">Close menu</span>
 
@@ -93,7 +93,31 @@ $(function () {
         `;
     }
 
+    $(document).on("click", "#condition-dropdown ul li", (e) => {
+        e.preventDefault()
+
+        const question = $(e.currentTarget).parents("#question")
+        const answerIndex = $(e.currentTarget).parents("#answer").index()
+        const val = $(e.currentTarget).children("input").val()
+
+        var conditions = JSON.parse(question.attr("conditions") ?? "[]")
+        
+        arrayIndex = conditions.findIndex(p => p.index == answerIndex)
+        if(arrayIndex != -1)
+            conditions[arrayIndex].value = val;
+        else
+            conditions.push({
+                index:  answerIndex,
+                value: val
+            })
+
+
+        question.attr("conditions", JSON.stringify(conditions))
+        $(e.currentTarget).parents("#condition-dropdown").addClass("hidden")
+    })
+
     $(document).on("click", "#condition", (e) => {
+
         const dropdown = $(e.currentTarget).next();
         $("#condition-dropdown:not(.hidden)").each((i, ee) => {
             if(dropdown.is($(ee)))
@@ -119,14 +143,19 @@ $(function () {
                 Seçili Değil
                 </label>
             </li>`)
-
+    
+        const question = $(e.currentTarget).parents("#question");
+        var conditions = JSON.parse(question.attr("conditions") ?? "[]")
+        
         for (const [k, v] of Object.entries(questions)) {
             if (v.type == "description")
                 continue;
 
+            var hasChecked = conditions.findIndex(p => p.index == parentIndex && p.value == v.slug) > -1;
+
             ul.append(`<li>
-                <input type="radio" id="${v.slug}" name="condition-${parentIndex}" value="${v.slug}" class="hidden peer" required />
-                <label for="${v.slug}" class="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border border-transparent rounded-lg cursor-pointer dark:hover:text-gray-300 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                <input type="radio" id="${v.slug}" name="condition-${parentIndex}" value="${v.slug}" class="hidden peer" ${hasChecked ? "checked" : ""} required />
+                <label for="${v.slug}" class="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border-2 border-transparent rounded-lg cursor-pointer dark:hover:text-gray-300 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
                 ${v.title}
                 </label>
             </li>`)
@@ -170,7 +199,8 @@ $(function () {
         slug,
         answers = [],
         isHorizontal = false,
-        isRequired = true
+        isRequired = true, 
+        conditions = []
     ) {
         var generatedAnswers = "";
         for (const v of Object.values(answers))
@@ -187,7 +217,7 @@ $(function () {
             </div>        
         `;
 
-        return getQuestionComponent(type, body, isRequired, true, isHorizontal);
+        return getQuestionComponent(type, body, isRequired, conditions, true, isHorizontal);
     }
 
     function createTextArea(questionDummyText, slug, isRequired = true) {
@@ -230,6 +260,7 @@ $(function () {
                 isRequired: $this.find("input[type=checkbox]:eq(0)").prop("checked"),
                 isHorizontal: $this.find("input[type=checkbox]:eq(1)").prop("checked"),
                 subType: $this.find("select:eq(0)").val(),
+                conditions: JSON.parse($this.attr("conditions") ?? "[]"),
                 answers: []
             };
             const answers = $this.find("#answers #answer");
@@ -279,11 +310,12 @@ $(function () {
                         v.slug,
                         v.answers,
                         v.isHorizontal,
-                        v.isRequired
+                        v.isRequired,
+                        v.conditions
                     );
                     break;
                 case "textarea":
-                    content = createTextArea(v.title, v.slug, v.isRequired);
+                    content = createTextArea(v.title, v.slug, v.isRequired, v.conditions);
                     break;
                 case "description":
                     content = createDescription(v.title, v.slug, v.subType);
@@ -345,6 +377,7 @@ $(function () {
     };
 
     window.generateSurvey = generate;
+    window.renderFormEntry = renderFormEntry;
     window.prepareSurveyForEditing = prepareSurveyForEditing;
 
     $(document).on("click", ".remove", function (event) {
@@ -373,8 +406,8 @@ $(function () {
         $(".preview-content").html("");
         array.forEach((element) =>
             $(".preview-content").append(renderFormEntry(element))
-        );
-    });
+        )
+    })
 
     $(document).on("keypress", "#create-answer", function (event) {
         if (!event.shiftKey && event.which == 13) {
@@ -384,7 +417,7 @@ $(function () {
             window.getSelection().selectAllChildren(event.target);
             return false;
         }
-    });
+    })
 
     $(document).on("click", "#survey-crud a", function (event) {
         const type = $(this).attr("type");
@@ -411,24 +444,6 @@ $(function () {
         }
 
         $(".questions").append(content);
-    });
-
-    $(".generated-form").each(function () {
-        try {
-
-            const $this = $(this);
-            $.ajax({
-                url: "/participate/data",
-                dataType: "json",
-                success: function (data) {
-                    $this.html("");
-                    for (const [k, element] of Object.entries(data))
-                        $this.append(renderFormEntry(element));
-                }
-            });
-        } catch (error) {
-            alert(error.message);
-        }
     });
 
     $("[data-json]").on("click", function () {

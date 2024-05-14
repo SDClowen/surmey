@@ -27,23 +27,19 @@
             <a href="#" class="text-center block my-1 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 hover:underline" tabindex="0" role="link">{$survey->title}</a>
             <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{$survey->about|noescape}</p>
 
-            <div class="mt-4 hidden">
-                <div class="flex items-center">
-                    <div class="flex items-center">
-                        <img class="object-cover h-10 rounded-full" src="https://images.unsplash.com/photo-1586287011575-a23134f797f9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=48&q=60" alt="Avatar">
-                        <a href="#" class="mx-2 font-semibold text-gray-700 dark:text-gray-200" tabindex="0" role="link">Jone Doe</a>
-                    </div>
-                    <span class="mx-1 text-xs text-gray-600 dark:text-gray-300">21 SEP 2015</span>
-
-                    <button class="bg-blue-600 ml-auto rounded-md text-white p-2 text-sm">Participate</button>
-                </div>
-            </div>
-
             <div class="msg fixed bottom-0 right-2 z-10 my-5 text-lg"></div>
             <form class="mt-4 border-t" role="form" method="post" action="/participate/apply" data-content=".msg" data-redirect="/:2000">
-
                 <div class="py-5">
-                    <div class="generated-form"></div>
+                    <div class="generated"></div>
+                    <script>
+                        $(function(){
+                            $this = $(".generated");
+                            const data = {$survey->data|noescape}
+                            $this.html("");
+
+                            data.forEach(element => $this.append(renderFormEntry(element)))
+                        })
+                    </script>
                     <button class="bg-blue-600 px-5 m-auto rounded-md text-white py-2">Gönder</button>
                 </div>
             </form>

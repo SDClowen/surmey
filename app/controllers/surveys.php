@@ -58,8 +58,6 @@ class Surveys extends Controller
         $post->verifyPhone = (int) isset($post->verifyPhone);
         $post->anonymous = (int) isset($post->anonymous);
 
-        unset($post->csrf);
-
         $input = Request::files();
 
         if (isset($input->photo) && $input->photo->name) {
@@ -128,12 +126,23 @@ class Surveys extends Controller
         $post->about = str_replace("\t", "  ", $post->about);
         */
 
+        $data = [
+            "title" => $post->title,
+            "about" => $post->about,
+            "data"  => $post->data,
+            "verifyPhone" => $post->verifyPhone,
+            "anonymous" => $post->anonymous
+        ];
+
+        if(isset($post->photo))
+            $data["photo"] = $post->photo;
+
         if ($id == 0) {
             $post->userId = User::id();
             $post->slug = $randomString(5);
-            $result = $this->db->from("surveys")->insert((array) $post);
+            $result = $this->db->from("surveys")->insert($data);
         } else
-            $result = $this->db->from("surveys")->where("id", "=", $id)->update((array) $post);
+            $result = $this->db->from("surveys")->where("id", "=", $id)->update($data);
 
         if ($result)
             if($id > 0)
@@ -191,30 +200,4 @@ class Surveys extends Controller
 
         getDataError();
     }
-
-	#[route(method: route::xhr_get, uri: "data")]
-	public function getSurveyData()
-	{
-
-		if (session_check("survey"))
-			$survey = session_get("survey");
-		else {
-			if (! session_check("participator"))
-				die("PARTICIPATE_ERRROR");
-
-			if (! session_check("surveyId"))
-				die("data-not-found");
-
-			$surveyId = session_get("surveyId");
-			if (! session_check("participator"))
-				warning("INVALID_SURVEY");
-
-			$survey = Survey::exists("id", $surveyId);
-			if (! $survey)
-				error("INVALID_SURVEY_DATA");
-		}
-
-
-		die($survey->data);
-	}
 }

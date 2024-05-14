@@ -279,7 +279,6 @@ class Participate extends Controller
 	#[route(method: route::xhr_get, uri: "data")]
 	public function getSurveyData()
 	{
-
 		if (session_check("survey"))
 			$survey = session_get("survey");
 		else {
@@ -297,7 +296,6 @@ class Participate extends Controller
 			if (! $survey)
 				error("INVALID_SURVEY_DATA");
 		}
-
 
 		die($survey->data);
 	}
