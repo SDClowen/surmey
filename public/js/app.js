@@ -155,7 +155,7 @@ $(function () {
         var conditions = JSON.parse(question.attr("conditions") ?? "[]")
         
         for (const [k, v] of Object.entries(questions)) {
-            if (v.type == "description")
+            if (v.type == "description" || questionSlug == v.slug)
                 continue;
 
             var hasChecked = conditions.findIndex(p => p.index == parentIndex && p.value == v.slug) > -1;
@@ -332,18 +332,49 @@ $(function () {
         }
     };
 
+    $(document).on("change", "[data-change-tracker]", (e) => {
+        e.preventDefault()
+
+        $this = $(e.currentTarget)
+        $condition = $this.data("condition");
+        if($condition == "none")
+            return;
+
+        const type = $this.attr("type")
+        if(type == "radio")
+        {
+            const inputs = $this.parents("[data-slug]").find("input")
+            inputs.each((inputIndex, inputElement) => {
+                if($this.is(inputElement))
+                    return
+
+                $inputCondition = $(inputElement).data("condition");
+                if($inputCondition == "none")
+                    return;
+
+                const conditionDiv = $(`[data-slug='${$inputCondition}']`);
+                conditionDiv.find("input").prop('checked',false);
+                conditionDiv.hide()
+            })
+        }
+        
+        $(`[data-slug='${$condition}']`).show()
+    })
+
     const renderFormEntry = (element) => {
         let content = "";
         if (element.type != "description")
             content += `
-                  <div class="rounded-lg bg-slate-50/30 border mb-3 border-gray-200 shadow-sm p-4 dark:border-gray-600 dark:bg-slate-900"> 
-              `;
+                <div data-slug="${element.slug}" class="rounded-lg bg-slate-50/30 border mb-3 border-gray-200 shadow-sm p-4 dark:border-gray-600 dark:bg-slate-900"> 
+            `;
+
         if (element.type != "description")
             content += `
-                  <h1 data-slug="${element.slug}" class="text-clip border-b border-gray-200 pb-3 pt-1 text-lg font-medium dark:border-gray-600 mb-4">
-                      ${linkify(element.title)}  ${element.isRequired ? "<b class='text-red-600'>*</b>" : ""}
-                  </h1>
+                <h1 class="text-clip border-b border-gray-200 pb-3 pt-1 text-lg font-medium dark:border-gray-600 mb-4">
+                    ${linkify(element.title)}  ${element.isRequired ? "<b class='text-red-600'>*</b>" : ""}
+                </h1>
               `;
+
         switch (element.type) {
             case "radio":
             case "checkbox":
@@ -353,25 +384,26 @@ $(function () {
                 content += `<div class="${divClass}">`;
                 break;
             case "textarea":
-                content +=
-                    '<textarea maxlength="1000" name="' +
-                    element.slug +
-                    '" class="w-full rounded-lg border mb-3 text-gray-900 dark:text-gray-50 border-gray-200 shadow-sm bg-white p-2 focus:outline-blue-500 dark:focus:outline-blue-600 dark:border-gray-600 dark:bg-slate-900"></textarea>';
+                content += `<textarea maxlength="1000" name="${element.slug}" class="w-full rounded-lg border mb-3 text-gray-900 dark:text-gray-50 border-gray-200 shadow-sm bg-white p-2 focus:outline-blue-500 dark:focus:outline-blue-600 dark:border-gray-600 dark:bg-slate-900"></textarea>`;
                 break;
             case "description":
                 const types = ["info", "warning", "success", "danger"];
                 content += `
-                      <div class="my-3 shadow-sm text-center rounded-md p-3 text-md ${types[element.subType]}">
-                          ${linkify(element.title)}
-                      </div>
-                  `;
+                    <div data-slug="${element.slug}" class="my-3 shadow-sm text-center rounded-md p-3 text-md alert-${types[element.subType]}">
+                        ${linkify(element.title)}
+                    </div>
+                `;
                 break;
         }
 
         element.answers.forEach((answer, i) => {
+
+            const arrayIndex = !element.hasOwnProperty("conditions") ? -1 : element.conditions.findIndex(p => p.index == i)
+            const hasCondition = arrayIndex > -1 ? element.conditions[arrayIndex].value : "none"
+
             content += `
                   <div class="flex w-fit items-center mb-2 mx-1">
-                      <input id="link-${element.slug + i}" name="${element.type == "radio" ? element.slug : element.slug + i}" type="${element.type}" value="${i}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                      <input data-condition="${hasCondition}" data-change-tracker="true" id="link-${element.slug + i}" name="${element.type == "radio" ? element.slug : element.slug + i}" type="${element.type}" value="${i}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                       <label for="link-${element.slug + i}" class="ml-2 text-sm font-normal text-gray-900 dark:text-gray-300" ${element.isHorizontal ? 'style="min-inline-size: max-content;"' : ''}>${linkify(answer)}</label>
                   </div>
               `;
@@ -409,11 +441,15 @@ $(function () {
     });
 
     $(document).on("click", "#preview", function (event) {
-        const array = generate();
+        const data = generate();
         $(".preview-content").html("");
-        array.forEach((element) =>
+        data.forEach((element) =>
             $(".preview-content").append(renderFormEntry(element))
         )
+
+        data.forEach(element => {
+            element.conditions.forEach(condition => $(`[data-slug='${condition.value}']`).hide())
+        })
     })
 
     $(document).on("keypress", "#create-answer", function (event) {
