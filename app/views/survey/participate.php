@@ -38,6 +38,10 @@
                             $this.html("");
 
                             data.forEach(element => $this.append(renderFormEntry(element)))
+
+                            data.forEach(element => {
+                                element.conditions.forEach(condition => $("[data-slug='" + condition.value + "']").hide())
+                            })
                         })
                     </script>
                     <button class="bg-blue-600 px-5 m-auto rounded-md text-white py-2">Gönder</button>
