@@ -444,7 +444,7 @@ $(function () {
         )
 
         data.forEach(element => {
-            element.conditions.forEach(condition => $(`[data-slug='${condition.value}']`).hide())
+            element.conditions.forEach(condition => $(`.rounded-lg[data-slug='${condition.value}']`).hide())
         })
     })
 
