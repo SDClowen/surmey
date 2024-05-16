@@ -138,11 +138,11 @@ class Surveys extends Controller
             $data["photo"] = $post->photo;
 
         if ($id == 0) {
-            $post->userId = User::id();
-            $post->slug = $randomString(5);
+            $data["userId"] = User::id();
+            $data["slug"] = $randomString(5);
             $result = $this->db->from("surveys")->insert($data);
         } else
-            $result = $this->db->from("surveys")->where("id", "=", $id)->update($data);
+            $result = $this->db->from("surveys")->where("id", value: $id)->update($data);
 
         if ($result)
             if($id > 0)

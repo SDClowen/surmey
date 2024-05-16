@@ -206,7 +206,7 @@ $(function () {
         slug,
         answers = [],
         isHorizontal = false,
-        isRequired = true, 
+        isRequired = false, 
         conditions = []
     ) {
         var generatedAnswers = "";
@@ -337,8 +337,6 @@ $(function () {
 
         $this = $(e.currentTarget)
         $condition = $this.data("condition");
-        if($condition == "none")
-            return;
 
         const type = $this.attr("type")
         if(type == "radio")
@@ -349,8 +347,6 @@ $(function () {
                     return
 
                 $inputCondition = $(inputElement).data("condition");
-                if($inputCondition == "none")
-                    return;
 
                 const conditionDiv = $(`[data-slug='${$inputCondition}']`);
                 conditionDiv.find("input").prop('checked',false);
