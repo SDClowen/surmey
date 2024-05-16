@@ -177,7 +177,7 @@ class Surveys extends Controller
             "user" => User::info(),
             "surveyFormTitle" => $surveyFormTitle,
             "url" => $isOnEditMode ? "apply/$surveyId" : "apply",
-            "showIfOnEditMode" => $isOnEditMode ? "<script>$(()=>{window.prepareSurveyForEditing('$result', '$data')})</script>" : ""
+            "showIfOnEditMode" => $isOnEditMode ? "<script>$(()=>{window.prepareSurveyForEditing(`$result`, `$data`)})</script>" : ""
         ]);
     }
 
