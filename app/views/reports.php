@@ -10,11 +10,27 @@
             </a>
             <a href="javascript:void(0)" class="cursor-default inline-flex items-center px-4 py-1 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:text-gray-300" x-on:click="current = 2" x-bind:class="{ 'text-white bg-blue-600 dark:bg-blue-800': current === 2 }">
                 <svg class="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 22C15.8082 21.9947 14.0267 20.2306 14 18.039V16H9.99996V18.02C9.98892 20.2265 8.19321 22.0073 5.98669 22C3.78017 21.9926 1.99635 20.1999 2.00001 17.9934C2.00367 15.7868 3.79343 14 5.99996 14H7.99996V9.99999H5.99996C3.79343 9.99997 2.00367 8.21315 2.00001 6.00663C1.99635 3.8001 3.78017 2.00736 5.98669 1.99999C8.19321 1.99267 9.98892 3.77349 9.99996 5.97999V7.99999H14V5.99999C14 3.79085 15.7908 1.99999 18 1.99999C20.2091 1.99999 22 3.79085 22 5.99999C22 8.20913 20.2091 9.99999 18 9.99999H16V14H18C20.2091 14 22 15.7909 22 18C22 20.2091 20.2091 22 18 22ZM16 16V18C16 19.1046 16.8954 20 18 20C19.1045 20 20 19.1046 20 18C20 16.8954 19.1045 16 18 16H16ZM5.99996 16C4.89539 16 3.99996 16.8954 3.99996 18C3.99996 19.1046 4.89539 20 5.99996 20C6.53211 20.0057 7.04412 19.7968 7.42043 19.4205C7.79674 19.0442 8.00563 18.5321 7.99996 18V16H5.99996ZM9.99996 9.99999V14H14V9.99999H9.99996ZM18 3.99999C17.4678 3.99431 16.9558 4.2032 16.5795 4.57952C16.2032 4.95583 15.9943 5.46784 16 5.99999V7.99999H18C18.5321 8.00567 19.0441 7.79678 19.4204 7.42047C19.7967 7.04416 20.0056 6.53215 20 5.99999C20.0056 5.46784 19.7967 4.95583 19.4204 4.57952C19.0441 4.2032 18.5321 3.99431 18 3.99999ZM5.99996 3.99999C5.4678 3.99431 4.95579 4.2032 4.57948 4.57952C4.20317 4.95583 3.99428 5.46784 3.99996 5.99999C3.99428 6.53215 4.20317 7.04416 4.57948 7.42047C4.95579 7.79678 5.4678 8.00567 5.99996 7.99999H7.99996V5.99999C8.00563 5.46784 7.79674 4.95583 7.42043 4.57952C7.04412 4.2032 6.53211 3.99431 5.99996 3.99999Z" fill="currentColor"></path>
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path d="M21 21H7.8C6.11984 21 5.27976 21 4.63803 20.673C4.07354 20.3854 3.6146 19.9265 3.32698 19.362C3 18.7202 3 17.8802 3 16.2V3M6 15L10 11L14 15L20 9M20 9V13M20 9H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
                 </svg>
-                <span class="ml-1">Grafik</span>
+                <span class="ml-1">Çizelge</span>
             </a>
-            <a n:if="!$anonymous" href="javascript:void(0)" class="cursor-default inline-flex items-center px-4 py-1 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:text-gray-300" x-on:click="current = 3" x-bind:class="{ 'text-white bg-blue-600 dark:bg-blue-800': current === 3 }">
+
+            <a href="javascript:void(0)" class="cursor-default inline-flex items-center px-4 py-1 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:text-gray-300" x-on:click="current = 3" x-bind:class="{ 'text-white bg-blue-600 dark:bg-blue-800': current === 3 }">
+                <svg class="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path d="M2.99902 3V16.2C2.99902 17.8802 2.99902 18.7202 3.326 19.362C3.61362 19.9265 4.07257 20.3854 4.63705 20.673C5.27879 21 6.11887 21 7.79902 21H20.999M19.9998 15H15.9998M12.9998 7.00002H6.99978M17.9998 11H8.99978" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                </svg>
+                <span class="ml-1">Hizalanmış</span>
+            </a>
+
+            <a n:if="!$anonymous" href="javascript:void(0)" class="cursor-default inline-flex items-center px-4 py-1 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:text-gray-300" x-on:click="current = 4" x-bind:class="{ 'text-white bg-blue-600 dark:bg-blue-800': current === 4 }">
                 <svg class="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -101,37 +117,68 @@
                 </div>
             </div>
         </div>
-        <div x-show="current === 2">
 
-            <div id="chart"></div>
+        <div class="content-between mt-2" x-show="current === 2">
+            <button data-chart-type="pie" class="p-1 bg-gray-900 text-white rounded-lg m-1 my-2 shadow-sm">
+                <svg class="w-8 h-8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" fill="currentColor">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <style type="text/css">
+                            .st0 {
+                                fill: none;
+                                stroke: currentColor;
+                                stroke-width: 2;
+                                stroke-linecap: round;
+                                stroke-linejoin: round;
+                                stroke-miterlimit: 10;
+                            }
+                        </style>
+                        <g>
+                            <path d="M27.7,8.3l-10.2,7.8l9.1,9.1c2.1-2.5,3.4-5.7,3.4-9.2C30,13.1,29.1,10.5,27.7,8.3z"></path>
+                            <path d="M17,14l9.4-7.3c-2.4-2.6-5.7-4.4-9.4-4.7V14z"></path>
+                            <path d="M15.3,16.7C15.3,16.7,15.3,16.7,15.3,16.7C15.2,16.6,15.2,16.6,15.3,16.7c-0.1-0.1-0.1-0.2-0.1-0.2c0-0.1-0.1-0.1-0.1-0.2 s0-0.1,0-0.2c0,0,0-0.1,0-0.1V2.1C7.7,2.6,2,8.6,2,16c0,7.7,6.3,14,14,14c3.5,0,6.7-1.3,9.2-3.4L15.3,16.7z"></path>
+                        </g>
+                    </g>
+                </svg>
+            </button>
+            <button data-chart-type="bar" class="bg-gray-100 text-blue-600 p-1 rounded-lg m-1 my-2 shadow-sm">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 -8 72 72" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <title>bar-chart</title>
+                        <g id="Layer_5" data-name="Layer 5">
+                            <path d="M61,49.12c0,1-.27,1.88-1.57,1.88H13.35A2.36,2.36,0,0,1,11,48.65V5.22c0-1.3.85-1.57,1.88-1.57s1.88.27,1.88,1.57V44.89a2.36,2.36,0,0,0,2.35,2.35H59.43C60.73,47.24,61,48.08,61,49.12Z"></path>
+                        </g>
+                        <path d="M22.13,44h3.12a1.55,1.55,0,0,0,1.55-1.56V26.8a1.55,1.55,0,0,0-1.55-1.56H22.13a1.56,1.56,0,0,0-1.56,1.56V42.39A1.56,1.56,0,0,0,22.13,44Z"></path>
+                        <path d="M31.37,43.63h3.26A1.63,1.63,0,0,0,36.26,42V12.65A1.63,1.63,0,0,0,34.63,11H31.37a1.63,1.63,0,0,0-1.63,1.63V42A1.63,1.63,0,0,0,31.37,43.63Z"></path>
+                        <path d="M41.15,43.63h3.27A1.63,1.63,0,0,0,46.05,42V32.21a1.63,1.63,0,0,0-1.63-1.63H41.15a1.63,1.63,0,0,0-1.63,1.63V42A1.63,1.63,0,0,0,41.15,43.63Z"></path>
+                        <path d="M50.94,43.63H54.2A1.63,1.63,0,0,0,55.83,42V19.17a1.63,1.63,0,0,0-1.63-1.63H50.94a1.63,1.63,0,0,0-1.63,1.63V42A1.63,1.63,0,0,0,50.94,43.63Z"></path>
+                    </g>
+                </svg>
+            </button>
+            <button data-chart-type="line" class="bg-gray-100 text-blue-600 p-1 rounded-lg m-1 my-2 shadow-sm">
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path d="M21 21H7.8C6.11984 21 5.27976 21 4.63803 20.673C4.07354 20.3854 3.6146 19.9265 3.32698 19.362C3 18.7202 3 17.8802 3 16.2V3M7 7L12 13L16 9L21 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                </svg>
+            </button>
 
-            <script>
-                $(function () {
-                    function showAnswers(data) {
-                        data = JSON.parse(data);
+            <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2">
+                <div class="dark:bg-gray-900 bg-gray-100 rounded-lg m-1 my-2 p-3 shadow-sm" n:foreach="$data as $key => $value">
+                    <h1 class="text-current text-center h-12" title="{$key}">{$key}</h1>
+                    <canvas class="dark:bg-gray-800 bg-white rounded-xl m-1 my-3 overflow-hidden" chart-data="{json_encode($value["answers"])|noescape}" id="chart-{$random=mt_rand(0, PHP_INT_MAX)}"></canvas>
+                </div>
+            </div>
+        </div>
 
-                        for (const [k, v] of Object.entries(data))
-                            console.log("Key:" + k + "  " + v);
-                    }
-
-                    $("[data-json]").on("click", function () {
-
-                        const jsonData = $(this).data("json");
-
-                        const questionTitle = $(this).parent().parent().parent().prev().text();
-                        $("#answers-modal-title").text(questionTitle)
-
-                        $("#answersModalContent").html("")
-
-                        jsonData.forEach(element => {
-                            $("#answersModalContent").prepend('<div class="dark:bg-gray-700 bg-gray-50 my-2 text-sm text-gray-900 dark:text-gray-200 p-3 rounded-md">' + element.value + '</div>');
-                        });
-                    })
-                })
-            </script>
-
+        <div class="content-between mt-2" x-show="current === 3">
             <div class="dark:bg-gray-900 bg-gray-100 rounded-lg m-1 my-2 p-3 shadow-sm" n:foreach="$data as $key => $value">
-                <h1 class="text-xl text-center">{$key}</h1>
+                <h1 class="text-xl text-center h-12 truncate" title="{$key}">{$key}</h1>
                 <div class="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 content-between mt-2">
                     <div class="dark:bg-gray-800 bg-white rounded-xl m-1 my-3 overflow-hidden" n:foreach="$value['answers'] as $aK => $aV">
                         <!-- Progress -->
@@ -150,7 +197,7 @@
             </div>
         </div>
 
-        <div n:if="!$anonymous" x-show="current === 3" x-transition class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+        <div n:if="!$anonymous" x-show="current === 4" x-transition class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-50 dark:bg-gray-800">
                     <tr>
@@ -248,3 +295,67 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(function() {
+        const charts = []
+        $("[data-json]").on("click", function() {
+
+            const jsonData = $(this).data("json");
+
+            const questionTitle = $(this).parent().parent().parent().prev().text();
+            $("#answers-modal-title").text(questionTitle)
+
+            $("#answersModalContent").html("")
+
+            jsonData.forEach(element => {
+                $("#answersModalContent").prepend('<div class="dark:bg-gray-700 bg-gray-50 my-2 text-sm text-gray-900 dark:text-gray-200 p-3 rounded-md">' + element.value + '</div>');
+            });
+        })
+
+        $("[chart-data]").each((index, element) => {
+
+            $this = $(element)
+            const chartData = $this.attr("chart-data");
+            const data = JSON.parse(chartData)
+
+            const ctx = document.getElementById($this.attr("id"));
+
+            var chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        label: '',
+                        data: Object.values(data),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+
+                    },
+                }
+            })
+
+            charts.push(chart)
+        })
+
+        $("[data-chart-type]").on("click", (e) => {
+
+            const chartType = $(e.currentTarget).data("chart-type")
+
+            charts.forEach(element => {
+                element.config.type = chartType
+                element.update()
+            });
+
+            $("[data-chart-type]").each((index, element) => {
+                $(element).removeClass("bg-gray-900 text-white").addClass("bg-gray-100 text-blue-600")
+            })
+
+            $(e.currentTarget).removeClass("bg-gray-100 text-blue-600").addClass("bg-gray-900 text-white")
+        })
+    })
+</script>
