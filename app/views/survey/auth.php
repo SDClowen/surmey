@@ -9,7 +9,7 @@
     {acss("app")|noescape}
     {njs("jquery/dist/jquery.min")|noescape}
     {ajs("jquery.inputmask.min")|noescape}
-    {njs("sdeasy/sdeasy")|noescape}
+    {njs("sdpower/sdeasy")|noescape}
     <script>
         $(function () {
             $(":input[name=phone]").inputmask({ "mask": "(999) 999 99 99" });

@@ -21,8 +21,8 @@
     "@tinymce/tinymce-jquery": "^2.1.0",
     "fs-extra": "^11.1.1",
     "jquery": "^3.7.0",
-    "sdeasy": "^1.0.1",
-    "tinymce": "^6.6.0"
+    "sdpower": "^1.0.1",
+    "tinymce": "^7.2.1"
   },
   "main": "tailwind.config.js",
   "scripts": {

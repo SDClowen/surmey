@@ -6,6 +6,9 @@ $(function () {
     });*/
 
     function linkify(text) {
+
+        return text;
+        
         var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
         return text.replace(urlRegex, function (url) {
             return '<a class="text-blue-600 underline" href="' + url + '">' + url + '</a>';
@@ -29,10 +32,11 @@ $(function () {
     const clearText = (text) => {
         return text
             .trim()
-            .replace("\r\n", "<br>")
-            .replace("\r", "<br/>")
-            .replace("\n", "<br>")
-            .replace("\t", "   ");
+            .replaceAll("\r\n", "<br>")
+            .replaceAll("\r", "<br/>")
+            .replaceAll("\n", "<br>")
+            .replaceAll("\t", "   ")
+            .replaceAll('"', '\\\"');
     };
 
     $("body").on("change", "#file-upload", function (event) {
@@ -367,7 +371,7 @@ $(function () {
         if (element.type != "description")
             content += `
                 <h1 class="text-clip border-b border-gray-200 pb-3 pt-1 text-lg font-medium dark:border-gray-600 mb-4">
-                    ${linkify(element.title)}  ${element.isRequired ? "<b class='text-red-600'>*</b>" : ""}
+                    ${linkify(element.title.replaceAll('\\\"', '"'))}  ${element.isRequired ? "<b class='text-red-600'>*</b>" : ""}
                 </h1>
               `;
 
@@ -386,7 +390,7 @@ $(function () {
                 const types = ["info", "warning", "success", "danger"];
                 content += `
                     <div data-slug="${element.slug}" class="my-3 shadow-sm text-center rounded-md p-3 text-md alert-${types[element.subType]}">
-                        ${linkify(element.title)}
+                        ${linkify(element.title.replaceAll('\\\"', '"'))}
                     </div>
                 `;
                 break;
@@ -400,7 +404,7 @@ $(function () {
             content += `
                   <div class="flex w-fit items-center mb-2 mx-1">
                       <input data-condition="${hasCondition}" data-change-tracker="true" id="link-${element.slug + i}" name="${element.type == "radio" ? element.slug : element.slug + i}" type="${element.type}" value="${i}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="link-${element.slug + i}" class="ml-2 text-sm font-normal text-gray-900 dark:text-gray-300" ${element.isHorizontal ? 'style="min-inline-size: max-content;"' : ''}>${linkify(answer)}</label>
+                      <label for="link-${element.slug + i}" class="ml-2 text-sm font-normal text-gray-900 dark:text-gray-300" ${element.isHorizontal ? 'style="min-inline-size: max-content;"' : ''}>${linkify(answer.replaceAll('\\\"', '"'))}</label>
                   </div>
               `;
         });

@@ -8,7 +8,7 @@
     <title>Surmey - Validate Pin</title>
     {acss("app")|noescape}
     {njs("jquery/dist/jquery.min")|noescape}
-    {njs("sdeasy/sdeasy")|noescape}
+    {njs("sdpower/sdeasy")|noescape}
 
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
