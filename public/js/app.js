@@ -8,7 +8,7 @@ $(function () {
     function linkify(text) {
 
         return text;
-        
+
         var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
         return text.replace(urlRegex, function (url) {
             return '<a class="text-blue-600 underline" href="' + url + '">' + url + '</a>';
@@ -52,6 +52,35 @@ $(function () {
             reader.readAsDataURL(input.files[0]);
         }
     });
+
+    const initTinymce = () => {
+        $("[contenteditable]:not(#create-answer)").tinymce({
+            inline: true,
+            menubar: false,
+            paste_data_images: true,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'fullscreen',
+                'insertdatetime', 'media', 'table'
+            ],
+            toolbar: 'blocks | bold italic underline link | forecolor backcolor |  image media | ' +
+                'alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist outdent indent | removeformat preview',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    tinymce.triggerSave();
+                })
+
+                editor.on('init', function () {
+                    $(editor.getDoc()).on('keydown', function (e) {
+                        if (e.keyCode === 13) {
+                            e.preventDefault();
+                        }
+                    });
+                });
+            }
+        })
+    }
 
     const getQuestionComponent = (type, body, isRequired = false, conditions = [], isCheckable = false, isHorizontal = false) => {
         return `
@@ -105,18 +134,17 @@ $(function () {
         const val = $(e.currentTarget).children("input").val()
 
         var conditions = JSON.parse(question.attr("conditions") ?? "[]")
-        
+
         arrayIndex = conditions.findIndex(p => p.index == answerIndex)
-        if(arrayIndex != -1)
-        {
-            if(val == "none")
+        if (arrayIndex != -1) {
+            if (val == "none")
                 conditions.splice(arrayIndex, 1)
             else
-                conditions[arrayIndex].value = val;   
+                conditions[arrayIndex].value = val;
         }
         else
             conditions.push({
-                index:  answerIndex,
+                index: answerIndex,
                 value: val
             })
 
@@ -129,9 +157,9 @@ $(function () {
 
         const dropdown = $(e.currentTarget).next();
         $("#condition-dropdown:not(.hidden)").each((i, ee) => {
-            if(dropdown.is($(ee)))
+            if (dropdown.is($(ee)))
                 return;
-            
+
             $(ee).addClass("hidden")
         })
 
@@ -152,12 +180,12 @@ $(function () {
                 Seçili Değil
                 </label>
             </li>`)
-    
+
         const question = $(e.currentTarget).parents("#question");
         const questionSlug = question.find("[data-slug]").data("slug");
 
         var conditions = JSON.parse(question.attr("conditions") ?? "[]")
-        
+
         for (const [k, v] of Object.entries(questions)) {
             if (v.type == "description" || questionSlug == v.slug)
                 continue;
@@ -210,7 +238,7 @@ $(function () {
         slug,
         answers = [],
         isHorizontal = false,
-        isRequired = false, 
+        isRequired = false,
         conditions = []
     ) {
         var generatedAnswers = "";
@@ -265,7 +293,7 @@ $(function () {
             var slug = $this.find("div:eq(0)").data("slug");
             if (!slug) slug = randomString(6);
             var question = {
-                title: clearText($this.find("div:eq(0)").text()),
+                title: clearText($this.find("div:eq(0)").html().trim()),
                 slug: slug,
                 type: $this.data("type"),
                 isRequired: $this.find("input[type=checkbox]:eq(0)").prop("checked"),
@@ -334,6 +362,8 @@ $(function () {
             }
             $(".questions").append(content);
         }
+
+        initTinymce()
     };
 
     $(document).on("change", "[data-change-tracker]", (e) => {
@@ -343,21 +373,20 @@ $(function () {
         $condition = $this.data("condition");
 
         const type = $this.attr("type")
-        if(type == "radio")
-        {
+        if (type == "radio") {
             const inputs = $this.parents("[data-slug]").find("input")
             inputs.each((inputIndex, inputElement) => {
-                if($this.is(inputElement))
+                if ($this.is(inputElement))
                     return
 
                 $inputCondition = $(inputElement).data("condition");
 
                 const conditionDiv = $(`[data-slug='${$inputCondition}']`);
-                conditionDiv.find("input").prop('checked',false);
+                conditionDiv.find("input").prop('checked', false);
                 conditionDiv.hide()
             })
         }
-        
+
         $(`[data-slug='${$condition}']`).show()
     })
 
@@ -370,8 +399,8 @@ $(function () {
 
         if (element.type != "description")
             content += `
-                <h1 class="text-clip border-b border-gray-200 pb-3 pt-1 text-lg font-medium dark:border-gray-600 mb-4">
-                    ${linkify(element.title.replaceAll('\\\"', '"'))}  ${element.isRequired ? "<b class='text-red-600'>*</b>" : ""}
+                <h1 class="flex text-clip border-b border-gray-200 pb-3 pt-1 text-lg font-medium dark:border-gray-600 mb-4">
+                    ${linkify(element.title.replaceAll('\\\"', '"'))}  ${element.isRequired ? "<b class='ml-2 text-red-600'>*</b>" : ""}
                 </h1>
               `;
 
@@ -420,12 +449,22 @@ $(function () {
     window.prepareSurveyForEditing = prepareSurveyForEditing;
 
     $(document).on("click", ".remove", function (event) {
-        $(this).parent().remove();
+
+        $parent = $(this).parent()
+
+        if ($parent.attr("id") != "question")
+            $parent = $parent.parent()
+
+        $parent.remove();
     });
 
     $(document).on("click", ".up, .down", function (event) {
 
         $parent = $(this).parent()
+
+        if ($parent.attr("id") != "question")
+            $parent = $parent.parent()
+
         const isUpper = $(this).hasClass("up");
 
         $v = isUpper ? $parent.prev() : $parent.next()
@@ -452,12 +491,15 @@ $(function () {
         })
     })
 
-    $(document).on("keypress", "#create-answer", function (event) {
+    $(document).on("keydown", "#create-answer", function (event) {
         if (!event.shiftKey && event.which == 13) {
             $(this).prev("#answers").append(getAnswerComponent($(this).text()));
 
             $(event.target).text("...");
             window.getSelection().selectAllChildren(event.target);
+
+            initTinymce()
+
             return false;
         }
     })
@@ -487,6 +529,8 @@ $(function () {
         }
 
         $(".questions").append(content);
+
+        initTinymce()
     });
 
     $("[data-json]").on("click", function () {

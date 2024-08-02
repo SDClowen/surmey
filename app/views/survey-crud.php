@@ -259,8 +259,6 @@
     </div>
 </div>
 
-{njs("tinymce/tinymce.min")|noescape}
-{njs("@tinymce/tinymce-jquery/dist/tinymce-jquery.min")|noescape}
 
 <script>
     $(() => {
@@ -282,24 +280,5 @@
                 })
             }
         });
-
-        $("[contenteditable]").tinymce({
-            inline: true,
-            menubar: false,
-            paste_data_images: true,
-            plugins: [
-                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                'anchor', 'searchreplace', 'visualblocks', 'fullscreen',
-                'insertdatetime', 'media', 'table'
-            ],
-            toolbar: 'blocks | bold italic underline link | forecolor backcolor |  image media | ' +
-                'alignleft aligncenter alignright alignjustify | ' +
-                'bullist numlist outdent indent | removeformat preview',
-            setup: function (editor) {
-                editor.on('change', function () {
-                    tinymce.triggerSave();
-                })
-            }
-        })
     })
 </script>
