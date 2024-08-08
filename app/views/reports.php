@@ -321,10 +321,13 @@
 
             const ctx = document.getElementById($this.attr("id"));
 
+            const keys = Object.keys(data).map((v) => v.replace(/\\"/g, '"').replace(/<[^>]*>?/gm, ''))
+            
+            console.log(keys)
             var chart = new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: Object.keys(data),
+                    labels: keys,
                     datasets: [{
                         label: '',
                         data: Object.values(data),
