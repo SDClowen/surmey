@@ -102,10 +102,10 @@
 
         <div x-show="current === 1">
             <div class="dark:bg-gray-900 bg-gray-100 rounded-lg m-1 my-2 p-3 shadow-sm" n:foreach="$data as $key => $value">
-                <h1 class="text-xl text-center">{$key}</h1>
+                <h1 class="text-xl text-center">{str_ireplace('\"', '"',$key)|noescape}</h1>
                 <div class="grid grid-cols-1 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-2 content-between mt-2">
                     <div class="dark:bg-gray-800 bg-white rounded-xl m-1 my-3 overflow-hidden" n:foreach="$value['answers'] as $aK => $aV">
-                        <span class="block text-center bg-blue-600 text-white p-1">{$aK}</span>
+                        <span class="block text-center bg-blue-600 text-white p-1 overflow-hidden">{str_ireplace('\"', '"', $aK)|noescape}</span>
                         <span class="block text-4xl text-center text-gray-500 p-1 dark:text-gray-300">
                             {if $value["type"] != "radio" && $value["type"] != "checkbox" && $aK != "Boş"}
                             <button @click="isAnswerModalOpened = !isAnswerModalOpened" title="Anonim Cevapları Göster" class="text-blue-500 underline dark:text-blue-400 font-bold hover:bg-blue-500 rounded-xl transition-colors duration-200 hover:text-white" data-json='{$value["list-json"]|noescape}'>{$aV}</button>
@@ -170,7 +170,7 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2">
                 <div class="dark:bg-gray-900 bg-gray-100 rounded-lg m-1 my-2 p-3 shadow-sm" n:foreach="$data as $key => $value">
-                    <h1 class="text-current text-center h-12" title="{$key}">{$key}</h1>
+                    <h1 class="text-current text-center h-12" title="{str_ireplace('\"', '"',$key)|noescape}">{str_ireplace('\"', '"',$key)|noescape}</h1>
                     <canvas class="dark:bg-gray-800 bg-white rounded-xl m-1 my-3 overflow-hidden" chart-data="{json_encode($value["answers"])|noescape}" id="chart-{$random=mt_rand(0, PHP_INT_MAX)}"></canvas>
                 </div>
             </div>
@@ -178,13 +178,13 @@
 
         <div class="content-between mt-2" x-show="current === 3">
             <div class="dark:bg-gray-900 bg-gray-100 rounded-lg m-1 my-2 p-3 shadow-sm" n:foreach="$data as $key => $value">
-                <h1 class="text-xl text-center h-12 truncate" title="{$key}">{$key}</h1>
+                <h1 class="text-xl text-center h-12 truncate" title="{str_ireplace('\"', '"',$key)|noescape}">{str_ireplace('\"', '"',$key)|noescape}</h1>
                 <div class="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 content-between mt-2">
                     <div class="dark:bg-gray-800 bg-white rounded-xl m-1 my-3 overflow-hidden" n:foreach="$value['answers'] as $aK => $aV">
                         <!-- Progress -->
                         <div class="p-4">
                             <div class="mb-2 flex justify-between items-center">
-                                <h3 class="text-sm font-semibold text-gray-800 dark:text-white">{$aK}</h3>
+                                <h3 class="text-sm font-semibold text-gray-800 dark:text-white">{str_ireplace('\"', '"', $aK)|noescape}</h3>
                                 <span class="text-sm text-gray-800 dark:text-white">{round($aV * 100 / ($value["total"] == 0 ? 1 : $value["total"]), 1)}%</span>
                             </div>
                             <div class="flex w-full h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">

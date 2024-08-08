@@ -1,0 +1,2 @@
+anket yayımlandığında linki ve text ile birlikte sms yada mail attırma 
+serkantın yaptığı personel tipine göre anketi ayırma
