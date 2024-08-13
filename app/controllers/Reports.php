@@ -1,10 +1,13 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Models\User;
 use App\Models\Survey;
-use Core\{Controller, Request};
+use Core\{Controller, Request, Database};
 use Core\Attributes\route;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Reports extends Controller
 {
@@ -16,7 +19,7 @@ class Reports extends Controller
             redirect();
 
         $result = Survey::report($survey);
-        
+
         $args = [
             "surveyTitle" => $survey->title,
             "user" => User::info(),
@@ -25,7 +28,7 @@ class Reports extends Controller
             "surveyId" => $surveyId
         ];
 
-        if(!$survey->anonymous)
+        if (!$survey->anonymous)
             $args["participators"] = Survey::participators($surveyId);
 
         $this->view("main", "reports", lang("reports"), $args);
@@ -35,11 +38,11 @@ class Reports extends Controller
     public function reset(int $surveyId)
     {
         $survey = Survey::existsByUserId(User::id(), "id", $surveyId);
-        if(!$survey)
+        if (!$survey)
             redirect();
 
         $count = Survey::reset($surveyId);
-        if($count)
+        if ($count)
             success(refresh: true);
 
         getDataError();
@@ -49,34 +52,57 @@ class Reports extends Controller
     public function csv(int $surveyId)
     {
         $survey = Survey::existsByUserId(User::id(), "id", $surveyId);
-        if(!$survey)
+        if (!$survey)
             redirect();
 
+        ob_clean();
+        
         header('Pragma: private');
         header('Cache-control: private, must-revalidate');
-        header('Content-type: text/csv');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $csvFileName = preg_replace('/[^A-Za-z0-9_-]/', '', str_replace(' ', '-', $survey->title));
-        header('Content-Disposition: attachment; filename=' . $csvFileName . '.csv');
+        header('Content-Disposition: attachment; filename=' . $csvFileName . '.xlsx');
+        header('Cache-Control: max-age=0');
+        $file = fopen('php://output', 'w');
 
-        $fp = fopen('php://output', 'w');
+        ##################################################
 
-        $report = Survey::report($survey);
+        $questionData = json_decode($survey->data);
+        $questions = array_map(fn($v) => strip_tags(trim($v->title)), $questionData);
 
-        #values
-        foreach($report as $title => $data)
-        {
-            foreach($data["answers"] as $answerTitle => $participateCount)
-            {
-                $answerData[] = $answerTitle;
-                $valueData[] = $participateCount;
+        $data = [
+            array_merge(['Sicil No', 'Ad Soyad'], $questions)
+        ];
+
+        #################
+        $participators = Survey::participators($surveyId);
+        
+        foreach ($participators as $key => $participator) {
+            if(!$participator->done)
+                continue;
+
+            $inline = [
+                $participator->id, 
+                $participator->fullname
+            ];
+
+            
+            $answerData = json_decode($participator->data);
+
+            foreach ($answerData as $questionKey => $answerKey) {
+                $question = current(array_filter($questionData, fn($val) => $val->slug == $questionKey));
+                
+                $inline[] = strip_tags(trim($question->type == "textarea" ? $answerKey : $question->answers[$answerKey]));
             }
 
-            fputcsv($fp, [$title]);
-            fputcsv($fp, $answerData);
-            fputcsv($fp, $valueData);
+            $data[] = $inline;
         }
 
-        fclose($fp);
-        exit;
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->fromArray($data);
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
     }
 }

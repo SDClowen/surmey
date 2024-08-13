@@ -61,9 +61,9 @@ $(function () {
             plugins: [
                 'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
                 'anchor', 'searchreplace', 'visualblocks', 'fullscreen',
-                'insertdatetime', 'media', 'table'
+                'insertdatetime', 'media', 'table', 'iframe'
             ],
-            toolbar: 'blocks | bold italic underline link | forecolor backcolor |  image media | ' +
+            toolbar: 'blocks | bold italic underline link | forecolor backcolor | insertfile image media | ' +
                 'alignleft aligncenter alignright alignjustify | ' +
                 'bullist numlist outdent indent | removeformat preview',
             setup: function (editor) {

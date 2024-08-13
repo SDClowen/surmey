@@ -65,9 +65,9 @@
                                     </g>
                                 </svg>
                                 <div class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                    <div>CSV</div>
+                                    <div>EXCEL</div>
                                     <p id="helper-radio-text-4" class="text-xs font-normal text-gray-500 dark:text-gray-300">
-                                        Sonuçları CSV olarak dışarı aktar
+                                        Sonuçları excel formatında dışarı aktar
                                     </p>
                                 </div>
                             </a>

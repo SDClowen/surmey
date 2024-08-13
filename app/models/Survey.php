@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Core\{Model, Database};
@@ -62,7 +63,7 @@ final class Survey extends Model
         return Database::get()
             ->from("answers")
             ->join("personals", "personals.id = answers.personalId")
-            ->where("answers.surveyId", value:$surveyId)
+            ->where("answers.surveyId", value: $surveyId)
             ->where("answers.done", value: 1)
             ->results();
     }
@@ -76,7 +77,7 @@ final class Survey extends Model
             ->first();
     }
 
-    public static function report($survey)
+    public static function generateReportData($survey)
     {
         $questionData = json_decode($survey->data);
         $answerData = Database::get()
@@ -176,6 +177,13 @@ final class Survey extends Model
             }
         }
 
+        return $generatedData;
+    }
+
+    public static function report($survey)
+    {
+        $generatedData = self::generateReportData($survey);
+
         $result = [];
 
         $group0Data = current($generatedData);
@@ -204,7 +212,6 @@ final class Survey extends Model
                 }
 
                 $result[$title]["total"] = $totalCount;
-
             } else {
                 $emptyCount = $fillCount = 0;
                 foreach ($question as $answerK => $answerV) {
@@ -214,7 +221,6 @@ final class Survey extends Model
                         $fillCount++;
                         $result[$title]["list-json"][] = $answerV;
                     }
-
                 }
 
                 $result[$title]["answers"] = [
@@ -228,7 +234,6 @@ final class Survey extends Model
             }
 
             $result[$title]["total"] = $totalCount;
-
         }
 
         return $result;

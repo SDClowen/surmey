@@ -269,9 +269,9 @@
             plugins: [
                 'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
                 'anchor', 'searchreplace', 'visualblocks', 'fullscreen',
-                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount', 'iframe'
             ],
-            toolbar: 'undo redo | blocks | bold italic link | forecolor backcolor |  image media | ' +
+            toolbar: 'undo redo | blocks | bold italic link | forecolor backcolor | insertfile  image media | ' +
                 'alignleft aligncenter alignright alignjustify | ' +
                 'bullist numlist outdent indent | removeformat | help | code',
             setup: function (editor) {
