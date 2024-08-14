@@ -40,7 +40,8 @@ class Surveys extends Controller
     #[route(method: route::xhr_post, uri: "apply", session: "user")]
     public function apply(int $id = 0)
     {
-        $post = Request::post();
+        $post = (object)Request::post(filter: false);
+        
         $validate = validate($post, [
             "title" => ["name" => lang("title"), "required" => true, "min" => 8, "max" => 255],
             "about" => ["name" => lang("about"), "min" => 0, "max" => 65535],

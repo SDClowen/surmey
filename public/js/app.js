@@ -267,7 +267,7 @@ $(function () {
 
     function createDescription(questionDummyText, slug, subType = 0) {
         const body = `
-            <div contenteditable="true" data-slug="${slug}" class="mb-3 h-14 bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
+            <div contenteditable="true" data-slug="${slug}" class="mb-3 min-h-14 bg-gray-100 focus:outline-blue-600 dark:bg-gray-700 rounded-md px-4 py-2">${questionDummyText}</div>
                 
             <div class="rounded-t-lg bg-yellow-100 dark:bg-gray-900 p-2">
                 <div class="col-span-4">
