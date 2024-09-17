@@ -73,7 +73,7 @@ $(function () {
 
                 editor.on('init', function () {
                     $(editor.getDoc()).on('keydown', function (e) {
-                        if (e.keyCode === 13) {
+                        if (e.key === "Enter") {
                             e.preventDefault();
                         }
                     });
