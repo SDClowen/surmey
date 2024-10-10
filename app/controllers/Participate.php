@@ -191,9 +191,10 @@ class Participate extends Controller
 			error("INVALID_SURVEY_DATA");
 
 		$user = session_get("participator");
-
-		if (Participator::checkSurveyIsParticipated($user->personalId, true))
-			warning("Bu anketi daha önce zaten cevapladınız!");
+		if ($survey->verifyPhone) {
+			if (Participator::checkSurveyIsParticipated($user->personalId, true))
+				warning("Bu anketi daha önce zaten cevapladınız!");
+		}
 
 		$post = Request::post();
 
@@ -230,8 +231,8 @@ class Participate extends Controller
 
 						$validate2 = ! in_array(true, $actions);
 
-						if($validate2)
-							$errors[] = $value->title. " sorusunu cevaplayınız!";
+						if ($validate2)
+							$errors[] = $value->title . " sorusunu cevaplayınız!";
 					}
 
 					break;
@@ -239,7 +240,7 @@ class Participate extends Controller
 				case "textarea":
 
 					$rules[$value->slug] = [
-						"name" => $value->title."<br>",
+						"name" => $value->title . "<br>",
 						#"required" => $value->isRequired,
 						"min" => 4,
 						"max" => 1000
@@ -257,20 +258,30 @@ class Participate extends Controller
 		if (count($errors) != 0)
 			warning(join("<br>", $errors));
 
-		if($validate)
+		if ($validate)
 			warning($validate);
 
-		$result = Database::get()->from("answers")
-			->where("surveyId", "=", $surveyId)
-			->where("personalId", "=", $user->personalId)
-			->update([
+		if ($survey->verifyPhone) {
+			$result = Database::get()->from("answers")
+				->where("surveyId", "=", $surveyId)
+				->where("personalId", "=", $user->personalId)
+				->update([
 					"data" => data_json($post),
 					"done" => 1
 				]);
+		} else {
+			$result = Database::get()->from("answers")
+				->insert([
+					"surveyId" => $surveyId,
+					"personalId" => 0,
+					"data" => data_json($post),
+					"done" => 1
+				]);
+		}
 
 		if ($result) {
 			session_destroy();
-			successlang("survey.successfully.answered", redirect: "/d/$slug:2500");
+			successlang("survey.successfully.answered", redirect: "/successfully/$slug:2500");
 		}
 
 		getDataError();

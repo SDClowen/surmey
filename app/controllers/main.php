@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Models\Survey;
@@ -23,7 +24,7 @@ class Main extends Controller
     {
         if (session_check("user"))
             redirect("/");
-        
+
         session_remove("tempPin");
         if (session_check("tempPin"))
             redirect("/pin");
@@ -64,14 +65,14 @@ class Main extends Controller
         if (!$memberDetail)
             error(lang("wrong.auth.info"));
 
-        while(User::exists("pin_token", ($pin = join(randomSequence(6)))));
+        while (User::exists("pin_token", ($pin = join(randomSequence(6)))));
 
         User::updateBy("id", $memberDetail->id, ["pin_token" => $pin]);
         session_set("tempPin", hash("sha256", $pin));
-        
-        
+
+
         #disabled for now
-		#\SmsHelper::send($memberDetail->phone, "form.hauscloud için onay kodu: ". $pin);
+        #\SmsHelper::send($memberDetail->phone, "form.hauscloud için onay kodu: ". $pin);
         #success(redirect: "/pin");
 
         session_regenerate_id(true);
@@ -87,7 +88,7 @@ class Main extends Controller
             redirect("/");
 
         $tempPin = session_get("tempPin");
-        if(!$tempPin)
+        if (!$tempPin)
             redirect("/");
 
         $this->render("auth-pin", [
@@ -112,16 +113,16 @@ class Main extends Controller
             errorlang("csrf.error");
 
         $tempPin = session_get("tempPin");
-        if($post->token != $tempPin)
+        if ($post->token != $tempPin)
             error("UNDEFINED_TOKEN");
-        elseif(hash("sha256", $post->pin) != $tempPin)
+        elseif (hash("sha256", $post->pin) != $tempPin)
             errorlang("pin.error");
-            
+
         if (! ($userInfo = User::validatePin($post->token, $post->pin)))
             warninglang("pin.error");
-            
+
         session_remove("tempPin");
-        
+
         session_regenerate_id(true);
 
         session_set("user", $userInfo);
@@ -172,24 +173,43 @@ class Main extends Controller
         session_destroy();
         success(redirect: "/");
     }
-    
-    #[route(method: route::get, uri: "d")]
-	public function participateSurvey(string $slug)
-	{
+
+    #[route(method: route::get | route::xhr_get)]
+    function successfully($slug)
+    {
         $survey = Survey::exists("slug", $slug);
-		if (!$survey || $survey->status != 1)
+        if (!$survey || $survey->status != 1)
             warning("SURVEY_ERROR: $slug");
         
-        if(session_check("user"))
+        $this->render("survey/successfully", [
+            "title" => $survey->title." anketine başarıyla katıldınız!"
+        ]);
+    }
+
+    #[route(method: route::get, uri: "d")]
+    public function participateSurvey(string $slug)
+    {
+        $survey = Survey::exists("slug", $slug);
+        if (!$survey || $survey->status != 1)
+            warning("SURVEY_ERROR: $slug");
+
+        if (session_check("user") || !$survey->verifyPhone)
             session_set("survey", $survey);
 
-		if (!session_check("user") && !session_check("participator"))
-		{
+        if (!$survey->verifyPhone) {
+            session_set("surveySlug", $slug);
+            session_set("surveyId", $survey->id);
+            session_set("participator", (object)[
+                "personalId" => 0
+            ]);
+        }
+
+        if ($survey->verifyPhone && !session_check("user") && !session_check("participator")) {
             session_set("surveySlug", $slug);
             session_set("surveyId", $survey->id);
             redirect("/participate");
         }
 
-		$this->render("survey/participate", ["title" => $survey->title, "survey" => $survey]);
-	}
+        $this->render("survey/participate", ["title" => $survey->title, "survey" => $survey]);
+    }
 }
