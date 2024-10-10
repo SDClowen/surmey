@@ -261,8 +261,9 @@ class Participate extends Controller
 		if ($validate)
 			warning($validate);
 
+		$result = false;
 		if ($survey->verifyPhone) {
-			$result = Database::get()->from("answers")
+			$result = $this->db->from("answers")
 				->where("surveyId", "=", $surveyId)
 				->where("personalId", "=", $user->personalId)
 				->update([
@@ -270,7 +271,7 @@ class Participate extends Controller
 					"done" => 1
 				]);
 		} else {
-			$result = Database::get()->from("answers")
+			$result = $this->db->from("answers")
 				->insert([
 					"surveyId" => $surveyId,
 					"personalId" => 0,
@@ -281,7 +282,8 @@ class Participate extends Controller
 
 		if ($result) {
 			session_destroy();
-			successlang("survey.successfully.answered", redirect: "/successfully/$slug:2500");
+			successlang("survey.successfully.answered");
+			#redirect: "/successfully/$slug:2500"
 		}
 
 		getDataError();
