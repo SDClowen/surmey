@@ -31,7 +31,7 @@ final class Participator extends Model
             ->from("answers")
             ->where("surveyId", "=", $surveyId)
             ->where("personalId", "=", $personalId)
-            ->where("done", "=", $isDone)
+            ->where("done", "=", (int)$isDone)
             ->first();
     }
 
