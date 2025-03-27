@@ -282,8 +282,7 @@ class Participate extends Controller
 
 		if ($result) {
 			session_destroy();
-			successlang("survey.successfully.answered");
-			#redirect: "/successfully/$slug:2500"
+			successlang("survey.successfully.answered", redirect: "/successfully/$slug:2500");
 		}
 
 		getDataError();
