@@ -298,6 +298,15 @@
 
 <script>
     $(function() {
+        // Add handler for reset link
+        $("[data-url^='/reports/reset/']").on("click", function(e) {
+            e.preventDefault();
+            if (confirm("Katılımcıları sıfırlamak istediğinize emin misiniz? Bu işlem geri alınamaz.")) 
+                return true;
+            else 
+                return false;
+        });
+
         const charts = []
         $("[data-json]").on("click", function() {
 
