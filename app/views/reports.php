@@ -1,4 +1,12 @@
-<div x-data="{ isAnswerModalOpened: false, dropIsOpen: false, current: 1 }" x-on:keydown.escape="isAnswerModalOpened = false">
+<div x-data="{ 
+    isNotificationModalOpened: false, 
+    isAnswerModalOpened: false,
+    types: [],
+    recipientType: 'all',
+    charCount: 0,
+    dropIsOpen: false, 
+    current: 1
+}" x-on:keydown.escape="isNotificationModalOpened = false">
     <h1 class="text-center">{$surveyTitle}</h1>
     <div class="flex justify-between content-between w-full mb-3">
         <div class="inline-flex overflow-hidden relative bg-white border divide-x rounded-lg dark:bg-gray-900 rtl:flex-row-reverse shadow-sm dark:border-gray-700 dark:divide-gray-700">
@@ -44,6 +52,200 @@
             </a>
         </div>
         <div class="flex justify-items-end">
+            <!-- Notification Modal -->
+            <div x-data="{ isNotificationModalOpened: false, types: [], recipientType: 'all', charCount: 0 }">
+                            <button @click="isNotificationModalOpened = true" class="inline-flex items-center px-4 py-2 me-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-300">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                </svg>
+                                Bildirim Gönder
+                            </button>
+
+                            <div x-show="isNotificationModalOpened" @click="isNotificationModalOpened = false" class="fixed z-30 bg-black/50 backdrop-blur-sm top-0 left-0 w-full h-full outline-none"></div>
+
+                            <div x-show="isNotificationModalOpened" x-transition class="z-40 fixed top-0 left-0 w-full h-full outline-none overflow-x-hidden overflow-y-auto">
+                                <div class="sm:h-[calc(100%-3rem)] max-w-2xl my-6 mx-auto relative w-auto pointer-events-none">
+                                    <div class="max-h-full overflow-hidden border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white dark:bg-slate-900 dark:text-gray-50 bg-clip-padding rounded-lg outline-none text-current">
+                                        <div class="flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 dark:border-gray-600 rounded-t-md bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+                                            <h5 class="text-xl font-medium leading-normal flex items-center">
+                                                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                                </svg>
+                                                Bildirim Gönder
+                                            </h5>
+                                            <button @click="isNotificationModalOpened = false" class="text-white hover:text-gray-200 transition-colors duration-200">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
+
+                                        <form role="form" action="/reports/sendNotification/{$surveyId}" method="post" data-content=".notification-message" x-on:submit="$event.target.types.value = types.join(',')">
+                                            <div class="relative p-6">
+                                                <div class="notification-message"></div>
+
+                                                <div class="mb-6">
+                                                    <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Bildirim Tipi</label>
+                                                    <div class="grid grid-cols-2 gap-4">
+                                                        <label class="relative flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 cursor-pointer transition-all duration-300" 
+                                                            :class="{ 'border-blue-500 bg-blue-50 dark:bg-blue-900/20': types.includes('sms') }">
+                                                            <input type="checkbox" value="sms" class="hidden" x-model="types">
+                                                            <input type="hidden" name="types" value="">
+                                                            <div class="flex items-center">
+                                                                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" :class="{ 'text-blue-600': types.includes('sms'), 'text-gray-400': !types.includes('sms') }" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                                                </svg>
+                                                                <span class="text-sm font-medium" :class="{ 'text-blue-600': types.includes('sms') }">SMS</span>
+                                                            </div>
+                                                            <div class="absolute top-2 right-2" x-show="types.includes('sms')">
+                                                                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                                                </svg>
+                                                            </div>
+                                                        </label>
+                                                        
+                                                        <label class="relative flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 cursor-pointer transition-all duration-300" 
+                                                            :class="{ 'border-blue-500 bg-blue-50 dark:bg-blue-900/20': types.includes('email') }">
+                                                            <input type="checkbox" value="email" class="hidden" x-model="types">
+                                                            <div class="flex items-center">
+                                                                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" :class="{ 'text-blue-600': types.includes('email'), 'text-gray-400': !types.includes('email') }" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                                                </svg>
+                                                                <span class="text-sm font-medium" :class="{ 'text-blue-600': types.includes('email') }">Email</span>
+                                                            </div>
+                                                            <div class="absolute top-2 right-2" x-show="types.includes('email')">
+                                                                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                                                </svg>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-6">
+                                                    <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Alıcı Tipi</label>
+                                                    <div class="grid grid-cols-3 gap-4">
+                                                        <label class="relative flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 cursor-pointer transition-all duration-300" :class="{ 'border-blue-500 bg-blue-50 dark:bg-blue-900/20': recipientType === 'all' }">
+                                                            <input type="radio" name="recipientType" value="all" class="sr-only" x-model="recipientType">
+                                                            <div class="flex items-center">
+                                                                <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                                                </svg>
+                                                                <span class="text-sm font-medium">Tümü</span>
+                                                            </div>
+                                                        </label>
+                                                        <label class="relative flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 cursor-pointer transition-all duration-300" :class="{ 'border-blue-500 bg-blue-50 dark:bg-blue-900/20': recipientType === 'department' }">
+                                                            <input type="radio" name="recipientType" value="department" class="sr-only" x-model="recipientType">
+                                                            <div class="flex items-center">
+                                                                <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                                                </svg>
+                                                                <span class="text-sm font-medium">Departman</span>
+                                                            </div>
+                                                        </label>
+                                                        <label class="relative flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 cursor-pointer transition-all duration-300" :class="{ 'border-blue-500 bg-blue-50 dark:bg-blue-900/20': recipientType === 'individual' }">
+                                                            <input type="radio" name="recipientType" value="individual" class="sr-only" x-model="recipientType">
+                                                            <div class="flex items-center">
+                                                                <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                                                </svg>
+                                                                <span class="text-sm font-medium">Kişi</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="mb-6 department-select" x-show="recipientType === 'department'" x-transition>
+                                                    <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Departmanlar</label>
+                                                    <div class="mb-4">
+                                                        <select multiple="" name="recipients[]" data-hs-select='{
+                                                            "hasSearch": true,
+                                                            "searchPlaceholder": "Ara...",
+                                                            "searchClasses": "block w-full sm:text-sm border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 before:absolute before:inset-0 before:z-1 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 py-1.5 sm:py-2 px-3",
+                                                            "searchWrapperClasses": "bg-white p-2 -mx-1 sticky top-0 dark:bg-neutral-900",
+                                                            "placeholder": "Çoklu seçim yapabilirsiniz...",
+                                                            "toggleTag": "<button type=\"button\" aria-expanded=\"false\"></button>",
+                                                            "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-3 ps-4 pe-9 flex gap-x-2 text-nowrap w-full cursor-pointer bg-white border border-gray-200 rounded-lg text-start text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600",
+                                                            "toggleSeparators": {
+                                                            "betweenItemsAndCounter": "&"
+                                                            },
+                                                            "toggleCountText": "+",
+                                                            "toggleCountTextPlacement": "prefix-no-space",
+                                                            "toggleCountTextMinItems": 3,
+                                                            "toggleCountTextMode": "nItemsAndCount",
+                                                            "dropdownClasses": "mt-2 z-50 w-full max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-900 dark:border-neutral-700",
+                                                            "optionClasses": "py-2 px-4 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800",
+                                                            "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><svg class=\"shrink-0 size-3.5 text-blue-600 dark:text-blue-500 \" xmlns=\"http:.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg></span></div>",
+                                                            "extraMarkup": "<div class=\"absolute top-1/2 end-3 -translate-y-1/2\"><svg class=\"shrink-0 size-3.5 text-gray-500 dark:text-neutral-500 \" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m7 15 5 5 5-5\"/><path d=\"m7 9 5-5 5 5\"/></svg></div>"
+                                                        }' class="hidden">
+                                                            <option n:foreach="$departmentList as $dept" value="{$dept}">{$dept}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-6 person-select" x-show="recipientType === 'individual'" x-transition>
+                                                    <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Kişiler</label>
+                                                    <select multiple="" name="recipients[]" data-hs-select='{
+                                                                    "hasSearch": true,
+                                                                    "searchPlaceholder": "Ara...",
+                                                                    "searchClasses": "block w-full sm:text-sm border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 before:absolute before:inset-0 before:z-1 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 py-1.5 sm:py-2 px-3",
+                                                                    "searchWrapperClasses": "bg-white p-2 -mx-1 sticky top-0 dark:bg-neutral-900",
+                                                                    "placeholder": "Çoklu seçim yapabilirsiniz...",
+                                                                    "toggleTag": "<button type=\"button\" aria-expanded=\"false\"></button>",
+                                                                    "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-3 ps-4 pe-9 flex gap-x-2 text-nowrap w-full cursor-pointer bg-white border border-gray-200 rounded-lg text-start text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:focus:outline-hidden dark:focus:ring-1 dark:focus:ring-neutral-600",
+                                                                    "toggleSeparators": {
+                                                                    "betweenItemsAndCounter": "&"
+                                                                    },
+                                                                    "toggleCountText": "+",
+                                                                    "toggleCountTextPlacement": "prefix-no-space",
+                                                                    "toggleCountTextMinItems": 3,
+                                                                    "toggleCountTextMode": "nItemsAndCount",
+                                                                    "dropdownClasses": "mt-2 z-50 w-full max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-neutral-900 dark:border-neutral-700",
+                                                                    "optionClasses": "py-2 px-4 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-hidden focus:bg-gray-100 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-200 dark:focus:bg-neutral-800",
+                                                                    "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><svg class=\"shrink-0 size-3.5 text-blue-600 dark:text-blue-500 \" xmlns=\"http:.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg></span></div>",
+                                                                    "extraMarkup": "<div class=\"absolute top-1/2 end-3 -translate-y-1/2\"><svg class=\"shrink-0 size-3.5 text-gray-500 dark:text-neutral-500 \" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m7 15 5 5 5-5\"/><path d=\"m7 9 5-5 5 5\"/></svg></div>"
+                                                                }' class="hidden">
+                                                        <option n:foreach="$personList as $person" value="{$person->id}">{$person->fullname}</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-6">
+                                                    <div class="flex justify-between mb-2">
+                                                        <label class="block text-sm font-medium text-gray-900 dark:text-white">Mesaj</label>
+                                                        <span class="text-sm text-gray-500" x-text="charCount + '/160 karakter'"></span>
+                                                    </div>
+                                                    <div class="relative">
+                                                        <textarea name="message" rows="4" maxlength="160" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                            x-on:input="charCount = $event.target.value.length"
+                                                            :class="{ 'border-red-500': charCount > 160 }"
+                                                            placeholder="Mesajınızı buraya yazın..."></textarea>
+                                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" x-show="charCount > 160">
+                                                            <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 dark:border-gray-600 rounded-b-md bg-gray-50 dark:bg-gray-800">
+                                                <button @click="isNotificationModalOpened = false" type="button" class="inline-flex justify-center rounded-lg px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600 transition-all duration-300 mr-4">
+                                                    İptal
+                                                </button>
+                                                <button type="submit"
+                                                    class="inline-flex justify-center rounded-lg px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300"
+                                                    :disabled="charCount == 0 || charCount > 160 || types.length === 0">
+                                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                                    </svg>
+                                                    Gönder
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
             <div class="relative inline-flex">
                 <button id="dropdownMenuIconButton" @click="dropIsOpen = !dropIsOpen" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">
                     <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
@@ -60,8 +262,8 @@
                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                     <g id="SVGRepo_iconCarrier">
-                                        <path opacity="0.5" d="M4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12L4 12Z" fill="#1C274C"></path>
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.5303 7.53033C15.2374 7.82322 14.7626 7.82322 14.4697 7.53033L12.75 5.81066L12.75 14C12.75 14.4142 12.4142 14.75 12 14.75C11.5858 14.75 11.25 14.4142 11.25 14L11.25 5.81066L9.53033 7.53033C9.23744 7.82322 8.76256 7.82322 8.46967 7.53033C8.17678 7.23744 8.17678 6.76256 8.46967 6.46967L11.4697 3.46967C11.7626 3.17678 12.2374 3.17678 12.5303 3.46967L15.5303 6.46967C15.8232 6.76256 15.8232 7.23744 15.5303 7.53033Z" fill="#1C274C"></path>
+                                        <path opacity="0.5" d="M4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12L4 12Z" fill="currentColor"></path>
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.5303 7.53033C15.2374 7.82322 14.7626 7.82322 14.4697 7.53033L12.75 5.81066L12.75 14C12.75 14.4142 12.4142 14.75 12 14.75C11.5858 14.75 11.25 14.4142 11.25 14L11.25 5.81066L9.53033 7.53033C9.23744 7.82322 8.76256 7.82322 8.46967 7.53033C8.17678 7.23744 8.17678 6.76256 8.46967 6.46967L11.4697 3.46967C11.7626 3.17678 12.2374 3.17678 12.5303 3.46967L15.5303 6.46967C15.8232 6.76256 15.8232 7.23744 15.5303 7.53033Z" fill="currentColor"></path>
                                     </g>
                                 </svg>
                                 <div class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -78,10 +280,10 @@
                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                     <g id="SVGRepo_iconCarrier">
-                                        <path d="M3 6.52381C3 6.12932 3.32671 5.80952 3.72973 5.80952H8.51787C8.52437 4.9683 8.61554 3.81504 9.45037 3.01668C10.1074 2.38839 11.0081 2 12 2C12.9919 2 13.8926 2.38839 14.5496 3.01668C15.3844 3.81504 15.4756 4.9683 15.4821 5.80952H20.2703C20.6733 5.80952 21 6.12932 21 6.52381C21 6.9183 20.6733 7.2381 20.2703 7.2381H3.72973C3.32671 7.2381 3 6.9183 3 6.52381Z" fill="#1C274C"></path>
-                                        <path opacity="0.5" d="M11.5956 22.0001H12.4044C15.1871 22.0001 16.5785 22.0001 17.4831 21.1142C18.3878 20.2283 18.4803 18.7751 18.6654 15.8686L18.9321 11.6807C19.0326 10.1037 19.0828 9.31524 18.6289 8.81558C18.1751 8.31592 17.4087 8.31592 15.876 8.31592H8.12405C6.59127 8.31592 5.82488 8.31592 5.37105 8.81558C4.91722 9.31524 4.96744 10.1037 5.06788 11.6807L5.33459 15.8686C5.5197 18.7751 5.61225 20.2283 6.51689 21.1142C7.42153 22.0001 8.81289 22.0001 11.5956 22.0001Z" fill="#1C274C"></path>
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.42543 11.4815C9.83759 11.4381 10.2051 11.7547 10.2463 12.1885L10.7463 17.4517C10.7875 17.8855 10.4868 18.2724 10.0747 18.3158C9.66253 18.3592 9.29499 18.0426 9.25378 17.6088L8.75378 12.3456C8.71256 11.9118 9.01327 11.5249 9.42543 11.4815Z" fill="#1C274C"></path>
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.5747 11.4815C14.9868 11.5249 15.2875 11.9118 15.2463 12.3456L14.7463 17.6088C14.7051 18.0426 14.3376 18.3592 13.9254 18.3158C13.5133 18.2724 13.2126 17.8855 13.2538 17.4517L13.7538 12.1885C13.795 11.7547 14.1625 11.4381 14.5747 11.4815Z" fill="#1C274C"></path>
+                                        <path d="M3 6.52381C3 6.12932 3.32671 5.80952 3.72973 5.80952H8.51787C8.52437 4.9683 8.61554 3.81504 9.45037 3.01668C10.1074 2.38839 11.0081 2 12 2C12.9919 2 13.8926 2.38839 14.5496 3.01668C15.3844 3.81504 15.4756 4.9683 15.4821 5.80952H20.2703C20.6733 5.80952 21 6.12932 21 6.52381C21 6.9183 20.6733 7.2381 20.2703 7.2381H3.72973C3.32671 7.2381 3 6.9183 3 6.52381Z" fill="currentColor"></path>
+                                        <path opacity="0.5" d="M11.5956 22.0001H12.4044C15.1871 22.0001 16.5785 22.0001 17.4831 21.1142C18.3878 20.2283 18.4803 18.7751 18.6654 15.8686L18.9321 11.6807C19.0326 10.1037 19.0828 9.31524 18.6289 8.81558C18.1751 8.31592 17.4087 8.31592 15.876 8.31592H8.12405C6.59127 8.31592 5.82488 8.31592 5.37105 8.81558C4.91722 9.31524 4.96744 10.1037 5.06788 11.6807L5.33459 15.8686C5.5197 18.7751 5.61225 20.2283 6.51689 21.1142C7.42153 22.0001 8.81289 22.0001 11.5956 22.0001Z" fill="currentColor"></path>
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.42543 11.4815C9.83759 11.4381 10.2051 11.7547 10.2463 12.1885L10.7463 17.4517C10.7875 17.8855 10.4868 18.2724 10.0747 18.3158C9.66253 18.3592 9.29499 18.0426 9.25378 17.6088L8.75378 12.3456C8.71256 11.9118 9.01327 11.5249 9.42543 11.4815Z" fill="currentColor"></path>
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.5747 11.4815C14.9868 11.5249 15.2875 11.9118 15.2463 12.3456L14.7463 17.6088C14.7051 18.0426 14.3376 18.3592 13.9254 18.3158C13.5133 18.2724 13.2126 17.8855 13.2538 17.4517L13.7538 12.1885C13.795 11.7547 14.1625 11.4381 14.5747 11.4815Z" fill="currentColor"></path>
                                     </g>
                                 </svg>
                                 <div class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -171,7 +373,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2">
                 <div class="dark:bg-gray-900 bg-gray-100 rounded-lg m-1 my-2 p-3 shadow-sm" n:foreach="$data as $key => $value">
                     <h1 class="text-current text-center h-12" title="{str_ireplace('\"', '"',$key)|noescape}">{str_ireplace('\"', '"',$key)|noescape}</h1>
-                    <canvas class="dark:bg-gray-800 bg-white rounded-xl m-1 my-3 overflow-hidden" chart-data="{json_encode($value["answers"])|noescape}" id="chart-{$random=mt_rand(0, PHP_INT_MAX)}"></canvas>
+                    <canvas class="dark:bg-gray-800 bg-white rounded-xl m-1 my-3 overflow-hidden" chart-data="{json_encode($value[" answers"])|noescape}" id="chart-{$random=mt_rand(0, PHP_INT_MAX)}"></canvas>
                 </div>
             </div>
         </div>
@@ -301,9 +503,9 @@
         // Add handler for reset link
         $("[data-url^='/reports/reset/']").on("click", function(e) {
             e.preventDefault();
-            if (confirm("Katılımcıları sıfırlamak istediğinize emin misiniz? Bu işlem geri alınamaz.")) 
+            if (confirm("Katılımcıları sıfırlamak istediğinize emin misiniz? Bu işlem geri alınamaz."))
                 return true;
-            else 
+            else
                 return false;
         });
 
@@ -331,7 +533,6 @@
             const ctx = document.getElementById($this.attr("id"));
 
             const keys = Object.keys(data).map((v) => v.replace(/\\"/g, '"').replace(/<[^>]*>?/gm, ''))
-            
             console.log(keys)
             var chart = new Chart(ctx, {
                 type: 'pie',

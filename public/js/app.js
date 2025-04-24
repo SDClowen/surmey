@@ -546,4 +546,16 @@ $(function () {
             $("#answersModalContent").prepend('<div class="dark:bg-gray-700 bg-gray-50 my-2 text-sm text-gray-900 dark:text-gray-200 p-3 rounded-md">' + element.value + '</div>');
         });
     })
+
+    window.previousPathname = window.location.pathname;
+
+    setInterval(() => {
+        window.HSStaticMethods.autoInit();
+
+        const currentPathname = window.location.pathname;
+        if (currentPathname !== previousPathname) {
+            previousPathname = currentPathname;
+            window.HSStaticMethods.autoInit();
+        }
+    }, 250);
 });

@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Helpers\Mail;
 use App\Models\User;
 use App\Models\Survey;
 use Core\{Controller, Request, Database};
@@ -20,6 +21,7 @@ use PhpOffice\PhpSpreadsheet\Chart\DataSeries;
 use PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Chart\Layout;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class Reports extends Controller
 {
@@ -32,12 +34,29 @@ class Reports extends Controller
 
         $result = Survey::report($survey);
 
+        $departments = $this->db
+            ->select("DISTINCT department")
+            ->from("personals")
+            ->where("fullname", "!=", "DUMMY")
+            ->results();
+        $departmentList = array_map(fn($dept) => $dept->department, $departments);
+
+        $personList = Database::get()
+            ->select("id, fullname")
+            ->from("personals")
+            ->where("fullname", "!=", "DUMMY")
+            ->where("status", "=", 1)
+            ->orderBy("fullName", "ASC")
+            ->results();
+
         $args = [
             "surveyTitle" => $survey->title,
             "user" => User::info(),
             "data" => $result,
             "anonymous" => $survey->anonymous,
-            "surveyId" => $surveyId
+            "surveyId" => $surveyId,
+            "departmentList" => $departmentList,
+            "personList" => $personList
         ];
 
         if (!$survey->anonymous)
@@ -214,5 +233,71 @@ class Reports extends Controller
         $writer = new Xlsx($spreadsheet);
         $writer->setIncludeCharts(true);
         $writer->save('php://output');
+    }
+
+    #[route(method: route::xhr_post)]
+    public function sendNotification(int $surveyId)
+    {
+        $survey = Survey::existsByUserId(User::id(), "id", $surveyId);
+        if (!$survey)
+            redirect();
+
+        $post = Request::post();
+        $validate = validate($post, [
+            "types" => ["name" => "types", "required" => true],
+            "message" => ["name" => "message", "required" => true, "max" => 160],
+            "recipientType" => ["name" => "recipient_type", "required" => true],
+            "recipients" => ["name" => "recipients"]
+        ]);
+
+        if ($validate)
+            warning($validate);
+
+        $query = $this->db->select("phone1, phone2, email, department")->from("personals");
+
+        if ($post->recipientType === "department") {
+            if (empty($post->recipients))
+                warning("Lütfen en az bir departman seçin");
+            $query->in("department", $post->recipients);
+        } else if ($post->recipientType === "individual") {
+            if (empty($post->recipients))
+                warning("Lütfen en az bir kişi seçin");
+            $query->in("id", $post->recipients);
+        }
+
+        $contacts = $query->results();
+        
+        $types = explode(",", $post->types);
+        $success = [];
+        $errors = [];
+
+        if (in_array("sms", $types)) {
+            $messages = [];
+            echo $this->db->lastQuery();
+            foreach ($contacts as $contact) {
+                if (!empty($contact->phone1))
+                    $messages[] = ["no" => $contact->phone1, "msg" => $post->message];
+                if (!empty($contact->phone2))
+                    $messages[] = ["no" => $contact->phone2, "msg" => $post->message];
+            }
+
+            $result = (object) ["code" => 0];
+            $result = \SmsHelper::send($messages);
+            if ($result->code == 0)
+                $success[] = "SMS'ler başarıyla gönderildi";
+            else
+                $errors[] = "SMS Hatası: " . $result->status;
+        }
+
+        if (in_array("email", $types)) {
+            Mail::send($survey->title, array_map(fn($contact) => $contact->email, $contacts), $post->message);
+            $success[] = "E-Postalar başarıyla gönderildi";
+        }
+
+        if (!empty($errors)) {
+            warning(implode("<br>", $errors));
+        } else {
+            success(implode("<br>", $success));
+        }
     }
 }

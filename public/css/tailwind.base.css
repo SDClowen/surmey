@@ -1,12 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "./../../node_modules/preline/variants.css";
+@plugin "@tailwindcss/forms";
 
 @layer base {
     html {
         font-family: 'Inter', system-ui, sans-serif;
     }
-    .active{
+    a.active{
         font-weight: 700 !important;
         background-color:#034285
     }

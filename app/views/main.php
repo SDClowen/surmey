@@ -27,6 +27,13 @@
 
     {njs("sdpower/sdeasy")|noescape}
     {ajs("app")|noescape}
+    {njs("preline/preline")|noescape}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            window.HSStaticMethods.autoInit();
+        });
+    </script>
 </head>
 
 <body class="bg-gray-50 dark:bg-gray-900">
