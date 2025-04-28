@@ -5,8 +5,11 @@
     recipientType: 'all',
     charCount: 0,
     dropIsOpen: false, 
-    current: 1
-}" x-on:keydown.escape="isNotificationModalOpened = false">
+    current: 1,
+    activeTab: 'email'
+}" 
+x-on:keydown.escape="isNotificationModalOpened = false"
+x-effect="activeTab = types.includes('email') ? 'email' : (types.includes('sms') ? 'sms' : activeTab)">
     <h1 class="text-center">{$surveyTitle}</h1>
     <div class="flex justify-between content-between w-full mb-3">
         <div class="inline-flex overflow-hidden relative bg-white border divide-x rounded-lg dark:bg-gray-900 rtl:flex-row-reverse shadow-sm dark:border-gray-700 dark:divide-gray-700">
@@ -53,7 +56,13 @@
         </div>
         <div class="flex justify-items-end">
             <!-- Notification Modal -->
-            <div x-data="{ isNotificationModalOpened: false, types: [], recipientType: 'all', charCount: 0 }">
+            <div 
+            x-effect="activeTab = types.includes('email') ? 'email' : (types.includes('sms') ? 'sms' : '')"
+            @toggle-notification-type.window="
+                if ($event.detail.type === 'email') {
+                    activeTab = 'email';
+                }
+            ">
                             <button @click="isNotificationModalOpened = true" class="inline-flex items-center px-4 py-2 me-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-300">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
@@ -79,18 +88,20 @@
                                                 </svg>
                                             </button>
                                         </div>
+                                        
+                                        <div class="notification-message"></div>
 
-                                        <form role="form" action="/reports/sendNotification/{$surveyId}" method="post" data-content=".notification-message" x-on:submit="$event.target.types.value = types.join(',')">
+                                        <form id="emailForm" data-block-reset="true" class="overflow-auto" role="form" action="/reports/sendNotification/{$surveyId}" method="post" data-content=".notification-message" x-on:submit="$event.target.types.value = types.join(',');">
                                             <div class="relative p-6">
-                                                <div class="notification-message"></div>
 
                                                 <div class="mb-6">
                                                     <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Bildirim Tipi</label>
                                                     <div class="grid grid-cols-2 gap-4">
-                                                        <label class="relative flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 cursor-pointer transition-all duration-300" 
-                                                            :class="{ 'border-blue-500 bg-blue-50 dark:bg-blue-900/20': types.includes('sms') }">
+                                                        <div class="relative flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 cursor-pointer transition-all duration-300" 
+                                                            :class="{ 'border-blue-500 bg-blue-50 dark:bg-blue-900/20': types.includes('sms') }"
+                                                            @click="types = types.includes('sms') ? types.filter(t => t !== 'sms') : [...types, 'sms']">
                                                             <input type="checkbox" value="sms" class="hidden" x-model="types">
-                                                            <input type="hidden" name="types" value="">
+                                                            <input type="hidden" name="types" :value="types.join(',')">
                                                             <div class="flex items-center">
                                                                 <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" :class="{ 'text-blue-600': types.includes('sms'), 'text-gray-400': !types.includes('sms') }" viewBox="0 0 24 24">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
@@ -102,10 +113,11 @@
                                                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                                                 </svg>
                                                             </div>
-                                                        </label>
+                                                        </div>
                                                         
-                                                        <label class="relative flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 cursor-pointer transition-all duration-300" 
-                                                            :class="{ 'border-blue-500 bg-blue-50 dark:bg-blue-900/20': types.includes('email') }">
+                                                        <div class="relative flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 cursor-pointer transition-all duration-300" 
+                                                            :class="{ 'border-blue-500 bg-blue-50 dark:bg-blue-900/20': types.includes('email') }"
+                                                            @click="types = types.includes('email') ? types.filter(t => t !== 'email') : [...types, 'email']">
                                                             <input type="checkbox" value="email" class="hidden" x-model="types">
                                                             <div class="flex items-center">
                                                                 <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" :class="{ 'text-blue-600': types.includes('email'), 'text-gray-400': !types.includes('email') }" viewBox="0 0 24 24">
@@ -118,11 +130,12 @@
                                                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                                                 </svg>
                                                             </div>
-                                                        </label>
+                                                        </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="mb-6">
+                                                <!-- Alıcı Tipi -->
+                                                <div class="mb-6" x-show="types.length > 0" x-transition>
                                                     <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Alıcı Tipi</label>
                                                     <div class="grid grid-cols-3 gap-4">
                                                         <label class="relative flex items-center p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 cursor-pointer transition-all duration-300" :class="{ 'border-blue-500 bg-blue-50 dark:bg-blue-900/20': recipientType === 'all' }">
@@ -154,7 +167,7 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="mb-6 department-select" x-show="recipientType === 'department'" x-transition>
                                                     <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Departmanlar</label>
                                                     <div class="mb-4">
@@ -208,21 +221,57 @@
                                                         <option n:foreach="$personList as $person" value="{$person->id}">{$person->fullname}</option>
                                                     </select>
                                                 </div>
-
-                                                <div class="mb-6">
-                                                    <div class="flex justify-between mb-2">
-                                                        <label class="block text-sm font-medium text-gray-900 dark:text-white">Mesaj</label>
-                                                        <span class="text-sm text-gray-500" x-text="charCount + '/160 karakter'"></span>
+                                                
+                                                <div class="mb-6" x-show="types.length > 0" x-transition>
+                                                    <div class="border-b border-gray-200 dark:border-gray-700">
+                                                        <nav class="flex space-x-2" aria-label="Tabs" role="tablist">
+                                                            <button type="button"
+                                                                class="py-4 px-1 inline-flex items-center gap-2 border-b-[3px] border-transparent text-sm whitespace-nowrap text-gray-500 hover:text-blue-600"
+                                                                :class="{ 'font-semibold border-blue-600 text-blue-600': types.includes('sms') && activeTab === 'sms' }"
+                                                                @click="activeTab = 'sms'"
+                                                                x-show="types.includes('sms')"
+                                                                x-transition>
+                                                                SMS İçeriği
+                                                            </button>
+                                                            <button type="button"
+                                                                class="py-4 px-1 inline-flex items-center gap-2 border-b-[3px] border-transparent text-sm whitespace-nowrap text-gray-500 hover:text-blue-600"
+                                                                :class="{ 'font-semibold border-blue-600 text-blue-600': types.includes('email') && activeTab === 'email' }"
+                                                                @click="activeTab = 'email'"
+                                                                x-show="types.includes('email')"
+                                                                x-transition>
+                                                                E-posta İçeriği
+                                                            </button>
+                                                        </nav>
                                                     </div>
-                                                    <div class="relative">
-                                                        <textarea name="message" rows="4" maxlength="160" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                            x-on:input="charCount = $event.target.value.length"
-                                                            :class="{ 'border-red-500': charCount > 160 }"
-                                                            placeholder="Mesajınızı buraya yazın..."></textarea>
-                                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" x-show="charCount > 160">
-                                                            <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                                            </svg>
+
+                                                    <!-- Tab İçerikleri -->
+                                                    <div class="mt-3">
+                                                        <div x-show="activeTab === 'sms' && types.includes('sms')" x-transition>
+                                                            <div class="relative">
+                                                                <textarea name="sms_message" rows="4" maxlength="160" 
+                                                                    x-on:input="charCount = $event.target.value.length"
+                                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                                    placeholder="SMS mesajınızı yazın..."
+                                                                    :required="types.includes('sms')"></textarea>
+                                                                <div class="absolute bottom-2 right-2">
+                                                                    <span class="text-sm text-gray-500" x-text="charCount + '/160'"></span>
+                                                                </div>
+                                                            </div>
+                                                            <p class="mt-1 text-sm text-gray-500">Maksimum 160 karakter</p>
+                                                        </div>
+
+                                                        <div x-show="activeTab === 'email' && types.includes('email')" x-transition>
+                                                            <!-- E-posta Başlığı -->
+                                                            <div class="mb-4">
+                                                                <input type="text" name="email_subject"
+                                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                                    placeholder="E-posta başlığı..."
+                                                                    :required="types.includes('email')">
+                                                            </div>
+                                                            <!-- E-posta İçeriği -->
+                                                            <textarea tinymce="true" name="email_message" id="email_editor" rows="8" 
+                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                                :required="types.includes('email')"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -234,7 +283,7 @@
                                                 </button>
                                                 <button type="submit"
                                                     class="inline-flex justify-center rounded-lg px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300"
-                                                    :disabled="charCount == 0 || charCount > 160 || types.length === 0">
+                                                    :disabled="types.length === 0 || (types.includes('sms') && (charCount === 0 || charCount > 160))">
                                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
                                                     </svg>
@@ -373,7 +422,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2">
                 <div class="dark:bg-gray-900 bg-gray-100 rounded-lg m-1 my-2 p-3 shadow-sm" n:foreach="$data as $key => $value">
                     <h1 class="text-current text-center h-12" title="{str_ireplace('\"', '"',$key)|noescape}">{str_ireplace('\"', '"',$key)|noescape}</h1>
-                    <canvas class="dark:bg-gray-800 bg-white rounded-xl m-1 my-3 overflow-hidden" chart-data="{json_encode($value[" answers"])|noescape}" id="chart-{$random=mt_rand(0, PHP_INT_MAX)}"></canvas>
+                    <canvas class="dark:bg-gray-800 bg-white rounded-xl m-1 my-3 overflow-hidden" chart-data="{json_encode($value['answers'])|noescape}" id="chart-{$random=mt_rand(0, PHP_INT_MAX)}"></canvas>
                 </div>
             </div>
         </div>
@@ -570,5 +619,24 @@
 
             $(e.currentTarget).removeClass("bg-gray-100 text-blue-600").addClass("bg-gray-900 text-white")
         })
+
+        $("#email_editor").tinymce({
+            height: 300,
+            menubar: false,
+            paste_data_images: true,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount', 'iframe'
+            ],
+            toolbar: 'blocks | bold italic link | forecolor backcolor | insertfile  image media | ' +
+                'alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist outdent indent | removeformat | help | code',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    tinymce.triggerSave();
+                })
+            }
+        });
     })
 </script>

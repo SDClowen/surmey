@@ -20,8 +20,6 @@ use PhpOffice\PhpSpreadsheet\Chart\PlotArea;
 use PhpOffice\PhpSpreadsheet\Chart\DataSeries;
 use PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
-use PhpOffice\PhpSpreadsheet\Chart\Layout;
-use PHPMailer\PHPMailer\PHPMailer;
 
 class Reports extends Controller
 {
@@ -37,14 +35,14 @@ class Reports extends Controller
         $departments = $this->db
             ->select("DISTINCT department")
             ->from("personals")
-            ->where("fullname", "!=", "DUMMY")
+            ->where("id", "!=", "0")
             ->results();
         $departmentList = array_map(fn($dept) => $dept->department, $departments);
 
-        $personList = Database::get()
+        $personList = $this->db
             ->select("id, fullname")
             ->from("personals")
-            ->where("fullname", "!=", "DUMMY")
+            ->where("id", "!=", "0")
             ->where("status", "=", 1)
             ->orderBy("fullName", "ASC")
             ->results();
@@ -243,9 +241,12 @@ class Reports extends Controller
             redirect();
 
         $post = Request::post();
+        $types = explode(",", $post->types);
+        
         $validate = validate($post, [
             "types" => ["name" => "types", "required" => true],
-            "message" => ["name" => "message", "required" => true, "max" => 160],
+            "sms_message" => ["name" => "SMS mesajı", "max" => 160],
+            "email_message" => ["name" => "E-posta mesajı"],
             "recipientType" => ["name" => "recipient_type", "required" => true],
             "recipients" => ["name" => "recipients"]
         ]);
@@ -253,7 +254,22 @@ class Reports extends Controller
         if ($validate)
             warning($validate);
 
-        $query = $this->db->select("phone1, phone2, email, department")->from("personals");
+        if(!in_array("sms", $types) && !in_array("email", $types))
+            warning("Lütfen en az bir iletişim türü seçin");
+
+        if(!in_array($post->recipientType, ["all", "department", "individual"]))
+            warning("Lütfen geçerli bir alıcı türü seçin");
+
+        if(in_array("sms", $types) && (!isset($post->sms_message) || empty($post->sms_message)))
+            warning("Lütfen SMS mesajı girin");
+
+        if(in_array("email", $types) && (!isset($post->email_message) || empty($post->email_message)))
+            warning("Lütfen geçerli bir e-posta mesajı girin");
+
+        $query = $this->db->select("fullname, phone1, phone2, email, department")
+            ->from("personals")
+            ->where("status", value: 1)
+            ->where("id", "!=", "0");
 
         if ($post->recipientType === "department") {
             if (empty($post->recipients))
@@ -266,23 +282,24 @@ class Reports extends Controller
         }
 
         $contacts = $query->results();
-        
-        $types = explode(",", $post->types);
+        #echo $this->db->lastQuery();
+
         $success = [];
         $errors = [];
 
         if (in_array("sms", $types)) {
             $messages = [];
-            echo $this->db->lastQuery();
+            $post->sms_message = preg_replace('/[\xF0-\xF7][\x80-\xBF]{3}/', '', $post->sms_message);
+
             foreach ($contacts as $contact) {
                 if (!empty($contact->phone1))
-                    $messages[] = ["no" => $contact->phone1, "msg" => $post->message];
+                    $messages[] = ["no" => $contact->phone1, "msg" => $post->sms_message];
                 if (!empty($contact->phone2))
-                    $messages[] = ["no" => $contact->phone2, "msg" => $post->message];
+                    $messages[] = ["no" => $contact->phone2, "msg" => $post->sms_message];
             }
 
-            $result = (object) ["code" => 0];
-            $result = \SmsHelper::send($messages);
+            $result = (object)["code" => 0];
+            //$result = \SmsHelper::send($messages);
             if ($result->code == 0)
                 $success[] = "SMS'ler başarıyla gönderildi";
             else
@@ -290,14 +307,20 @@ class Reports extends Controller
         }
 
         if (in_array("email", $types)) {
-            Mail::send($survey->title, array_map(fn($contact) => $contact->email, $contacts), $post->message);
+            # Some emails are empty, so we need to filter them out
+            $contacts = array_filter($contacts, fn($contact) => !empty($contact->email));
+            if (empty($contacts))
+                warning("E-posta gönderilecek kişi bulunamadı.");
+            
+            #print_r(array_map(fn($contact) => $contact->email, $contacts));
+            Mail::send($post->email_subject, array_map(fn($contact) => $contact->email, $contacts), $post->email_message);
             $success[] = "E-Postalar başarıyla gönderildi";
         }
 
         if (!empty($errors)) {
             warning(implode("<br>", $errors));
         } else {
-            success(implode("<br>", $success));
+            success(implode("<br>", $success). "<br> " . count($contacts) . " kişiye başarıyla gönderildi.");
         }
     }
 }
