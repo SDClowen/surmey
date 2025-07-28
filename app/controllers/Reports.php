@@ -298,8 +298,7 @@ class Reports extends Controller
                     $messages[] = ["no" => $contact->phone2, "msg" => $post->sms_message];
             }
 
-            $result = (object)["code" => 0];
-            //$result = \SmsHelper::send($messages);
+            $result = \SmsHelper::send($messages);
             if ($result->code == 0)
                 $success[] = "SMS'ler başarıyla gönderildi";
             else
