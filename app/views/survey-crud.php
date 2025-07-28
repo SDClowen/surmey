@@ -118,23 +118,23 @@
                             x-transition:leave="transition ease-in duration-100"
                             x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90"
                             class="absolute right-0 z-20 w-48 py-2 mt-2 origin-top-right bg-white rounded-lg border dark:border-gray-600 shadow-xl dark:bg-gray-800">
-                            <a x-on:click="isOpen = !isOpen" type="radio" question-text="New Question"
+                            <a x-on:click="isOpen = !isOpen" data-type="radio" data-question-text="New Question"
                                 answer-text="New Answer" href="javascript:void(0)"
                                 class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
                                 Radio List </a>
-                            <a x-on:click="isOpen = !isOpen" type="checkbox" question-text="New Question"
+                            <a x-on:click="isOpen = !isOpen" data-type="checkbox" data-question-text="New Question"
                                 answer-text="New Answer" href="javascript:void(0)"
                                 class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
                                 Check List </a>
-                            <a x-on:click="isOpen = !isOpen" type="textarea" question-text="New Question"
+                            <a x-on:click="isOpen = !isOpen" data-type="textarea" data-question-text="New Question"
                                 answer-text="...." href="javascript:void(0)"
                                 class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
                                 Text Area </a>
-                            <a x-on:click="isOpen = !isOpen" type="description" question-text="Description Title"
+                            <a x-on:click="isOpen = !isOpen" data-type="description" data-question-text="Description Title"
                                 answer-text="Description..." href="javascript:void(0)"
                                 class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
                                 Description </a>
-                            <!--<a x-on:click="isOpen = !isOpen" type="group" question-text="Group Title" answer-text="Title..." href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Group </a>-->
+                            <!--<a x-on:click="isOpen = !isOpen" data-type="group" data-question-text="Group Title" answer-text="Title..." href="javascript:void(0)" class="m-1 rounded-lg block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"> Group </a>-->
                         </div>
                     </div>
                 </h2>

@@ -372,7 +372,7 @@ $(function () {
         $this = $(e.currentTarget)
         $condition = $this.data("condition");
 
-        const type = $this.attr("type")
+        const type = $this.data("type")
         if (type == "radio") {
             const inputs = $this.parents("[data-slug]").find("input")
             inputs.each((inputIndex, inputElement) => {
@@ -505,8 +505,8 @@ $(function () {
     })
 
     $(document).on("click", "#survey-crud a", function (event) {
-        const type = $(this).attr("type");
-        const questionDummyText = $(this).attr("question-text");
+        const type = $(this).data("type");
+        const questionDummyText = $(this).data("question-text");
         const answerDummyText = $(this).attr("answer-text");
         var content = "";
         var slug = randomString(6);
