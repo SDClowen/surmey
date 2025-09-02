@@ -372,22 +372,26 @@ $(function () {
         $this = $(e.currentTarget)
         $condition = $this.data("condition");
 
-        const type = $this.data("type")
-        if (type == "radio") {
-            const inputs = $this.parents("[data-slug]").find("input")
-            inputs.each((inputIndex, inputElement) => {
-                if ($this.is(inputElement))
-                    return
-
-                $inputCondition = $(inputElement).data("condition");
-
-                const conditionDiv = $(`[data-slug='${$inputCondition}']`);
-                conditionDiv.find("input").prop('checked', false);
-                conditionDiv.hide()
-            })
+        const inputType = $this.attr("type");
+        
+        if (inputType == "radio") {
+            const currentQuestion = $this.parents("[data-slug]");
+            
+            currentQuestion.find("input[data-change-tracker]").each((index, inputElement) => {
+                const $input = $(inputElement);
+                const inputCondition = $input.data("condition");
+                
+                if (inputCondition && inputCondition !== "none") {
+                    const conditionDiv = $(`[data-slug='${inputCondition}']`);
+                    conditionDiv.hide();
+                    conditionDiv.find("input").prop('checked', false);
+                }
+            });
         }
-
-        $(`[data-slug='${$condition}']`).show()
+       
+        if ($condition && $condition !== "none") {
+            $(`[data-slug='${$condition}']`).show()
+        }
     })
 
     const renderFormEntry = (element) => {
