@@ -107,7 +107,7 @@ class Participate extends Controller
 
 		$messages[] = ["no" => $post->phone, "msg" => "Anket sistemine giriş için onay kodu: " . $pin];
 
-		\SmsHelper::send($messages);
+		\SmsHelper::sendOtp($post->phone, "Anket katilim icin onay kodu: " . $pin);
 		if ($result)
 			success(redirect: "/participate/pin");
 

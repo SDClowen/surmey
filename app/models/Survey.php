@@ -20,7 +20,7 @@ final class Survey extends Model
 
         $query = "
             select (
-                select count(answers.id) from answers where answers.surveyId = surveys.id
+                select count(answers.id) from answers where answers.surveyId = surveys.id and data IS NOT NULL
             ) answersCount, 
             surveys.*
             from surveys
