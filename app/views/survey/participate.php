@@ -15,6 +15,7 @@
     {acss("app")|noescape}
     {njs("jquery/dist/jquery.min")|noescape}
     {njs("sdpower/sdeasy")|noescape}
+    {njs("preline/preline")|noescape}
     {ajs("app")|noescape}
 </head>
 
