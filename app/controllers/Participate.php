@@ -210,6 +210,32 @@ class Participate extends Controller
 			if ($value->type == "description")
 				continue;
 
+			// Koşullu soru kontrolü - tüm soru tipleri için
+			$index = -1;
+			$hasCondition = false;
+
+			foreach ($formData as $dkey => $dvalue) {
+				// Eğer bu soru koşula sahipse
+				if (!empty($dvalue->conditions)) {
+					foreach ($dvalue->conditions as $i => $p) {
+						if ($p->value == $value->slug) {
+							$hasCondition = true; // Bu soru bir koşula bağlı
+							$parentAnswer = $post->{$dvalue->slug} ?? null;
+
+							if ($p->index == $parentAnswer) {
+								$index = $i;
+								break 2; // iki foreach'ten çık
+							}
+						}
+					}
+				}
+			}
+
+			// Eğer koşula bağlıysa ve koşul sağlanmamışsa bu soruyu atla
+			if ($hasCondition && $index == -1) {
+				continue;
+			}
+
 			switch ($value->type) {
 				case "radio":
 					$rules[$value->slug] = [
@@ -241,39 +267,14 @@ class Participate extends Controller
 					break;
 
 				case "textarea":
-					
-					$index = -1;
-					$hasCondition = false;
+					$rules[$value->slug] = [
+						"name" => $value->title . "<br>",
+						"min" => 4,
+						"max" => 1000
+					];
 
-					foreach ($formData as $dkey => $dvalue) {
-						// Eğer bu soru koşula sahipse
-						if (!empty($dvalue->conditions)) {
-							foreach ($dvalue->conditions as $i => $p) {
-								if ($p->value == $value->slug) {
-									$hasCondition = true; // Bu soru bir koşula bağlı
-									$parentAnswer = $post->{$dvalue->slug} ?? null;
-
-									if ($p->index == $parentAnswer) {
-										$index = $i;
-										break 2; // iki foreach'ten çık
-									}
-								}
-							}
-						}
-					}
-
-					// Eğer hiç koşula bağlı değilse (bağımsız bir soruysa) veya koşulu sağlandıysa rules'a ekle
-					if (!$hasCondition || $index != -1) {
-						$rules[$value->slug] = [
-							"name" => $value->title . "<br>",
-							"min" => 4,
-							"max" => 1000
-						];
-
-						if ($value->isRequired)
-							$rules[$value->slug]["required"] = $value->isRequired;
-					}
-
+					if ($value->isRequired)
+						$rules[$value->slug]["required"] = $value->isRequired;
 
 					break;
 			}
