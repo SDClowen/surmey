@@ -245,7 +245,7 @@ class Reports extends Controller
         
         $validate = validate($post, [
             "types" => ["name" => "types", "required" => true],
-            "sms_message" => ["name" => "SMS mesajı", "max" => 160],
+            "sms_message" => ["name" => "SMS mesajı", "max" => 300],
             "email_message" => ["name" => "E-posta mesajı"],
             "recipientType" => ["name" => "recipient_type", "required" => true],
             "recipients" => ["name" => "recipients"]

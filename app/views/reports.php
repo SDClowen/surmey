@@ -248,16 +248,16 @@ x-effect="activeTab = types.includes('email') ? 'email' : (types.includes('sms')
                                                     <div class="mt-3">
                                                         <div x-show="activeTab === 'sms' && types.includes('sms')" x-transition>
                                                             <div class="relative">
-                                                                <textarea name="sms_message" rows="4" maxlength="160" 
+                                                                <textarea name="sms_message" rows="4" maxlength="300" 
                                                                     x-on:input="charCount = $event.target.value.length"
                                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                                     placeholder="SMS mesajınızı yazın..."
                                                                     :required="types.includes('sms')"></textarea>
                                                                 <div class="absolute bottom-2 right-2">
-                                                                    <span class="text-sm text-gray-500" x-text="charCount + '/160'"></span>
+                                                                    <span class="text-sm text-gray-500" x-text="charCount + '/300'"></span>
                                                                 </div>
                                                             </div>
-                                                            <p class="mt-1 text-sm text-gray-500">Maksimum 160 karakter</p>
+                                                            <p class="mt-1 text-sm text-gray-500">Maksimum 300 karakter</p>
                                                         </div>
 
                                                         <div x-show="activeTab === 'email' && types.includes('email')" x-transition>
@@ -283,7 +283,7 @@ x-effect="activeTab = types.includes('email') ? 'email' : (types.includes('sms')
                                                 </button>
                                                 <button type="submit"
                                                     class="inline-flex justify-center rounded-lg px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300"
-                                                    :disabled="types.length === 0 || (types.includes('sms') && (charCount === 0 || charCount > 160))">
+                                                    :disabled="types.length === 0 || (types.includes('sms') && (charCount === 0 || charCount > 300))">
                                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
                                                     </svg>
