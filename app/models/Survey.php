@@ -108,15 +108,41 @@ final class Survey extends Model
                 continue;
             }
 
+            // Koşullu soru kontrolü - bu soru koşula bağlı mı?
+            $hasCondition = false;
+            $parentQuestion = null;
+            $parentAnswerIndex = null;
+            
+            foreach ($questionData as $parentQ) {
+                if (!empty($parentQ->conditions)) {
+                    foreach ($parentQ->conditions as $cond) {
+                        if ($cond->value == $question->slug) {
+                            $hasCondition = true;
+                            $parentQuestion = $parentQ;
+                            $parentAnswerIndex = $cond->index;
+                            break 2;
+                        }
+                    }
+                }
+            }
+
             $group0 = $groups[$groupIndex];
-            $search = function ($k) use ($question, $answerData) {
-                return array_filter($answerData, function ($aw_V, $aw_K) use ($question, $k) {
+            $search = function ($k) use ($question, $answerData, $hasCondition, $parentQuestion, $parentAnswerIndex) {
+                return array_filter($answerData, function ($aw_V, $aw_K) use ($question, $k, $hasCondition, $parentQuestion, $parentAnswerIndex) {
                     if(!$aw_V || !$aw_V->data)
                         return;
 
                     $decodedJson = json_decode($aw_V->data, JSON_OBJECT_AS_ARRAY);
                     if (! $decodedJson)
                         return;
+
+                    // Koşullu soru kontrolü - eğer bu soru koşula bağlıysa, parent sorunun cevabını kontrol et
+                    if ($hasCondition && $parentQuestion) {
+                        $parentAnswer = $decodedJson[$parentQuestion->slug] ?? null;
+                        if ($parentAnswer != $parentAnswerIndex) {
+                            return false; // Koşul sağlanmamış, bu cevabı dahil etme
+                        }
+                    }
 
                     $s = $question->type == "checkbox" ? $question->slug . $k : $question->slug;
 
@@ -204,22 +230,53 @@ final class Survey extends Model
 
             $totalCount = 0;
             if ($type === "radio" || $type === "checkbox") {
-
+                // Checkbox için benzersiz katılımcı sayısını hesaplamak için
+                $uniqueParticipantIds = [];
+                
                 foreach ($question as $answerK => $answerV) {
                     $count = count($answerV);
                     $result[$title]["answers"][$answerK] = $count;
-                    $totalCount += $count;
+                    
+                    // Checkbox için benzersiz katılımcı ID'lerini topla
+                    if ($type === "checkbox") {
+                        foreach ($answerV as $participant) {
+                            // personalId veya id field'ını kontrol et
+                            $participantId = $participant->id ?? $participant->personalId ?? null;
+                            if ($participantId && !in_array($participantId, $uniqueParticipantIds)) {
+                                $uniqueParticipantIds[] = $participantId;
+                            }
+                        }
+                    } else {
+                        // Radio için normal toplam
+                        $totalCount += $count;
+                    }
+                }
+                
+                // Checkbox için benzersiz katılımcı sayısını kullan
+                if ($type === "checkbox") {
+                    $totalCount = count($uniqueParticipantIds);
                 }
 
                 $result[$title]["total"] = $totalCount;
             } else {
+                // Textarea için benzersiz katılımcı sayısını hesaplamak için
+                $uniqueParticipantIds = [];
                 $emptyCount = $fillCount = 0;
+                
                 foreach ($question as $answerK => $answerV) {
-                    if (empty($answerV->value))
-                        $emptyCount++;
-                    else {
-                        $fillCount++;
-                        $result[$title]["list-json"][] = $answerV;
+                    // personalId veya id field'ını kontrol et
+                    $participantId = $answerV->id ?? $answerV->personalId ?? null;
+                    
+                    // Benzersiz katılımcı kontrolü
+                    if ($participantId && !in_array($participantId, $uniqueParticipantIds)) {
+                        $uniqueParticipantIds[] = $participantId;
+                        
+                        if (empty($answerV->value))
+                            $emptyCount++;
+                        else {
+                            $fillCount++;
+                            $result[$title]["list-json"][] = $answerV;
+                        }
                     }
                 }
 
@@ -228,7 +285,7 @@ final class Survey extends Model
                     "Boş" => $emptyCount
                 ];
 
-                $totalCount = $fillCount + $emptyCount;
+                $totalCount = count($uniqueParticipantIds);
 
                 $result[$title]["list-json"] = data_json($result[$title]["list-json"]);
             }
