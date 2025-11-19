@@ -60,13 +60,31 @@ final class Survey extends Model
 
     public static function participators(int $surveyId)
     {
-        return Database::get()
-            ->select("DISTINCT answers.personalId, personals.fullname, personals.department")
+        // İlk olarak benzersiz personalId'leri al
+        $uniqueParticipants = Database::get()
+            ->select("answers.personalId, MAX(answers.id) as maxId")
             ->from("answers")
-            ->leftJoin("personals", "personals.id = answers.personalId")
             ->where("answers.surveyId", value: $surveyId)
             ->where("answers.done", value: 1)
+            ->groupBy(["answers.personalId"])
             ->results();
+        
+        // Her personalId için tam veriyi al
+        $participators = [];
+        foreach ($uniqueParticipants as $participant) {
+            $fullData = Database::get()
+                ->select("answers.*, personals.fullname, personals.department")
+                ->from("answers")
+                ->leftJoin("personals", "personals.id = answers.personalId")
+                ->where("answers.id", "=", $participant->maxId)
+                ->result();
+            
+            if ($fullData) {
+                $participators[] = $fullData;
+            }
+        }
+        
+        return $participators;
     }
 
     public static function participateCount(int $userId)
@@ -83,13 +101,30 @@ final class Survey extends Model
     {
         $questionData = json_decode($survey->data);
         $answerData = Database::get()
-            ->select("answers.personalId, answers.data, personals.fullname, personals.department")
+            ->select("answers.personalId, MAX(answers.id) as maxId, personals.fullname, personals.department")
             ->from("answers")
             ->leftJoin("personals", "personals.id = answers.personalId")
             ->where("surveyId", "=", $survey->id)
             ->where("done", "=", 1)
             ->groupBy(["answers.personalId"])
             ->results();
+        
+        // Her personalId için en son cevabı al
+        $finalAnswerData = [];
+        foreach ($answerData as $row) {
+            $fullAnswer = Database::get()
+                ->from("answers")
+                ->where("id", "=", $row->maxId)
+                ->result();
+            
+            if ($fullAnswer) {
+                $fullAnswer->fullname = $row->fullname;
+                $fullAnswer->department = $row->department;
+                $finalAnswerData[] = $fullAnswer;
+            }
+        }
+        
+        $answerData = $finalAnswerData;
 
         $generatedData = [];
 
