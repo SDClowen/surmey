@@ -266,6 +266,9 @@
             height: 300,
             menubar: false,
             paste_data_images: true,
+            relative_urls: false,
+            remove_script_host: false,
+            convert_urls: false,
             plugins: [
                 'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
                 'anchor', 'searchreplace', 'visualblocks', 'fullscreen',

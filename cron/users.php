@@ -1,0 +1,83 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
+if ($_GET["action"] == "users") {
+	$ORACLEconnection = oci_connect("HAUS", "HAUS", "//10.10.50.50:1521/PROD", 'AL32UTF8');
+
+	$dbs = ["surmey", "ikup"];
+
+	foreach ($dbs as $dbName) {
+		try {
+			$DB = new PDO("mysql:host=localhost;port=3333;dbname=$dbName;charset=utf8", "root", "Le8Of67IRExo", array(PDO::ATTR_PERSISTENT => true));
+			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		} catch (PDOException $e) {
+			print $e->getMessage();
+			die();
+		}
+		//DELETE TABLE
+		$delete = $DB->prepare("TRUNCATE TABLE personals");
+		$delete->execute();
+		$delete->closeCursor();
+
+		if ($dbName != "ikup") {
+			$insert = $DB->prepare("INSERT INTO personals (id, fullname) VALUES (:id, :fullname)");
+			$insert->bindValue(":id", "0");
+			$insert->bindValue(":fullname", "0");
+			$insert->execute();
+			$insert->closeCursor();
+		}
+
+		//
+		$sql = oci_parse($ORACLEconnection, "SELECT DISTINCT IASHCMPER.PERSID AS REGNO, IASADRBOOKCONTACT.DISPLAY AS FULLNAME, IASADRBOOKCONTACT.HMOBILE AS PHONE1, IASADRBOOKCONTACT.BMOBILE AS PHONE2, CASE WHEN IASADRBOOKCONTACT.EMAIL IS NULL THEN IASUSERS.MAILADRESS ELSE IASADRBOOKCONTACT.EMAIL END AS EMAIL, IASBAS082X4.STEXT AS DEPARTMENT, IASADRBKCNTID.TCKIMLIKNO AS TC, IASADRBOOKCONTACT.GENDER AS GENDER, CASE WHEN IASHCMPER.EMPLTYPE = 0 THEN 1 ELSE 0 END AS STATUS, IASHCMSALARY.PERACCGRP, IASHCM203X12.STEXT AS PERACCGRPT, IASBAS081X9.STEXT AS ORGPLACETEXT, IASADRBKCNTREC.STARTDATE FROM IASHCMPER INNER JOIN IASADRBOOKCONTACT ON( IASADRBOOKCONTACT.CLIENT = IASHCMPER.CLIENT AND IASADRBOOKCONTACT.CONTACTNUM = IASHCMPER.CONTACTNUM AND IASADRBOOKCONTACT.CTYPE = 1) INNER JOIN IASADRBKCNTREC ON ( IASADRBKCNTREC.CLIENT = IASHCMPER.CLIENT AND IASADRBKCNTREC.CONTACTNUM = IASHCMPER.CONTACTNUM ) INNER JOIN IASADRBKCNTORG ON ( IASADRBKCNTORG.CLIENT = IASHCMPER.CLIENT AND IASADRBKCNTORG.CONTACTNUM = IASHCMPER.CONTACTNUM ) LEFT OUTER JOIN IASADRBKCNTID ON ( IASADRBKCNTID.CLIENT = IASHCMPER.CLIENT AND IASADRBKCNTID.CONTACTNUM = IASHCMPER.CONTACTNUM ) LEFT OUTER JOIN IASUSERS ON ( IASUSERS.CLIENT = IASHCMPER.CLIENT AND IASUSERS.CONTACTNUM = IASHCMPER.CONTACTNUM ) LEFT OUTER JOIN IASBAS005X IASBAS005X3 ON ( IASBAS005X3.CLIENT = IASADRBKCNTREC.CLIENT AND IASBAS005X3.COMPANY = IASADRBKCNTREC.COMPANY AND IASBAS005X3.PLANT = IASADRBKCNTREC.PLANT AND IASBAS005X3.LANGU = 'T' ) LEFT OUTER JOIN IASBAS082X IASBAS082X4 ON ( IASBAS082X4.CLIENT = IASADRBKCNTORG.CLIENT AND IASBAS082X4.COMPANY = IASADRBKCNTREC.COMPANY AND IASBAS082X4.PLANT = IASADRBKCNTREC.PLANT AND IASBAS082X4.DEPARTCODE = IASADRBKCNTORG.DEPARTMENT AND IASBAS082X4.LANGU = 'T' ) LEFT OUTER JOIN IASBAS083X IASBAS083X5 ON ( IASBAS083X5.CLIENT = IASADRBKCNTORG.CLIENT AND IASBAS083X5.COMPANY = IASADRBKCNTREC.COMPANY AND IASBAS083X5.WORKTITLE = IASADRBKCNTORG.WORKTITLE AND IASBAS083X5.LANGU = 'T' ) LEFT OUTER JOIN IASBAS081X IASBAS081X9 ON ( IASBAS081X9.CLIENT = IASADRBKCNTORG.CLIENT AND IASBAS081X9.COMPANY = IASADRBKCNTREC.COMPANY AND IASBAS081X9.ORGPLACE = IASADRBKCNTORG.ORGPLACE AND IASBAS081X9.LANGU = 'T' ) LEFT OUTER JOIN ( SELECT * FROM IASHCMSALARY WHERE CLIENT = '00' AND PAYROLLGRP = 'NORM' AND VALIDFROM = ( SELECT MAX(SALARY.VALIDFROM) FROM IASHCMSALARY SALARY WHERE SALARY.CLIENT = '00' AND SALARY.PERSID = IASHCMSALARY.PERSID AND SALARY.PAYROLLGRP = 'NORM' ) ) IASHCMSALARY ON IASHCMPER.PERSID = IASHCMSALARY.PERSID LEFT OUTER JOIN IASHCM203X IASHCM203X12 ON ( IASHCM203X12.CLIENT = IASHCMSALARY.CLIENT AND IASHCM203X12.COMPANY = IASADRBKCNTREC.COMPANY AND IASHCM203X12.CLASSDEGREE = IASHCMSALARY.PERACCGRP AND IASHCM203X12.LANGU = 'T' ) WHERE IASHCMPER.CLIENT = '00' AND IASADRBKCNTREC.STARTDATE = ( SELECT MAX(BKCNTREC.STARTDATE) FROM IASADRBKCNTREC BKCNTREC WHERE BKCNTREC.CLIENT = '00' AND BKCNTREC.CONTACTNUM = IASHCMPER.CONTACTNUM ) AND IASADRBKCNTORG.VALIDFROM = ( SELECT MAX(BKCNTORG.VALIDFROM) FROM IASADRBKCNTORG BKCNTORG WHERE BKCNTORG.CLIENT = '00' AND BKCNTORG.CONTACTNUM = IASHCMPER.CONTACTNUM ) AND IASADRBKCNTREC.COMPANY IN ( '01', '05', '06', '07', '90', '91' ) AND IASHCMPER.ISDELETED = 0 AND IASHCMPER.ISDUMMY = 0 AND IASHCMPER.EMPLTYPE = 0");
+		oci_execute($sql);
+		$columns = ["PHONE1", "PHONE2"];
+
+
+		while ($print = oci_fetch_array($sql, OCI_ASSOC + OCI_RETURN_NULLS)) {
+			foreach ($columns as $column) {
+				if (empty($print[$column]))
+					continue;
+
+				$columnValue = preg_replace('/\D/', '', $print[$column]);
+
+				if (@str_starts_with($columnValue, "00905"))
+					$print[$column] = substr($columnValue, 4, strlen($columnValue));
+
+				if (@str_starts_with($columnValue, "05"))
+					$print[$column] = substr($columnValue, 1, strlen($columnValue));
+
+				
+			}
+
+			$print["TC"] = preg_replace('/\D/', '', $print["TC"]);
+
+			$insert = $DB->prepare("INSERT INTO personals (id, fullname, phone1, phone2, email, department, tc, gender, status, type, typeText, designation, startedDate) VALUES (:id, :fullname, :phone1, :phone2, :email, :department, :tc, :gender, :status, :type, :typeText, :designation, :startedDate)");
+			$insert->bindParam(":id", $print["REGNO"]);
+			$insert->bindParam(":fullname", $print["FULLNAME"]);
+			$insert->bindParam(":phone1", $print["PHONE1"]);
+			$insert->bindParam(":phone2", $print["PHONE2"]);
+			$insert->bindParam(":email", $print["EMAIL"]);
+			$insert->bindParam(":department", $print["DEPARTMENT"]);
+			$insert->bindParam(":tc", $print["TC"]);
+			$insert->bindParam(":gender", $print["GENDER"]);
+			$insert->bindParam(":status", $print["STATUS"]);
+			$insert->bindParam(":type", $print["PERACCGRP"]);
+			$insert->bindParam(":typeText", $print["PERACCGRPT"]);
+			$insert->bindParam(":designation", $print["ORGPLACETEXT"]);
+			
+			$date = DateTime::createFromFormat('d.m.Y H:i:s', $print["STARTDATE"]);
+			$startedDate = $date->format('Y-m-d H:i:s');
+
+
+			$insert->bindParam(":startedDate", $startedDate);
+			$insert->execute();
+			$insert->closeCursor();
+		}
+	}
+
+
+	echo "OK";
+}

@@ -34,7 +34,7 @@ class Mail
             //Content
             $mail->isHTML(true); //Set email format to HTML
             $mail->Subject = $title;
-            $mail->Body = $content;
+            $mail->Body = html_entity_decode($content);
             $mail->send();
             
             return true;
