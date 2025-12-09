@@ -44,7 +44,7 @@ class Surveys extends Controller
         
         $validate = validate($post, [
             "title" => ["name" => lang("title"), "required" => true, "min" => 8, "max" => 255],
-            "about" => ["name" => lang("about"), "min" => 0, "max" => 65535],
+            "about" => ["name" => lang("about"), "min" => 0],
             "csrf" => ["name" => lang("csrf"), "required" => true],
             #"photo" => ["name" => lang("photo")],
             "data" => ["name" => "data", "required" => true]
